@@ -28,6 +28,7 @@ export type OccasionPackage = {
   intro: string;
   icon: "peace" | "obstacles" | "family" | "success";
   image?: string;
+  price: string;
   items: PackageItem[];
   process: string[];
   benefits: string[];
@@ -130,6 +131,7 @@ const consumerPackageData: PackageData = {
       intro:
         "Ganapathy Homam is a sacred fire ritual performed to invoke the blessings of Lord Ganesha — the remover of all obstacles. This homam is traditionally conducted at the beginning of any new venture, ceremony, or important life event to ensure smooth progress and divine protection. Our package includes all the essential samagri required for this powerful homam.",
       icon: "peace",
+      price: "₹2,499",
       items: [
         { sno: 1, english: "Homa Kunda (Fire Pit)", tamil: "ஹோம குண்டம்", quantity: "1" },
         { sno: 2, english: "Pure A2 Cow Ghee", tamil: "தூய நெய்", quantity: "500 ml" },
@@ -166,6 +168,7 @@ const consumerPackageData: PackageData = {
       intro:
         "Griha Pravesham, or House Warming, is one of the most auspicious ceremonies in Hindu tradition. It sanctifies the new home and invites divine blessings for the family who enters it. The ritual involves Vastu Pooja, Ganapathy Homam, and the sacred entry into the home with a kalash. Our package provides all the materials needed for a complete and traditional Griha Pravesham ceremony.",
       icon: "success",
+      price: "₹4,999",
       items: [
         { sno: 1, english: "Kalash and Coconut", tamil: "கலசம் மற்றும் தேங்காய்", quantity: "1 set" },
         { sno: 2, english: "Navadhanyam (Nine grains)", tamil: "நவதானியம்", quantity: "1 set" },
@@ -202,6 +205,7 @@ const consumerPackageData: PackageData = {
       intro:
         "Satyanarayana Vratam is a beloved Hindu devotional ritual performed in gratitude to Lord Vishnu in his form as Satyanarayana. It is observed to seek blessings for health, wealth, family happiness, and fulfillment of wishes. This vratam is typically performed on Purnima (full moon) days or on occasions of personal milestones. Our package includes all the samagri required for a complete and traditional observation.",
       icon: "family",
+      price: "₹2,999",
       items: [
         { sno: 1, english: "Satyanarayana Pooja Book", tamil: "சத்யநாராயண பூஜை புத்தகம்", quantity: "1" },
         { sno: 2, english: "Panchamirtham Ingredients", tamil: "பஞ்சாமிர்த பொருட்கள்", quantity: "1 set" },
@@ -237,6 +241,7 @@ const consumerPackageData: PackageData = {
       intro:
         "Daily Pooja is the foundation of a devotional household — a simple yet powerful practice that brings peace, clarity, and divine connection each morning. Our daily pooja package provides all the essential items needed for regular home worship, carefully curated so your family never runs short of what is needed to maintain a consistent and blessed routine.",
       icon: "peace",
+      price: "₹999",
       items: [
         { sno: 1, english: "Pure Brass Pooja Utensils Set", tamil: "பித்தளை பூஜை பாத்திரங்கள்", quantity: "1 set" },
         { sno: 2, english: "Organic Camphor", tamil: "கற்பூரம்", quantity: "1 pack" },
@@ -268,6 +273,7 @@ const consumerPackageData: PackageData = {
       intro:
         "Vivaha Samskara is the sacred union of two souls sanctified by Agni Deva and Vedic rituals. Our comprehensive marriage package provides authentic, auspicious samagri for Kasi Yatra, Oonjal, Kanyadaanam, Mangalya Dharanam, Saptapadi, and Laja Homam.",
       icon: "family",
+      price: "₹15,999",
       items: [
         { sno: 1, english: "Pure Turmeric Roots & Powder", tamil: "மஞ்சள் கிழங்கு & பொடி", quantity: "1 kg" },
         { sno: 2, english: "Divine Kumkum & Sandalwood", tamil: "குங்குமம் & சந்தனம்", quantity: "250 g" },
@@ -305,6 +311,7 @@ const consumerPackageData: PackageData = {
       intro:
         "Bhoomi Pooja is performed to venerate Bhoomi Devi (Mother Earth) and Vastu Purusha before commencing construction on a new plot or property. It seeks forgiveness for disturbing the earth and invokes divine protection against structural impediments and evil eyes.",
       icon: "success",
+      price: "₹3,499",
       items: [
         { sno: 1, english: "Navaratnam (Nine Precious Gems)", tamil: "நவரத்தினங்கள்", quantity: "1 Set" },
         { sno: 2, english: "Panchaloham (Five Sacred Metals)", tamil: "ஐம்பொன்", quantity: "1 Set" },
@@ -340,6 +347,7 @@ const consumerPackageData: PackageData = {
       intro:
         "Punyahavachanam is the Vedic purification ritual performed on the 11th or 28th day following childbirth (Namakaranam), after major life events, or to purify the home after an eclipse or prolonged vacancy. Holy water charged with Vedic suktams is sprinkled across the premises.",
       icon: "peace",
+      price: "₹1,999",
       items: [
         { sno: 1, english: "Copper / Brass Kalash", tamil: "செம்பு / பித்தளை கலசம்", quantity: "1 No" },
         { sno: 2, english: "Mango Leaves & Darbha Grass", tamil: "மாவிலை மற்றும் தர்பை புல்", quantity: "1 Bundle" },
@@ -373,6 +381,7 @@ const consumerPackageData: PackageData = {
       intro:
         "Ruthu Punyahavachanam (Manjal Neerattu Vizha / Ritu Shanti) is celebrated to honor a young girl entering womanhood. The ceremony invokes Goddess Lakshmi, Parvati, and Saraswati to bless her with radiant health, auspiciousness, longevity, and future marital bliss.",
       icon: "family",
+      price: "₹4,499",
       items: [
         { sno: 1, english: "Pure Turmeric Root & Kasturi Turmeric", tamil: "கஸ்தூரி மஞ்சள் & மஞ்சள் கிழங்கு", quantity: "500 g" },
         { sno: 2, english: "Divine Kumkum, Chandanam & Vibhuti", tamil: "குங்குமம், சந்தனம் & விபூதி", quantity: "1 Set" },
@@ -407,6 +416,7 @@ const consumerPackageData: PackageData = {
       intro:
         "Ayush Homam is performed to seek the blessings of Ayur Devata, Markandeya, and the Chiranjeevis for long life, robust physical health, and protection against ailments. Traditionally conducted on a child's first birthday (Bodhana) and subsequently on every Janma Nakshatra.",
       icon: "peace",
+      price: "₹2,799",
       items: [
         { sno: 1, english: "Homa Kunda & Special Dravya Samagri", tamil: "ஹோம குண்டம் & சாமக்ரி", quantity: "1 Set" },
         { sno: 2, english: "Pure A2 Cow Ghee", tamil: "தூய பசு நெய்", quantity: "1 Litre" },
@@ -440,6 +450,7 @@ const consumerPackageData: PackageData = {
       intro:
         "Family ceremonies mark life's most cherished milestones — from birthdays and wedding anniversaries to naming ceremonies and thread ceremonies. Our Family Ceremony package is thoughtfully assembled to cover a wide range of personal and family occasions, giving you a complete collection of sacred items so you can focus on the celebration rather than the preparation.",
       icon: "obstacles",
+      price: "₹2,499",
       items: [
         { sno: 1, english: "Brass Diya and Pooja Plate", tamil: "பித்தளை விளக்கு மற்றும் பூஜை தட்டு", quantity: "1 set" },
         { sno: 2, english: "Flowers and Garland", tamil: "மலர்கள் மற்றும் மாலை", quantity: "As required" },
@@ -474,6 +485,42 @@ function PackagePage({ data }: PackagePageProps) {
   const [activeTab, setActiveTab] = useState("details");
   const [selectedRitual, setSelectedRitual] = useState<OccasionPackage | null>(null);
   const [dynamicItems, setDynamicItems] = useState<PackageItem[] | null>(null);
+
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [bookingForm, setBookingForm] = useState({
+    name: "",
+    mobile: "",
+    address: "",
+    email: "",
+  });
+
+  const handleBookingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch(`${API_BASE}/bookings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...bookingForm,
+          pooja: selectedRitual?.title || "Consumer Package",
+        }),
+      });
+
+      if (!res.ok) throw new Error("Booking failed");
+
+      setBookingSuccess(true);
+
+      setTimeout(() => {
+        setBookingSuccess(false);
+        setIsBookingOpen(false);
+        setBookingForm({ name: "", mobile: "", address: "", email: "" });
+      }, 2500);
+    } catch {
+      alert("Something went wrong. Please try again.");
+    }
+  };
 
   useEffect(() => {
     if (!selectedRitual) {
@@ -551,6 +598,15 @@ function PackagePage({ data }: PackagePageProps) {
 
   return (
     <main className="bg-[#FCFAF6] text-[#29231F]">
+      <style jsx global>{`
+      @keyframes priest-blink {
+        0%, 100% { opacity: 1; box-shadow: 0 0 0 rgba(243, 215, 138, 0); }
+        50% { opacity: 0.7; box-shadow: 0 0 14px rgba(243, 215, 138, 0.9); }
+      }
+      .animate-priest-blink {
+        animation: priest-blink 1.6s ease-in-out infinite;
+      }
+    `}</style>
 
       {/* =====================================================
           HERO
@@ -883,6 +939,35 @@ function PackagePage({ data }: PackagePageProps) {
                       );
                     })}
                   </div>
+
+                  <div className="mt-6 border-t border-white/15 pt-6">
+                    <span className="text-[10px] uppercase tracking-wider text-[#D4B978]">
+                      Selected Package
+                    </span>
+                    <div className="font-[family-name:var(--font-cormorant)] text-2xl font-bold text-[#F3D78A]">
+                      {selectedRitual.title}
+                    </div>
+                    <div className="mt-1 text-lg font-semibold text-white">
+                      {selectedRitual.price}
+                    </div>
+
+                    <button
+  type="button"
+  onClick={() => setIsBookingOpen(true)}
+  className="mt-4 w-full rounded-lg bg-[#E5C77A] py-2.5 text-sm font-bold tracking-wide text-[#3D1418] transition-colors hover:bg-[#F3D78A]"
+>
+  Order Now
+</button>
+
+<button
+  type="button"
+  onClick={() => setIsBookingOpen(true)}
+  className="mt-3 w-full rounded-lg bg-[#F3D78A] px-3 py-2.5 text-center text-[11px] font-semibold text-[#3D1418] animate-priest-blink"
+>
+  Looking for an experienced Iyer for an
+  upcoming pooja?
+</button>
+                  </div>
                 </div>
 
                 {/* CONTENT */}
@@ -1039,6 +1124,90 @@ function PackagePage({ data }: PackagePageProps) {
 
         </div>
       </section>
+
+      {isBookingOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          <div className="relative w-full max-w-md rounded-2xl border-2 border-[#DECBB0] bg-[#FAF6EE] p-6 shadow-2xl sm:p-8">
+            <button
+              type="button"
+              onClick={() => setIsBookingOpen(false)}
+              className="absolute right-4 top-4 text-[#7A6458] hover:text-[#42151B]"
+              aria-label="Close"
+            >
+              ✕
+            </button>
+
+            {bookingSuccess ? (
+              <div className="py-8 text-center">
+                <h3 className="mb-2 font-[family-name:var(--font-cormorant)] text-2xl font-bold text-[#42151B]">
+                  Request Received!
+                </h3>
+                <p className="text-sm text-[#55463E]">
+                  Our team will contact you shortly to confirm.
+                </p>
+              </div>
+            ) : (
+              <>
+                <h3 className="mb-1 font-[family-name:var(--font-cormorant)] text-2xl font-bold text-[#42151B]">
+                  Request for an Iyer
+                </h3>
+                <p className="mb-5 text-xs text-[#63534B]">
+                  Fill in your details and we&apos;ll get back to you shortly.
+                </p>
+
+                <form onSubmit={handleBookingSubmit} className="space-y-3.5">
+                  <input
+                    type="text"
+                    required
+                    placeholder="Full Name"
+                    value={bookingForm.name}
+                    onChange={(e) =>
+                      setBookingForm({ ...bookingForm, name: e.target.value })
+                    }
+                    className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none"
+                  />
+                  <input
+                    type="tel"
+                    required
+                    placeholder="Mobile Number"
+                    value={bookingForm.mobile}
+                    onChange={(e) =>
+                      setBookingForm({ ...bookingForm, mobile: e.target.value })
+                    }
+                    className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none"
+                  />
+                  <input
+                    type="email"
+                    required
+                    placeholder="Email Address"
+                    value={bookingForm.email}
+                    onChange={(e) =>
+                      setBookingForm({ ...bookingForm, email: e.target.value })
+                    }
+                    className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none"
+                  />
+                  <textarea
+                    required
+                    rows={2}
+                    placeholder="Address"
+                    value={bookingForm.address}
+                    onChange={(e) =>
+                      setBookingForm({ ...bookingForm, address: e.target.value })
+                    }
+                    className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    className="w-full rounded-lg bg-[#5A121D] py-3 text-sm font-bold tracking-wide text-white transition-colors hover:bg-[#400B13]"
+                  >
+                    Submit  
+                  </button>
+                </form>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
     </main>
   );

@@ -532,8 +532,31 @@ export default function FestivalPackagePage() {
   const [selectedFestival, setSelectedFestival] = useState<FestivalPackageData>(festivalPackages[0]);
   const [activeTab, setActiveTab] = useState<"details" | "process" | "benefits" | "notes">("details");
 
+
+
   const [liveItems, setLiveItems] = useState<PackageItem[]>(festivalPackages[0].items);
   const [itemsLoading, setItemsLoading] = useState(false);
+
+  // BOOKING STATE
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [bookingForm, setBookingForm] = useState({ name: "", mobile: "", address: "", email: "" });
+
+  const handleBookingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`${API_BASE}/bookings`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...bookingForm, pooja: selectedFestival.name }),
+      });
+      if (!res.ok) throw new Error("Booking failed");
+      setBookingSuccess(true);
+      setTimeout(() => {
+        setBookingSuccess(false); setIsBookingOpen(false);
+        setBookingForm({ name: "", mobile: "", address: "", email: "" });
+      }, 2500);
+    } catch { alert("Something went wrong. Please try again."); }
+  };
 
  // Set selected festival based on URL hash and listen to hashchange
 useEffect(() => {
@@ -628,6 +651,13 @@ useEffect(() => {
 
   return (
     <main className="min-h-screen bg-[#FDFBF7] pt-[90px]">
+      <style jsx global>{`
+        @keyframes priest-blink {
+          0%, 100% { opacity: 1; box-shadow: 0 0 0 rgba(243, 215, 138, 0); }
+          50% { opacity: 0.7; box-shadow: 0 0 14px rgba(243, 215, 138, 0.9); }
+        }
+        .animate-priest-blink { animation: priest-blink 1.6s ease-in-out infinite; }
+      `}</style>
       {/* ================= HERO BANNER ================= */}
       <section className="relative min-h-[520px] w-full overflow-hidden bg-[#24120E] sm:min-h-[580px] lg:min-h-[640px]">
         {/* Background Image */}
@@ -1019,16 +1049,13 @@ useEffect(() => {
                 {/* Package Quick Booking Box inside sidebar */}
                 <div className="mt-8 hidden rounded-xl border border-white/15 bg-black/20 p-4 text-white lg:block">
                   <span className="text-[11px] uppercase tracking-wider text-[#D4B978]">Starting At</span>
-                  <div className="font-[family-name:var(--font-cormorant)] text-3xl font-bold text-[#F3D78A]">
-                    {selectedFestival.price}
-                  </div>
+                  <div className="font-[family-name:var(--font-cormorant)] text-3xl font-bold text-[#F3D78A]">{selectedFestival.price}</div>
                   <p className="mt-1 text-xs text-white/75">Includes all packed samagri and home delivery.</p>
-                  <a
-                    href="/contact"
-                    className="mt-4 flex w-full items-center justify-center rounded-lg bg-[#E5C77A] py-2.5 text-xs font-bold tracking-wider text-[#3D1418] transition hover:bg-[#F3D78A]"
-                  >
-                    BOOK NOW
-                  </a>
+                  <button type="button" onClick={() => setIsBookingOpen(true)} className="mt-4 flex w-full items-center justify-center rounded-lg bg-[#E5C77A] py-2.5 text-xs font-bold tracking-wider text-[#3D1418] transition hover:bg-[#F3D78A]">ORDER NOW</button>
+                  <button type="button" onClick={() => setIsBookingOpen(true)} className="mt-3 w-full rounded-lg bg-[#F3D78A] px-3 py-2.5 text-center text-[11px] font-semibold text-[#3D1418] animate-priest-blink">
+                    Looking for an experienced Iyer for an
+                    upcoming pooja?
+                  </button>
                 </div>
               </div>
 
@@ -1236,6 +1263,28 @@ useEffect(() => {
           </div>
         </div>
       </section>
+      {/* IYER REQUEST MODAL */}
+      {isBookingOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          <div className="relative w-full max-w-md rounded-2xl border-2 border-[#DECBB0] bg-[#FAF6EE] p-6 shadow-2xl sm:p-8">
+            <button type="button" onClick={() => setIsBookingOpen(false)} className="absolute right-4 top-4 text-[#7A6458] hover:text-[#42151B]" aria-label="Close">✕</button>
+            {bookingSuccess ? <div className="py-8 text-center"><h3 className="mb-2 font-[family-name:var(--font-cormorant)] text-2xl font-bold text-[#42151B]">Request Received!</h3><p className="text-sm text-[#55463E]">Our team will contact you shortly to confirm your priest request.</p></div> : (
+              <>
+                <h3 className="mb-1 font-[family-name:var(--font-cormorant)] text-2xl font-bold text-[#42151B]">Request for an Iyer</h3>
+                <p className="mb-5 text-xs text-[#63534B]">Fill in your details and we&apos;ll get back to you shortly.</p>
+                <form onSubmit={handleBookingSubmit} className="space-y-3.5">
+                  <input type="text" required placeholder="Full Name" value={bookingForm.name} onChange={(e) => setBookingForm({ ...bookingForm, name: e.target.value })} className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none" />
+                  <input type="tel" required placeholder="Mobile Number" value={bookingForm.mobile} onChange={(e) => setBookingForm({ ...bookingForm, mobile: e.target.value })} className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none" />
+                  <input type="email" required placeholder="Email Address" value={bookingForm.email} onChange={(e) => setBookingForm({ ...bookingForm, email: e.target.value })} className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none" />
+                  <textarea required rows={2} placeholder="Address" value={bookingForm.address} onChange={(e) => setBookingForm({ ...bookingForm, address: e.target.value })} className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none" />
+                  <button type="submit" className="w-full rounded-lg bg-[#5A121D] py-3 text-sm font-bold tracking-wide text-white transition-colors hover:bg-[#400B13]">Submit</button>
+                </form>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
     </main>
   );
 }

@@ -18,6 +18,7 @@ import {
   Bell,
   ChevronDown,
     Image,
+    UserRoundCheck,
 } from "lucide-react";
 
 const NAV = [
@@ -29,6 +30,7 @@ const NAV = [
    { label: "Temple Packages", href: "/dashboard/temple-packages", icon: Package },
     { label: "Overseas Temple Package", href: "/dashboard/overseas-temple-package", icon: Globe },
   { label: "Festival Packages", href: "/dashboard/festivals-packages", icon: Gift },
+    { label: "Request  Iyer", href: "/dashboard/bookings", icon: UserRoundCheck },
   { label: "Contact Requests", href: "/dashboard/contact", icon: Phone },
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
 ];

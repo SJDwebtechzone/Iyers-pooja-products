@@ -12,20 +12,22 @@ import { FestivalsPackagesModule } from './festivals-packages/festivals-packages
 import { OverseasTemplePackageModule } from './overseas-temple-package/overseas-temple-package.module';
 import { HomeBannerModule } from './home-banner/home-banner.module';
 import { HomePackageImagesModule } from './home-package-images/home-package-images.module';
-@Module({
+import { BookingsModule } from './bookings/bookings.module';
 
+@Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     DatabaseModule,
     MailModule,
-     ConsumerPackagesModule,
-     CorporatePackagesModule,
-     TemplePackagesModule,
-     FestivalsPackagesModule,
-     OverseasTemplePackageModule,
-     HomeBannerModule,
-     HomePackageImagesModule 
+    ConsumerPackagesModule,
+    CorporatePackagesModule,
+    TemplePackagesModule,
+    FestivalsPackagesModule,
+    OverseasTemplePackageModule,
+    HomeBannerModule,
+    HomePackageImagesModule,
+    BookingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

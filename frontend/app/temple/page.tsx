@@ -24,6 +24,13 @@ import {
 } from "lucide-react";
 
 // -------------------------------------------------------------
+// API BASE
+// -------------------------------------------------------------
+
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+
+// -------------------------------------------------------------
 // SAMAGRI ITEM DATA MODEL
 // -------------------------------------------------------------
 
@@ -226,7 +233,7 @@ const importantNotes = [
   {
     title: "Temple Attire & Guidelines",
     points: [
-      "Traditional Indian attire is strictly recommended when attending in person (Dhoti/Kurta for men, Saree/Chudidar for women).",
+      "Traditional Indian attire is strictly recommended when attending in person.",
       "Devotees attending in person are advised to reach the temple 30 minutes prior to the scheduled Muhurtham.",
     ],
   },
@@ -240,8 +247,8 @@ const importantNotes = [
   {
     title: "Prasadham Dispatch & Delivery",
     points: [
-      "For remote/overseas devotees, sanctified Prasadham (Kumkum, Vibhuti, Raksha thread, dry fruits & energised coin) is dispatched via insured courier.",
-      "Tracking details will be provided immediately upon postal dispatch.",
+      "For remote devotees, sanctified Prasadham may be dispatched according to package availability.",
+      "Tracking details will be provided after postal dispatch where applicable.",
     ],
   },
 ];
@@ -262,30 +269,94 @@ export default function TemplePackagePage() {
   const [samagriList, setSamagriList] =
     useState<SamagriItem[]>(fallbackSamagriList);
 
+  const [itemsLoading, setItemsLoading] = useState(true);
+
   useEffect(() => {
-    fetch("http://localhost:3001/temple-packages")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch");
-        return res.json();
-      })
-      .then((data) => {
+    const fetchTemplePackages = async () => {
+      try {
+        setItemsLoading(true);
+
+        const res = await fetch(`${API_BASE}/temple-packages`);
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch temple packages");
+        }
+
+        const data = await res.json();
+
         if (Array.isArray(data) && data.length > 0) {
-          const mapped: SamagriItem[] = data.map((item: any) => ({
-            sno: item.sno,
-            nameEn: item.english,
-            nameTa: item.tamil,
-            quantity: item.quantity,
-          }));
+          const mapped: SamagriItem[] = data.map(
+            (item: {
+              sno?: number;
+              english?: string;
+              tamil?: string;
+              quantity?: string;
+              nameEn?: string;
+              nameTa?: string;
+              name?: string;
+            }, index: number) => ({
+              sno: item.sno ?? index + 1,
+              nameEn: item.english ?? item.nameEn ?? item.name ?? "",
+              nameTa: item.tamil ?? item.nameTa ?? "",
+              quantity: item.quantity ?? "",
+            })
+          );
 
           setSamagriList(mapped);
         }
-      })
-      .catch(() => {
-        // Fetch failed — fallbackSamagriList stays in place
-      });
+      } catch (error) {
+        console.error("Failed to load temple package items:", error);
+
+        // Keep fallback data when backend is unavailable
+        setSamagriList(fallbackSamagriList);
+      } finally {
+        setItemsLoading(false);
+      }
+    };
+
+    fetchTemplePackages();
   }, []);
 
+  // -----------------------------------------------------------
+
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
+
+  // BOOKING STATE
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [bookingForm, setBookingForm] = useState({
+    name: "",
+    mobile: "",
+    address: "",
+    email: "",
+  });
+
+  const handleBookingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch(`${API_BASE}/bookings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...bookingForm,
+          pooja: "Thirumanjam (Temple Package)",
+        }),
+      });
+
+      if (!res.ok) throw new Error("Booking failed");
+
+      setBookingSuccess(true);
+
+      setTimeout(() => {
+        setBookingSuccess(false);
+        setIsBookingOpen(false);
+        setBookingForm({ name: "", mobile: "", address: "", email: "" });
+      }, 2500);
+    } catch {
+      alert("Something went wrong. Please try again.");
+    }
+  };
 
   const detailsSectionRef = useRef<HTMLDivElement>(null);
 
@@ -365,13 +436,21 @@ export default function TemplePackagePage() {
 
   return (
     <div className="min-h-screen bg-[#FAF6EE] text-[#29231F] font-sans antialiased selection:bg-[#B08A45]/30">
+      <style jsx global>{`
+        @keyframes priest-blink {
+          0%, 100% { opacity: 1; box-shadow: 0 0 0 rgba(243, 215, 138, 0); }
+          50% { opacity: 0.7; box-shadow: 0 0 14px rgba(243, 215, 138, 0.9); }
+        }
+        .animate-priest-blink {
+          animation: priest-blink 1.6s ease-in-out infinite;
+        }
+      `}</style>
       {/* ========================================================= */}
-      {/* 1. HERO SECTION */}
+      {/* HERO SECTION */}
       {/* ========================================================= */}
 
       <section className="relative pt-[90px] overflow-hidden bg-[#FAF6EE] border-b border-[#E8DDC8]">
         <div className="mx-auto max-w-[1600px] grid grid-cols-1 lg:grid-cols-12 items-stretch min-h-[580px] lg:min-h-[640px]">
-          {/* LEFT COLUMN */}
           <div className="lg:col-span-6 flex flex-col justify-between pt-10 sm:pt-14 lg:pt-16 pb-8 px-6 sm:px-10 lg:pl-16 lg:pr-10 z-10">
             <div>
               <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#42151B] leading-[1.15]">
@@ -397,7 +476,6 @@ export default function TemplePackagePage() {
                 growth.
               </p>
 
-              {/* HERO BADGES */}
               <div className="grid grid-cols-3 gap-3 sm:gap-6 mt-8 sm:mt-10 max-w-lg">
                 <div className="flex flex-col items-center text-center p-3 sm:p-4 rounded-xl bg-[#F4EDE0]/70 border border-[#E5D7C0] transition-transform hover:-translate-y-0.5">
                   <div className="w-12 h-12 rounded-full flex items-center justify-center text-[#9E2A2B] mb-2">
@@ -415,7 +493,6 @@ export default function TemplePackagePage() {
                       <path d="M5 11h14l-1 5H6l-1-5z" />
                       <path d="M3 16h18v6H3v-6z" />
                       <path d="M10 22v-4h4v4" />
-                      <path d="M12 2v-1" />
                     </svg>
                   </div>
 
@@ -439,7 +516,6 @@ export default function TemplePackagePage() {
                       <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
                       <path d="M12 3v2" />
                       <path d="M10 5h4" />
-                      <path d="M9 13l3 3 3-3" />
                     </svg>
                   </div>
 
@@ -460,8 +536,6 @@ export default function TemplePackagePage() {
                       className="w-8 h-8"
                     >
                       <path d="M12 4c-1.5 3-4 6-4 9a4 4 0 0 0 8 0c0-3-2.5-6-4-9z" />
-                      <path d="M4 14c2-1 4.5-1 6.5 0-1.5-2.5-4-3.5-6.5-2 0 1 .5 2 .5 2z" />
-                      <path d="M20 14c-2-1-4.5-1-6.5 0 1.5-2.5 4-3.5 6.5-2 0 1-.5 2-.5 2z" />
                       <path d="M7 18c2.5 1 5 1 7.5 0" />
                     </svg>
                   </div>
@@ -473,7 +547,6 @@ export default function TemplePackagePage() {
               </div>
             </div>
 
-            {/* BREADCRUMB */}
             <div className="mt-10 sm:mt-12 -ml-6 sm:-ml-10 lg:-ml-16 self-start">
               <div className="inline-flex items-center gap-2 bg-[#5A121D] text-[#F3EAD8] text-xs sm:text-sm font-medium py-2.5 pl-6 sm:pl-10 pr-8 rounded-r-3xl shadow-md border-y border-r border-[#782330]">
                 <Link
@@ -501,248 +574,25 @@ export default function TemplePackagePage() {
             </div>
           </div>
 
-          {/* RIGHT IMAGE */}
           <div className="lg:col-span-6 relative min-h-[380px] lg:min-h-full overflow-hidden">
-            <div className="absolute inset-0 w-full h-full">
-              <Image
-                src="/images/temple_hero_gopuram.jpg"
-                alt="Illuminated ancient South Indian temple gopuram and sacred teertham"
-                fill
-                priority
-                className="object-cover object-center scale-105"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
+            <Image
+              src="/images/temple_hero_gopuram.jpg"
+              alt="Illuminated ancient South Indian temple gopuram"
+              fill
+              priority
+              className="object-cover object-center scale-105"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
 
-              <div className="absolute inset-y-0 left-0 w-24 sm:w-36 lg:w-48 bg-gradient-to-r from-[#FAF6EE] via-[#FAF6EE]/80 to-transparent pointer-events-none hidden lg:block" />
+            <div className="absolute inset-y-0 left-0 w-24 sm:w-36 lg:w-48 bg-gradient-to-r from-[#FAF6EE] via-[#FAF6EE]/80 to-transparent pointer-events-none hidden lg:block" />
 
-              <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#FAF6EE] to-transparent pointer-events-none lg:hidden" />
-
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
           </div>
         </div>
       </section>
 
       {/* ========================================================= */}
-      {/* 2. SUB HERO BANNER */}
-      {/* ========================================================= */}
-
-      <section className="py-10 sm:py-14 px-4 sm:px-8 max-w-[1400px] mx-auto">
-        <div className="relative rounded-2xl bg-[#FCFAF5] border border-[#DFCBB0] p-6 sm:p-10 shadow-[0_8px_30px_rgba(90,20,30,0.06)] overflow-hidden">
-          {/* CORNERS */}
-          <div className="absolute top-2 left-2 w-6 h-6 border-t-2 border-l-2 border-[#C79D55]" />
-          <div className="absolute top-2 right-2 w-6 h-6 border-t-2 border-r-2 border-[#C79D55]" />
-          <div className="absolute bottom-2 left-2 w-6 h-6 border-b-2 border-l-2 border-[#C79D55]" />
-          <div className="absolute bottom-2 right-2 w-6 h-6 border-b-2 border-r-2 border-[#C79D55]" />
-
-          {/* BELLS */}
-          <div className="hidden md:flex absolute top-0 left-12 flex-col items-center pointer-events-none opacity-85">
-            <div className="w-px h-8 bg-gradient-to-b from-[#B08A45] to-[#D4AF37]" />
-            <div className="text-xl">🔔</div>
-          </div>
-
-          <div className="hidden md:flex absolute top-0 left-28 flex-col items-center pointer-events-none opacity-70">
-            <div className="w-px h-14 bg-gradient-to-b from-[#B08A45] to-[#D4AF37]" />
-            <div className="text-base">🔔</div>
-          </div>
-
-          <div className="hidden md:flex absolute top-0 right-28 flex-col items-center pointer-events-none opacity-70">
-            <div className="w-px h-14 bg-gradient-to-b from-[#B08A45] to-[#D4AF37]" />
-            <div className="text-base">🔔</div>
-          </div>
-
-          <div className="hidden md:flex absolute top-0 right-12 flex-col items-center pointer-events-none opacity-85">
-            <div className="w-px h-8 bg-gradient-to-b from-[#B08A45] to-[#D4AF37]" />
-            <div className="text-xl">🔔</div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-12 items-center gap-6 relative z-10">
-            {/* LEFT IMAGE */}
-            <div className="md:col-span-3 flex justify-center md:justify-start">
-              <div className="relative w-36 h-36 sm:w-44 sm:h-44 transition-transform hover:scale-105 duration-300">
-                <Image
-                  src="/images/kalash_transparent.png"
-                  alt="Sacred Pooja Kalash with coconut and mango leaves"
-                  fill
-                  className="object-contain drop-shadow-[0_8px_16px_rgba(180,130,50,0.25)]"
-                />
-              </div>
-            </div>
-
-            {/* CENTER */}
-            <div className="md:col-span-6 text-center px-2">
-              <p className="text-xs sm:text-sm font-serif font-semibold tracking-[0.2em] uppercase text-[#B37D2A] mb-1 sm:mb-2">
-                Divine Rituals in Sacred Temples
-              </p>
-
-              <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-normal text-[#42151B] leading-tight">
-                Blessings that last a Lifetime
-              </h2>
-
-              <div className="flex items-center justify-center gap-2 mt-3">
-                <span className="h-px w-10 bg-gradient-to-r from-transparent to-[#B08A45]" />
-                <span className="w-2 h-2 rotate-45 bg-[#B08A45]" />
-                <span className="h-px w-10 bg-gradient-to-l from-transparent to-[#B08A45]" />
-              </div>
-            </div>
-
-            {/* RIGHT IMAGE */}
-            <div className="md:col-span-3 flex justify-center md:justify-end">
-              <div className="relative w-32 h-32 sm:w-40 sm:h-40 transition-transform hover:scale-105 duration-300">
-                <Image
-                  src="/images/brassplate_transparent.png"
-                  alt="Sacred Brass Deepam Plate"
-                  fill
-                  className="object-contain drop-shadow-[0_8px_16px_rgba(180,130,50,0.25)]"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================= */}
-      {/* 3. ABOUT TEMPLE PACKAGE */}
-      {/* ========================================================= */}
-
-      <section className="py-10 sm:py-16 px-4 sm:px-8 max-w-[1400px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
-          {/* IMAGE */}
-          <div className="lg:col-span-6">
-            <div className="relative rounded-2xl overflow-hidden shadow-[0_15px_35px_rgba(60,20,30,0.15)] border-2 border-[#E7D6BE] group">
-              <div className="relative aspect-[4/3] w-full">
-                <Image
-                  src="/images/temple_sanctum_altar.jpg"
-                  alt="Sacred deity sanctum illuminated by brass kuthu vilakku oil lamps"
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-              </div>
-            </div>
-          </div>
-
-          {/* CONTENT */}
-          <div className="lg:col-span-6 flex flex-col justify-center">
-            <span className="text-xs font-bold tracking-[0.25em] uppercase text-[#B08A45] mb-2 block font-sans">
-              About Temple Package
-            </span>
-
-            <h2 className="font-serif text-3xl sm:text-4xl lg:text-[42px] font-normal text-[#42151B] leading-tight">
-              Sacred Rituals, Timeless Blessings
-            </h2>
-
-            <div className="flex items-center gap-2 my-4">
-              <span className="h-px w-10 bg-gradient-to-r from-transparent to-[#B08A45]" />
-              <span className="w-1.5 h-1.5 rotate-45 border border-[#B08A45]" />
-              <span className="w-2.5 h-2.5 rotate-45 bg-[#B08A45]" />
-              <span className="w-1.5 h-1.5 rotate-45 border border-[#B08A45]" />
-              <span className="h-px w-16 bg-gradient-to-l from-transparent to-[#B08A45]" />
-            </div>
-
-            <p className="text-[#55463E] text-[15px] sm:text-base leading-relaxed mb-3">
-              Our Temple Packages are performed in renowned temples by
-              experienced priests using authentic Vedic procedures passed down
-              through generations.
-            </p>
-
-            <p className="text-[#55463E] text-[15px] sm:text-base leading-relaxed mb-8">
-              Each ritual is designed to bring divine grace, remove obstacles
-              and bless you with prosperity and well-being.
-            </p>
-
-            {/* FEATURE BADGES */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
-              <div className="flex flex-col items-center text-center p-3 rounded-xl bg-[#F7EFE1]/80 border border-[#DECBB0]/70">
-                <div className="w-11 h-11 rounded-full border border-[#B08A45]/60 flex items-center justify-center text-[#781D27] mb-2 bg-[#FAF5EC]">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    className="w-5 h-5"
-                  >
-                    <path d="M12 2v2m-3 3h6l-3-3z" />
-                    <path d="M7 7h10l-1 4H8L7 7z" />
-                    <path d="M5 11h14l-1 5H6l-1-5z" />
-                    <path d="M3 16h18v6H3z" />
-                  </svg>
-                </div>
-
-                <span className="text-[12px] font-semibold text-[#42151B] leading-snug">
-                  Performed in Sacred Temples
-                </span>
-              </div>
-
-              <div className="flex flex-col items-center text-center p-3 rounded-xl bg-[#F7EFE1]/80 border border-[#DECBB0]/70">
-                <div className="w-11 h-11 rounded-full border border-[#B08A45]/60 flex items-center justify-center text-[#781D27] mb-2 bg-[#FAF5EC]">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    className="w-5 h-5"
-                  >
-                    <circle cx="12" cy="7" r="4" />
-                    <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
-                    <path d="M12 3v2" />
-                  </svg>
-                </div>
-
-                <span className="text-[12px] font-semibold text-[#42151B] leading-snug">
-                  Experienced & Vedic Priests
-                </span>
-              </div>
-
-              <div className="flex flex-col items-center text-center p-3 rounded-xl bg-[#F7EFE1]/80 border border-[#DECBB0]/70">
-                <div className="w-11 h-11 rounded-full border border-[#B08A45]/60 flex items-center justify-center text-[#781D27] mb-2 bg-[#FAF5EC]">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    className="w-5 h-5"
-                  >
-                    <path d="M12 2l8 4.5v9L12 20l-8-4.5v-9L12 2z" />
-                    <path d="M12 12l8-4.5" />
-                    <path d="M12 12v8" />
-                    <path d="M12 12L4 7.5" />
-                  </svg>
-                </div>
-
-                <span className="text-[12px] font-semibold text-[#42151B] leading-snug">
-                  Authentic Rituals & Procedures
-                </span>
-              </div>
-
-              <div className="flex flex-col items-center text-center p-3 rounded-xl bg-[#F7EFE1]/80 border border-[#DECBB0]/70">
-                <div className="w-11 h-11 rounded-full border border-[#B08A45]/60 flex items-center justify-center text-[#781D27] mb-2 bg-[#FAF5EC]">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    className="w-5 h-5"
-                  >
-                    <path d="M12 4c-1.5 3-4 6-4 9a4 4 0 0 0 8 0c0-3-2.5-6-4-9z" />
-                    <path d="M4 14c2-1 4.5-1 6.5 0-1.5-2.5-4-3.5-6.5-2" />
-                    <path d="M20 14c-2-1 4.5-1 6.5 0-1.5-2.5-4-3.5-6.5-2" />
-                  </svg>
-                </div>
-
-                <span className="text-[12px] font-semibold text-[#42151B] leading-snug">
-                  Divine Blessings & Prosperity
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================= */}
-      {/* 4. PACKAGE DETAILS */}
+      {/* PACKAGE DETAILS */}
       {/* ========================================================= */}
 
       <section
@@ -750,7 +600,6 @@ export default function TemplePackagePage() {
         id="package-details"
         className="scroll-mt-28 py-10 sm:py-16 px-4 sm:px-8 max-w-[1400px] mx-auto"
       >
-        {/* SECTION HEADER */}
         <div className="text-center mb-8">
           <span className="inline-block px-4 py-1 rounded-full bg-[#EFE3CF] border border-[#DECBB0] text-[11px] font-bold tracking-[0.25em] uppercase text-[#88242F] mb-3">
             Thirumanjam
@@ -759,109 +608,101 @@ export default function TemplePackagePage() {
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#42151B]">
             Package Details
           </h2>
-
-          <div className="flex items-center justify-center gap-2 mt-3">
-            <span className="h-px w-12 bg-gradient-to-r from-transparent to-[#B08A45]" />
-            <span className="w-1.5 h-1.5 rotate-45 border border-[#B08A45]" />
-            <span className="w-2.5 h-2.5 rotate-45 bg-[#B08A45]" />
-            <span className="w-1.5 h-1.5 rotate-45 border border-[#B08A45]" />
-            <span className="h-px w-12 bg-gradient-to-l from-transparent to-[#B08A45]" />
-          </div>
         </div>
 
-        {/* OUTER BOX */}
         <div className="relative rounded-2xl bg-[#FCFAF5] border border-[#DFCBB0] p-4 sm:p-7 shadow-[0_10px_35px_rgba(80,20,30,0.07)] overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-            {/* LEFT SIDEBAR */}
+            {/* SIDEBAR */}
+
             <div className="lg:col-span-3 bg-[#4A1018] rounded-xl p-3 sm:p-4 text-white shadow-lg space-y-2">
-              {/* PACKAGE TAB */}
               <button
                 type="button"
                 onClick={() => setActiveTab("package")}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-lg text-left text-sm font-medium transition-all duration-300 ${
+                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-lg text-left text-sm font-medium transition-all ${
                   activeTab === "package"
                     ? "bg-gradient-to-r from-[#7D1E28] to-[#8C232E] text-white shadow-md border-l-4 border-[#E7BE6B]"
-                    : "text-[#E6CFCE] hover:bg-[#5E1520] hover:text-white"
+                    : "text-[#E6CFCE] hover:bg-[#5E1520]"
                 }`}
               >
-                <Package
-                  size={18}
-                  className={
-                    activeTab === "package"
-                      ? "text-[#E7BE6B]"
-                      : "text-[#B8860B]"
-                  }
-                />
+                <Package size={18} />
                 <span>Package Details</span>
               </button>
 
-              {/* PROCESS TAB */}
               <button
                 type="button"
                 onClick={() => setActiveTab("process")}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-lg text-left text-sm font-medium transition-all duration-300 ${
+                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-lg text-left text-sm font-medium transition-all ${
                   activeTab === "process"
                     ? "bg-gradient-to-r from-[#7D1E28] to-[#8C232E] text-white shadow-md border-l-4 border-[#E7BE6B]"
-                    : "text-[#E6CFCE] hover:bg-[#5E1520] hover:text-white"
+                    : "text-[#E6CFCE] hover:bg-[#5E1520]"
                 }`}
               >
-                <ListOrdered
-                  size={18}
-                  className={
-                    activeTab === "process"
-                      ? "text-[#E7BE6B]"
-                      : "text-[#B8860B]"
-                  }
-                />
+                <ListOrdered size={18} />
                 <span>Pooja Process</span>
               </button>
 
-              {/* BENEFITS TAB */}
               <button
                 type="button"
                 onClick={() => setActiveTab("benefits")}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-lg text-left text-sm font-medium transition-all duration-300 ${
+                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-lg text-left text-sm font-medium transition-all ${
                   activeTab === "benefits"
                     ? "bg-gradient-to-r from-[#7D1E28] to-[#8C232E] text-white shadow-md border-l-4 border-[#E7BE6B]"
-                    : "text-[#E6CFCE] hover:bg-[#5E1520] hover:text-white"
+                    : "text-[#E6CFCE] hover:bg-[#5E1520]"
                 }`}
               >
-                <Star
-                  size={18}
-                  className={
-                    activeTab === "benefits"
-                      ? "text-[#E7BE6B]"
-                      : "text-[#B8860B]"
-                  }
-                />
+                <Star size={18} />
                 <span>Benefits</span>
               </button>
 
-              {/* NOTES TAB */}
               <button
                 type="button"
                 onClick={() => setActiveTab("notes")}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-lg text-left text-sm font-medium transition-all duration-300 ${
+                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-lg text-left text-sm font-medium transition-all ${
                   activeTab === "notes"
                     ? "bg-gradient-to-r from-[#7D1E28] to-[#8C232E] text-white shadow-md border-l-4 border-[#E7BE6B]"
-                    : "text-[#E6CFCE] hover:bg-[#5E1520] hover:text-white"
+                    : "text-[#E6CFCE] hover:bg-[#5E1520]"
                 }`}
               >
-                <Info
-                  size={18}
-                  className={
-                    activeTab === "notes"
-                      ? "text-[#E7BE6B]"
-                      : "text-[#B8860B]"
-                  }
-                />
+                <Info size={18} />
                 <span>Important Notes</span>
               </button>
+
+              <div className="pt-4 mt-2 border-t border-white/15">
+                <span className="text-[10px] uppercase tracking-wider text-[#D4B978]">
+                  Selected Package
+                </span>
+
+                <div className="font-serif text-xl font-bold text-[#F3D78A] mt-1">
+                  Thirumanjam
+                </div>
+
+                <div className="text-white text-lg font-semibold mt-1">
+                  ₹1,999
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsBookingOpen(true)}
+                  className="mt-4 w-full rounded-lg bg-[#E5C77A] py-2.5 text-sm font-bold text-[#3D1418] hover:bg-[#F3D78A] transition-colors"
+                >
+                  Order Now
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsBookingOpen(true)}
+                  className="mt-3 w-full rounded-lg bg-[#F3D78A] px-3 py-2.5 text-center text-[11px] font-semibold text-[#3D1418] animate-priest-blink"
+                >
+                  Looking for an experienced Iyer for an upcoming pooja?
+                </button>
+              </div>
             </div>
 
-            {/* RIGHT CONTENT */}
+            {/* CONTENT */}
+
             <div className="lg:col-span-9 relative min-h-[480px]">
-              {/* TAB 1 - PACKAGE DETAILS */}
+              {/* PACKAGE TAB */}
+
               {activeTab === "package" && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between gap-4">
@@ -870,11 +711,12 @@ export default function TemplePackagePage() {
                     </h3>
 
                     <span className="text-xs text-[#7A6458] font-medium bg-[#EFE3CF] px-3 py-1 rounded-md whitespace-nowrap">
-                      {samagriList.length} Sacred Items
+                      {itemsLoading
+                        ? "Loading..."
+                        : `${samagriList.length} Sacred Items`}
                     </span>
                   </div>
 
-                  {/* TABLE */}
                   <div className="overflow-x-auto rounded-lg border border-[#DFCBB0] shadow-sm bg-white">
                     <table className="w-full text-left text-xs sm:text-sm border-collapse">
                       <thead>
@@ -891,7 +733,7 @@ export default function TemplePackagePage() {
                             Name (Tamil)
                           </th>
 
-                          <th className="py-3 px-3 sm:px-5 text-right sm:text-left">
+                          <th className="py-3 px-3 sm:px-5">
                             Quantity
                           </th>
                         </tr>
@@ -900,7 +742,7 @@ export default function TemplePackagePage() {
                       <tbody className="divide-y divide-[#EFE3CF]">
                         {samagriList.map((item, index) => (
                           <tr
-                            key={item.sno}
+                            key={`${item.sno}-${index}`}
                             className={`transition-colors hover:bg-[#F5EDE0] ${
                               index % 2 === 0
                                 ? "bg-[#FAF7F0]"
@@ -919,7 +761,7 @@ export default function TemplePackagePage() {
                               {item.nameTa}
                             </td>
 
-                            <td className="py-2.5 px-3 sm:px-5 font-medium text-[#7D1E28] text-right sm:text-left">
+                            <td className="py-2.5 px-3 sm:px-5 font-medium text-[#7D1E28]">
                               {item.quantity}
                             </td>
                           </tr>
@@ -928,43 +770,30 @@ export default function TemplePackagePage() {
                     </table>
                   </div>
 
-                  {/* DISCLAIMER */}
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2">
-                    <div className="flex items-start sm:items-center gap-2 text-xs sm:text-[13px] text-[#6E584D] italic bg-[#F7EFE1] p-3 rounded-lg border border-[#E5D7C0] max-w-xl">
-                      <Info
-                        size={16}
-                        className="text-[#9E2A2B] shrink-0 mt-0.5 sm:mt-0"
-                      />
+                  <div className="flex items-start gap-2 text-xs sm:text-[13px] text-[#6E584D] italic bg-[#F7EFE1] p-3 rounded-lg border border-[#E5D7C0]">
+                    <Info
+                      size={16}
+                      className="text-[#9E2A2B] shrink-0 mt-0.5"
+                    />
 
-                      <span>
-                        The items &amp; quantities may vary slightly based on
-                        the priest&apos;s guidance and temple tradition.
-                      </span>
-                    </div>
-
-                    <div className="hidden sm:flex items-center gap-2 self-end text-right">
-                      <div className="relative w-14 h-24">
-                        <Image
-                          src="/images/brassplate_transparent.png"
-                          alt="Traditional Brass Kuthu Vilakku Lamp"
-                          fill
-                          className="object-contain drop-shadow-[0_4px_10px_rgba(200,150,50,0.3)]"
-                        />
-                      </div>
-                    </div>
+                    <span>
+                      The items and quantities may vary slightly based on the
+                      priest&apos;s guidance and temple tradition.
+                    </span>
                   </div>
                 </div>
               )}
 
-              {/* TAB 2 - POOJA PROCESS */}
+              {/* PROCESS TAB */}
+
               {activeTab === "process" && (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between gap-4 mb-2">
+                  <div className="flex items-center justify-between gap-4">
                     <h3 className="font-serif text-xl sm:text-2xl text-[#42151B] font-semibold">
                       Step-by-Step Temple Pooja Process
                     </h3>
 
-                    <span className="text-xs text-[#7A6458] font-medium bg-[#EFE3CF] px-3 py-1 rounded-md whitespace-nowrap">
+                    <span className="text-xs text-[#7A6458] font-medium bg-[#EFE3CF] px-3 py-1 rounded-md">
                       6 Sacred Steps
                     </span>
                   </div>
@@ -973,10 +802,10 @@ export default function TemplePackagePage() {
                     {poojaProcessSteps.map((step) => (
                       <div
                         key={step.step}
-                        className="bg-white p-5 rounded-xl border border-[#DFCBB0] shadow-sm hover:shadow-md transition-shadow relative overflow-hidden"
+                        className="bg-white p-5 rounded-xl border border-[#DFCBB0] shadow-sm hover:shadow-md transition-shadow"
                       >
                         <div className="flex items-start gap-3">
-                          <span className="w-9 h-9 rounded-full bg-[#5A121D] text-[#F5E6C8] flex items-center justify-center font-serif font-bold text-sm shrink-0 shadow-inner">
+                          <span className="w-9 h-9 rounded-full bg-[#5A121D] text-[#F5E6C8] flex items-center justify-center font-serif font-bold text-sm shrink-0">
                             {step.step}
                           </span>
 
@@ -1007,7 +836,7 @@ export default function TemplePackagePage() {
                     <button
                       type="button"
                       onClick={() => setIsEnquiryOpen(true)}
-                      className="px-4 py-2 bg-[#5A121D] text-white text-xs font-semibold rounded-lg hover:bg-[#400B13] transition-colors"
+                      className="px-4 py-2 bg-[#5A121D] text-white text-xs font-semibold rounded-lg hover:bg-[#400B13]"
                     >
                       Book Sankalpam
                     </button>
@@ -1015,15 +844,16 @@ export default function TemplePackagePage() {
                 </div>
               )}
 
-              {/* TAB 3 - BENEFITS */}
+              {/* BENEFITS TAB */}
+
               {activeTab === "benefits" && (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between gap-4 mb-2">
+                  <div className="flex items-center justify-between gap-4">
                     <h3 className="font-serif text-xl sm:text-2xl text-[#42151B] font-semibold">
-                      Spiritual &amp; Worldly Benefits
+                      Spiritual & Worldly Benefits
                     </h3>
 
-                    <span className="text-xs text-[#7A6458] font-medium bg-[#EFE3CF] px-3 py-1 rounded-md whitespace-nowrap">
+                    <span className="text-xs text-[#7A6458] font-medium bg-[#EFE3CF] px-3 py-1 rounded-md">
                       Divine Blessings
                     </span>
                   </div>
@@ -1061,15 +891,16 @@ export default function TemplePackagePage() {
                 </div>
               )}
 
-              {/* TAB 4 - IMPORTANT NOTES */}
+              {/* NOTES TAB */}
+
               {activeTab === "notes" && (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between gap-4 mb-2">
+                  <div className="flex items-center justify-between gap-4">
                     <h3 className="font-serif text-xl sm:text-2xl text-[#42151B] font-semibold">
-                      Guidelines &amp; Important Information
+                      Guidelines & Important Information
                     </h3>
 
-                    <span className="text-xs text-[#7A6458] font-medium bg-[#EFE3CF] px-3 py-1 rounded-md whitespace-nowrap">
+                    <span className="text-xs text-[#7A6458] font-medium bg-[#EFE3CF] px-3 py-1 rounded-md">
                       Essential Guide
                     </span>
                   </div>
@@ -1111,29 +942,13 @@ export default function TemplePackagePage() {
       </section>
 
       {/* ========================================================= */}
-      {/* 5. FEATURE / ACTION CARDS */}
+      {/* ACTION CARDS */}
       {/* ========================================================= */}
 
       <section className="py-6 sm:py-10 px-4 sm:px-8 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
-          {/* PROCESS CARD */}
-          <div className="bg-[#FCFAF5] rounded-2xl p-6 sm:p-7 border border-[#DFCBB0] shadow-[0_4px_20px_rgba(80,20,30,0.05)] hover:shadow-md transition-all flex flex-col justify-between group">
+          <div className="bg-[#FCFAF5] rounded-2xl p-6 sm:p-7 border border-[#DFCBB0] shadow-[0_4px_20px_rgba(80,20,30,0.05)] flex flex-col justify-between">
             <div>
-              <div className="w-12 h-12 rounded-full bg-[#5A121D] flex items-center justify-center text-white mb-4 shadow-md group-hover:scale-105 transition-transform">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  className="w-6 h-6 text-[#E7BE6B]"
-                >
-                  <path d="M12 2v2m-3 3h6l-3-3z" />
-                  <path d="M7 7h10l-1 4H8L7 7z" />
-                  <path d="M5 11h14l-1 5H6l-1-5z" />
-                  <path d="M3 16h18v6H3z" />
-                </svg>
-              </div>
-
               <h3 className="font-serif text-xl sm:text-2xl font-semibold text-[#42151B] mb-2">
                 Pooja Process
               </h3>
@@ -1147,55 +962,37 @@ export default function TemplePackagePage() {
             <button
               type="button"
               onClick={() => scrollToTab("process")}
-              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#781D27] hover:text-[#42151B] transition-colors group/btn self-start"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#781D27]"
             >
               <span>View Process</span>
-
-              <ArrowRight
-                size={15}
-                className="transition-transform group-hover/btn:translate-x-1 text-[#C79D55]"
-              />
+              <ArrowRight size={15} />
             </button>
           </div>
 
-          {/* BENEFITS CARD */}
-          <div className="bg-[#FCFAF5] rounded-2xl p-6 sm:p-7 border border-[#DFCBB0] shadow-[0_4px_20px_rgba(80,20,30,0.05)] hover:shadow-md transition-all flex flex-col justify-between group">
+          <div className="bg-[#FCFAF5] rounded-2xl p-6 sm:p-7 border border-[#DFCBB0] shadow-[0_4px_20px_rgba(80,20,30,0.05)] flex flex-col justify-between">
             <div>
-              <div className="w-12 h-12 rounded-full bg-[#5A121D] flex items-center justify-center text-white mb-4 shadow-md group-hover:scale-105 transition-transform">
-                <Star size={22} className="text-[#E7BE6B]" />
-              </div>
-
               <h3 className="font-serif text-xl sm:text-2xl font-semibold text-[#42151B] mb-2">
                 Benefits
               </h3>
 
               <p className="text-xs sm:text-[13px] text-[#5D4E47] leading-relaxed mb-6">
                 Receive divine blessings for peace, prosperity, success and
-                spiritual growth for you and your family.
+                spiritual growth.
               </p>
             </div>
 
             <button
               type="button"
               onClick={() => scrollToTab("benefits")}
-              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#781D27] hover:text-[#42151B] transition-colors group/btn self-start"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#781D27]"
             >
               <span>View Benefits</span>
-
-              <ArrowRight
-                size={15}
-                className="transition-transform group-hover/btn:translate-x-1 text-[#C79D55]"
-              />
+              <ArrowRight size={15} />
             </button>
           </div>
 
-          {/* NOTES CARD */}
-          <div className="bg-[#FCFAF5] rounded-2xl p-6 sm:p-7 border border-[#DFCBB0] shadow-[0_4px_20px_rgba(80,20,30,0.05)] hover:shadow-md transition-all flex flex-col justify-between group">
+          <div className="bg-[#FCFAF5] rounded-2xl p-6 sm:p-7 border border-[#DFCBB0] shadow-[0_4px_20px_rgba(80,20,30,0.05)] flex flex-col justify-between">
             <div>
-              <div className="w-12 h-12 rounded-full bg-[#5A121D] flex items-center justify-center text-white mb-4 shadow-md group-hover:scale-105 transition-transform">
-                <Info size={22} className="text-[#E7BE6B]" />
-              </div>
-
               <h3 className="font-serif text-xl sm:text-2xl font-semibold text-[#42151B] mb-2">
                 Important Notes
               </h3>
@@ -1209,61 +1006,40 @@ export default function TemplePackagePage() {
             <button
               type="button"
               onClick={() => scrollToTab("notes")}
-              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#781D27] hover:text-[#42151B] transition-colors group/btn self-start"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#781D27]"
             >
               <span>View Notes</span>
-
-              <ArrowRight
-                size={15}
-                className="transition-transform group-hover/btn:translate-x-1 text-[#C79D55]"
-              />
+              <ArrowRight size={15} />
             </button>
           </div>
         </div>
       </section>
 
       {/* ========================================================= */}
-      {/* 6. ENQUIRY BANNER */}
+      {/* ENQUIRY BANNER */}
       {/* ========================================================= */}
 
       <section className="py-10 sm:py-14 px-4 sm:px-8 max-w-[1400px] mx-auto">
-        <div className="relative rounded-2xl bg-[#4A1018] border border-[#782330] p-6 sm:p-8 lg:p-10 shadow-2xl overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(218,165,32,0.15),transparent_60%)] pointer-events-none" />
-
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 items-center gap-6 sm:gap-8">
-            {/* DIYA */}
-            <div className="lg:col-span-2 flex justify-center lg:justify-start">
-              <div className="relative w-28 h-28 sm:w-32 sm:h-32">
-                <Image
-                  src="/images/cta_diya.png"
-                  alt="Traditional Brass Diya Lamp with Marigold Flowers"
-                  fill
-                  className="object-contain drop-shadow-[0_0_20px_rgba(255,180,60,0.4)]"
-                />
-              </div>
-            </div>
-
-            {/* TEXT */}
-            <div className="lg:col-span-7 text-center lg:text-left">
-              <h3 className="font-serif text-2xl sm:text-3xl lg:text-[34px] font-normal text-[#FDF7E7] leading-tight mb-2">
+        <div className="relative rounded-2xl bg-[#4A1018] border border-[#782330] p-6 sm:p-8 lg:p-10 shadow-2xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-6">
+            <div className="lg:col-span-9">
+              <h3 className="font-serif text-2xl sm:text-3xl text-[#FDF7E7] mb-2">
                 Have Questions About Our Temple Package?
               </h3>
 
-              <p className="text-xs sm:text-sm text-[#E2CDCD] leading-relaxed max-w-xl">
+              <p className="text-sm text-[#E2CDCD]">
                 Our team is here to help you choose the perfect pooja for your
                 needs.
               </p>
             </div>
 
-            {/* BUTTON */}
             <div className="lg:col-span-3 flex justify-center lg:justify-end">
               <button
                 type="button"
                 onClick={() => setIsEnquiryOpen(true)}
-                className="inline-flex items-center justify-center gap-2 bg-[#E7BE6B] hover:bg-[#D4A950] text-[#3D0D14] text-xs sm:text-sm font-bold tracking-wider uppercase px-7 py-3.5 rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                className="inline-flex items-center gap-2 bg-[#E7BE6B] hover:bg-[#D4A950] text-[#3D0D14] text-sm font-bold px-7 py-3.5 rounded-lg"
               >
                 <span>Enquire Now</span>
-
                 <ArrowRight size={16} />
               </button>
             </div>
@@ -1272,23 +1048,21 @@ export default function TemplePackagePage() {
       </section>
 
       {/* ========================================================= */}
-      {/* 7. ENQUIRY MODAL */}
+      {/* ENQUIRY MODAL */}
       {/* ========================================================= */}
 
       {isEnquiryOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-lg bg-[#FAF6EE] rounded-2xl border-2 border-[#DECBB0] shadow-2xl p-6 sm:p-8 overflow-hidden">
-            {/* CLOSE */}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="relative w-full max-w-lg bg-[#FAF6EE] rounded-2xl border-2 border-[#DECBB0] shadow-2xl p-6 sm:p-8">
             <button
               type="button"
               onClick={() => setIsEnquiryOpen(false)}
-              className="absolute top-4 right-4 text-[#7A6458] hover:text-[#42151B] p-1 rounded-full hover:bg-[#EFE3CF] transition-colors"
+              className="absolute top-4 right-4 text-[#7A6458] hover:text-[#42151B]"
               aria-label="Close modal"
             >
               <X size={20} />
             </button>
 
-            {/* HEADER */}
             <div className="text-center mb-6">
               <span className="text-xs font-bold tracking-widest text-[#B08A45] uppercase">
                 Divine Temple Rituals
@@ -1299,25 +1073,22 @@ export default function TemplePackagePage() {
               </h3>
 
               <p className="text-xs text-[#6A574E] mt-1">
-                Fill in your details below and our Vedic coordinators will
-                contact you promptly.
+                Fill in your details below and our team will contact you.
               </p>
             </div>
 
-            {/* FORM */}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
 
                 alert(
-                  "Thank you for your enquiry! Our temple priest team will contact you shortly."
+                  "Thank you for your enquiry! Our team will contact you shortly."
                 );
 
                 setIsEnquiryOpen(false);
               }}
               className="space-y-3.5"
             >
-              {/* NAME */}
               <div>
                 <label className="block text-xs font-semibold text-[#42151B] mb-1">
                   Full Name *
@@ -1338,7 +1109,6 @@ export default function TemplePackagePage() {
                 </div>
               </div>
 
-              {/* PHONE + DATE */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-[#42151B] mb-1">
@@ -1379,10 +1149,9 @@ export default function TemplePackagePage() {
                 </div>
               </div>
 
-              {/* GOTRAM */}
               <div>
                 <label className="block text-xs font-semibold text-[#42151B] mb-1">
-                  Gotram / Nakshatram (Optional)
+                  Gotram / Nakshatram
                 </label>
 
                 <input
@@ -1392,7 +1161,6 @@ export default function TemplePackagePage() {
                 />
               </div>
 
-              {/* REQUEST */}
               <div>
                 <label className="block text-xs font-semibold text-[#42151B] mb-1">
                   Specific Requests / Temple Preference
@@ -1405,16 +1173,47 @@ export default function TemplePackagePage() {
                 />
               </div>
 
-              {/* SUBMIT */}
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-2 bg-[#5A121D] hover:bg-[#400B13] text-white py-3 rounded-lg text-sm font-semibold tracking-wider uppercase shadow-md transition-colors mt-2"
+                className="w-full flex items-center justify-center gap-2 bg-[#5A121D] hover:bg-[#400B13] text-white py-3 rounded-lg text-sm font-semibold"
               >
                 <Send size={16} />
 
                 <span>Submit Temple Enquiry</span>
               </button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================= */}
+      {/* BOOKING MODAL */}
+      {/* ========================================================= */}
+      {isBookingOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="relative w-full max-w-md rounded-2xl border-2 border-[#DECBB0] bg-[#FAF6EE] p-6 shadow-2xl sm:p-8">
+            <button type="button" onClick={() => setIsBookingOpen(false)} className="absolute right-4 top-4 text-[#7A6458] hover:text-[#42151B]" aria-label="Close">
+              <X size={20} />
+            </button>
+
+            {bookingSuccess ? (
+              <div className="py-8 text-center">
+                <h3 className="mb-2 font-serif text-2xl font-bold text-[#42151B]">Request Received!</h3>
+                <p className="text-sm text-[#55463E]">Our team will contact you shortly to confirm.</p>
+              </div>
+            ) : (
+              <>
+                <h3 className="mb-1 font-serif text-2xl font-bold text-[#42151B]">Request for an Iyer</h3>
+                <p className="mb-5 text-xs text-[#63534B]">Fill in your details and we&apos;ll get back to you shortly.</p>
+                <form onSubmit={handleBookingSubmit} className="space-y-3.5">
+                  <input type="text" required placeholder="Full Name" value={bookingForm.name} onChange={(e) => setBookingForm({ ...bookingForm, name: e.target.value })} className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none" />
+                  <input type="tel" required placeholder="Mobile Number" value={bookingForm.mobile} onChange={(e) => setBookingForm({ ...bookingForm, mobile: e.target.value })} className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none" />
+                  <input type="email" required placeholder="Email Address" value={bookingForm.email} onChange={(e) => setBookingForm({ ...bookingForm, email: e.target.value })} className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none" />
+                  <textarea required rows={2} placeholder="Address" value={bookingForm.address} onChange={(e) => setBookingForm({ ...bookingForm, address: e.target.value })} className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none" />
+                  <button type="submit" className="w-full rounded-lg bg-[#5A121D] py-3 text-sm font-bold tracking-wide text-white transition-colors hover:bg-[#400B13]">Submit</button>
+                </form>
+              </>
+            )}
           </div>
         </div>
       )}
