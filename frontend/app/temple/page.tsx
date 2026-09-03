@@ -317,6 +317,26 @@ export default function TemplePackagePage() {
     fetchTemplePackages();
   }, []);
 
+    const [dynamicPrice, setDynamicPrice] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchPrice = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/package-prices/thirumanjam`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.price) {
+            setDynamicPrice(data.price);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load temple package price:", error);
+      }
+    };
+
+    fetchPrice();
+  }, []);
+
   // -----------------------------------------------------------
 
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
@@ -676,8 +696,8 @@ export default function TemplePackagePage() {
                   Thirumanjam
                 </div>
 
-                <div className="text-white text-lg font-semibold mt-1">
-                  ₹1,999
+                              <div className="text-white text-lg font-semibold mt-1">
+                  ₹{dynamicPrice ?? "1,999"}
                 </div>
 
                 <button

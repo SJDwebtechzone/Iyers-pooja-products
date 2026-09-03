@@ -794,6 +794,7 @@ export default function OverseasPackagePage() {
     overseasPoojas[0].items
   );
   const [itemsLoading, setItemsLoading] = useState(false);
+    const [dynamicPrice, setDynamicPrice] = useState<string | null>(null); 
 
   const [activeTab, setActiveTab] = useState<
     "details" | "process" | "benefits" | "notes"
@@ -862,6 +863,57 @@ const handleBookingSubmit = async (e: React.FormEvent) => {
   // ==========================================
 
   useEffect(() => {
+    if (selectedPooja.id !== "thirumanjam") {                                                               
+      setLiveItems(selectedPooja.items);
+      setItemsLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+
+    async function loadItems() {
+      setItemsLoading(true);
+
+      try {
+        const res = await fetch(`${API_BASE}/overseas-temple-package`);
+
+        if (!res.ok) {
+          throw new Error("Failed to load");
+        }
+
+        const data = await res.json();
+
+        if (!cancelled) {
+          const mapped: SamagriItem[] = data.map((row: any) => ({
+            sno: row.sno,
+            english: row.english,
+            tamil: row.tamil ?? "",
+            quantity: row.quantity ?? "",
+          }));
+
+          setLiveItems(
+            mapped.length > 0 ? mapped : selectedPooja.items
+          );
+        }
+      } catch {
+        if (!cancelled) {
+          setLiveItems(selectedPooja.items);
+        }
+      } finally {
+        if (!cancelled) {
+          setItemsLoading(false);
+        }
+      }
+    }
+
+    loadItems();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedPooja.id]);
+
+    useEffect(() => {
     if (selectedPooja.id !== "thirumanjam") {
       setLiveItems(selectedPooja.items);
       setItemsLoading(false);
@@ -906,6 +958,35 @@ const handleBookingSubmit = async (e: React.FormEvent) => {
     }
 
     loadItems();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedPooja.id]);
+
+  useEffect(() => {                                    
+    if (selectedPooja.id !== "thirumanjam") {
+      setDynamicPrice(null);
+      return;
+    }
+
+    let cancelled = false;
+
+    async function loadPrice() {
+      try {
+        const res = await fetch(`${API_BASE}/package-prices/overseas-thirumanjam`);
+        if (res.ok) {
+          const data = await res.json();
+          if (!cancelled && data?.price) {
+            setDynamicPrice(data.price);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load overseas package price:", error);
+      }
+    }
+
+    loadPrice();
 
     return () => {
       cancelled = true;
@@ -1623,7 +1704,7 @@ return (
     Selected Pooja
   </span>
 
-  <div className="font-[family-name:var(--font-cormorant)] text-xl font-bold text-[#F3D78A]">
+   <div className="font-[family-name:var(--font-cormorant)] text-xl font-bold text-[#F3D78A]">
     {selectedPooja.name}
   </div>
 
@@ -1631,9 +1712,14 @@ return (
     International Sankalpam
   </div>
 
+  <div className="text-white text-lg font-semibold mt-1">
+    {dynamicPrice ? `₹${dynamicPrice}` : "Contact for price"}
+  </div>
+
   <button
     type="button"
     onClick={() => setIsModalOpen(true)}
+    
     className="mt-3 w-full rounded-lg bg-[#E5C77A] py-2 text-center text-xs font-bold text-[#3D1418] transition hover:bg-[#F3D78A]"
   >
     Order Now

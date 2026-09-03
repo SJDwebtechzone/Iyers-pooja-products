@@ -534,8 +534,9 @@ export default function FestivalPackagePage() {
 
 
 
-  const [liveItems, setLiveItems] = useState<PackageItem[]>(festivalPackages[0].items);
+   const [liveItems, setLiveItems] = useState<PackageItem[]>(festivalPackages[0].items);
   const [itemsLoading, setItemsLoading] = useState(false);
+  const [dynamicPrice, setDynamicPrice] = useState<string | null>(null);
 
   // BOOKING STATE
   const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -624,6 +625,39 @@ useEffect(() => {
     }
 
     loadItems();
+
+    return () => {
+      cancelled = true;
+    };
+    }, [selectedFestival.id]);
+
+  // Fetch dynamic price for the selected festival
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadPrice() {
+      try {
+        const res = await fetch(
+          `${API_BASE}/package-prices/${selectedFestival.id}`
+        );
+
+        if (res.ok) {
+          const data = await res.json();
+
+          if (!cancelled) {
+            setDynamicPrice(data?.price ?? null);
+          }
+        } else if (!cancelled) {
+          setDynamicPrice(null);
+        }
+      } catch {
+        if (!cancelled) {
+          setDynamicPrice(null);
+        }
+      }
+    }
+
+    loadPrice();
 
     return () => {
       cancelled = true;
@@ -1046,13 +1080,36 @@ useEffect(() => {
                   </button>
                 </div>
 
-                {/* Package Quick Booking Box inside sidebar */}
-                <div className="mt-8 hidden rounded-xl border border-white/15 bg-black/20 p-4 text-white lg:block">
-                  <span className="text-[11px] uppercase tracking-wider text-[#D4B978]">Starting At</span>
-                  <div className="font-[family-name:var(--font-cormorant)] text-3xl font-bold text-[#F3D78A]">{selectedFestival.price}</div>
-                  <p className="mt-1 text-xs text-white/75">Includes all packed samagri and home delivery.</p>
-                  <button type="button" onClick={() => setIsBookingOpen(true)} className="mt-4 flex w-full items-center justify-center rounded-lg bg-[#E5C77A] py-2.5 text-xs font-bold tracking-wider text-[#3D1418] transition hover:bg-[#F3D78A]">ORDER NOW</button>
-                  <button type="button" onClick={() => setIsBookingOpen(true)} className="mt-3 w-full rounded-lg bg-[#F3D78A] px-3 py-2.5 text-center text-[11px] font-semibold text-[#3D1418] animate-priest-blink">
+            
+                                            {/* Package Quick Booking Box inside sidebar */}
+                <div className="mt-8 hidden pt-4 border-t border-white/15 text-white lg:block">
+                  <span className="text-[11px] uppercase tracking-wider text-[#D4B978]">
+                    Selected Package
+                  </span>
+
+                  <div className="mt-1 font-[family-name:var(--font-cormorant)] text-xl font-bold text-[#F3D78A]">
+                    {selectedFestival.name}
+                  </div>
+
+                  <div className="mt-1 text-lg font-semibold text-white">
+                    {dynamicPrice
+                      ? `₹${dynamicPrice}`
+                      : selectedFestival.price}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsBookingOpen(true)}
+                    className="mt-4 flex w-full items-center justify-center rounded-lg bg-[#E5C77A] py-2.5 text-xs font-bold tracking-wider text-[#3D1418] transition hover:bg-[#F3D78A]"
+                  >
+                    ORDER NOW
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsBookingOpen(true)}
+                    className="mt-3 w-full rounded-lg bg-[#F3D78A] px-3 py-2.5 text-center text-[11px] font-semibold text-[#3D1418] animate-priest-blink"
+                  >
                     Looking for an experienced Iyer for an
                     upcoming pooja?
                   </button>

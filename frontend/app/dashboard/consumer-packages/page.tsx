@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChevronLeft, Plus, Pencil, Trash2, X, Check } from "lucide-react";
+import { ChevronLeft, Plus, Pencil, Trash2, X, Check, IndianRupee } from "lucide-react";
 
 const CATEGORIES = [
   { slug: "ganapathi-homam", label: "Gaanapathi Homam" },
@@ -63,6 +63,102 @@ export default function ConsumerPackagesPage() {
       categoryLabel={CATEGORIES.find((c) => c.slug === activeCategory)!.label}
       onBack={() => setActiveCategory(null)}
     />
+  );
+}
+
+function PriceEditor({ categoryKey }: { categoryKey: string }) {
+  const [price, setPrice] = useState("");
+  const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  async function loadPrice() {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/package-prices/${categoryKey}`);
+      const data = await res.json();
+      setPrice(data.price ?? "");
+    } catch {
+      // ignore, leave price blank
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadPrice();
+    setEditing(false);
+  }, [categoryKey]);
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      const res = await fetch(`${API_BASE}/package-prices/${categoryKey}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ price }),
+      });
+      if (!res.ok) throw new Error();
+      setEditing(false);
+    } catch {
+      alert("Could not save price. Make sure you're logged in.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="flex items-center justify-between bg-white border border-[#E4D7C3] rounded-xl px-5 py-4 mb-4">
+      <div className="flex items-center gap-2">
+        <IndianRupee className="w-4 h-4 text-[#8A1C2B]" />
+        <span className="text-sm text-[#6B5A4E]">Package Price:</span>
+        {editing ? (
+          <input
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            placeholder="e.g. 2499"
+            className="border border-[#E4D7C3] rounded px-2 py-1 text-sm w-32"
+            autoFocus
+          />
+        ) : (
+          <span className="text-[#2B0C14] font-medium">
+            {loading ? "Loading..." : price ? `₹${price}` : "Not set"}
+          </span>
+        )}
+      </div>
+
+      {editing ? (
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="text-green-700 disabled:opacity-50"
+            aria-label="Save price"
+          >
+            <Check className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => {
+              setEditing(false);
+              loadPrice();
+            }}
+            className="text-[#6B5A4E]"
+            aria-label="Cancel"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={() => setEditing(true)}
+          className="flex items-center gap-1.5 bg-[#F3E7D3] text-[#2B0C14] text-sm px-3 py-1.5 rounded-lg hover:bg-[#E4D7C3] transition"
+        >
+          <Pencil className="w-3.5 h-3.5" />
+          {price ? "Edit Price" : "Add Price"}
+        </button>
+      )}
+    </div>
   );
 }
 
@@ -199,13 +295,16 @@ function PackageDetailsTable({
         Back to categories
       </button>
 
-      <div className="flex items-center justify-between mb-6">
-        <h1
-          className="text-2xl text-[#2B0C14]"
-          style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-        >
-          {categoryLabel} — Package Details
-        </h1>
+      <h1
+        className="text-2xl text-[#2B0C14] mb-4"
+        style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+      >
+        {categoryLabel} — Package Details
+      </h1>
+
+      <PriceEditor categoryKey={category} />
+
+      <div className="flex items-center justify-end mb-6">
         <button
           onClick={startAdd}
           className="flex items-center gap-1.5 bg-[#8A1C2B] text-[#F3E7D3] text-sm px-4 py-2 rounded-lg hover:bg-[#701622] transition"

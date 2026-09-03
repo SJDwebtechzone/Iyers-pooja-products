@@ -13,6 +13,8 @@ import { OverseasTemplePackageModule } from './overseas-temple-package/overseas-
 import { HomeBannerModule } from './home-banner/home-banner.module';
 import { HomePackageImagesModule } from './home-package-images/home-package-images.module';
 import { BookingsModule } from './bookings/bookings.module';
+import { PackagePricesModule } from './package-prices/package-prices.module';
+import { IyerRegistrationsModule } from './iyer-registrations/iyer-registrations.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { BookingsModule } from './bookings/bookings.module';
     HomeBannerModule,
     HomePackageImagesModule,
     BookingsModule,
+    PackagePricesModule,
+    IyerRegistrationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

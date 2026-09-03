@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Flame, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const API_URL = "http://localhost:3001";
 
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [remember, setRemember] = useState(true);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -77,10 +79,14 @@ export default function LoginPage() {
           />
         </svg>
 
-        <div className="relative z-10 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-[#D4A017]/15 border border-[#D4A017]/40 flex items-center justify-center">
-            <Flame className="w-5 h-5 text-[#D4A017]" strokeWidth={1.75} />
-          </div>
+                <div className="relative z-10 flex items-center gap-3">
+          <Image
+            src="/images/logo.jpeg"
+            alt="Iyer's Pooja Products"
+            width={88}
+            height={88}
+            className="h-[88px] w-[88px] rounded-full object-cover shrink-0"
+          />
           <span
             className="text-[#F3E7D3] text-lg tracking-wide"
             style={{ fontFamily: "'Fraunces', Georgia, serif" }}
@@ -112,8 +118,14 @@ export default function LoginPage() {
       {/* Right panel — form */}
       <div className="flex-1 flex items-center justify-center px-6 py-16 bg-[#FBF6EE]">
         <div className="w-full max-w-sm">
-          <div className="lg:hidden flex items-center gap-2 mb-10">
-            <Flame className="w-5 h-5 text-[#8A1C2B]" strokeWidth={1.75} />
+               <div className="lg:hidden flex items-center gap-2 mb-10">
+            <Image
+              src="/images/logo.jpeg"
+              alt="Iyer's Pooja Products"
+              width={56}
+              height={56}
+              className="h-[56px] w-[56px] rounded-full object-cover shrink-0"
+            />
             <span
               className="text-[#2B0C14] text-base"
               style={{ fontFamily: "'Fraunces', Georgia, serif" }}

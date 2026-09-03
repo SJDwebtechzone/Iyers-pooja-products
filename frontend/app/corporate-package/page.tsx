@@ -636,6 +636,9 @@ export default function CorporatePackagePage() {
   const [itemsLoading, setItemsLoading] =
     useState(false);
 
+      const [dynamicPrice, setDynamicPrice] =
+    useState<string | null>(null);
+
   const [formData, setFormData] = useState({
     companyName: "",
     contactPerson: "",
@@ -850,6 +853,36 @@ export default function CorporatePackagePage() {
     }
 
     loadItems();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedPackage]);
+
+    // ==========================================
+  // FETCH LIVE PRICE
+  // ==========================================
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadPrice() {
+      try {
+        const res = await fetch(
+          `${API_BASE}/package-prices/${selectedPackage.id}`
+        );
+        const data = await res.json();
+        if (!cancelled) {
+          setDynamicPrice(data?.price || null);
+        }
+      } catch {
+        if (!cancelled) {
+          setDynamicPrice(null);
+        }
+      }
+    }
+
+    loadPrice();
 
     return () => {
       cancelled = true;
@@ -1458,10 +1491,10 @@ export default function CorporatePackagePage() {
                       {selectedPackage.name}
                     </h3>
 
-                    <div className="mt-2 text-xl font-bold text-white">
-                      {
-                        selectedPackage.price
-                      }
+                                       <div className="mt-2 text-xl font-bold text-white">
+                      {dynamicPrice
+                        ? `₹${dynamicPrice}`
+                        : selectedPackage.price}
                     </div>
                   </div>
 

@@ -68,6 +68,103 @@ export default function FestivalsPackagesPage() {
   );
 }
 
+function PriceEditor({ categoryKey }: { categoryKey: string }) {
+  const [price, setPrice] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  async function loadPrice() {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/package-prices/${categoryKey}`);
+      if (res.ok) {
+        const data = await res.json();
+        setPrice(data?.price ?? null);
+      } else {
+        setPrice(null);
+      }
+    } catch {
+      setPrice(null);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadPrice();
+    setEditing(false);
+  }, [categoryKey]);
+
+  function startEdit() {
+    setInputValue(price ?? "");
+    setEditing(true);
+  }
+
+  async function handleSave() {
+    if (!inputValue.trim()) {
+      alert("Price is required");
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await fetch(`${API_BASE}/package-prices/${categoryKey}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ price: inputValue.trim() }),
+      });
+      if (!res.ok) throw new Error();
+      setEditing(false);
+      loadPrice();
+    } catch {
+      alert("Save failed. Make sure you're logged in.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="bg-white border border-[#E4D7C3] rounded-xl px-4 py-3 flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <span className="text-sm text-[#6B5A4E]">Package Price:</span>
+        {editing ? (
+          <input
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="e.g. 5000"
+            className="w-32 border border-[#E4D7C3] rounded px-2 py-1 text-sm"
+          />
+        ) : (
+          <span className="text-[#2B0C14] text-sm font-medium">
+            {loading ? "Loading..." : price ? `₹${price}` : "Not set"}
+          </span>
+        )}
+      </div>
+
+      {editing ? (
+        <div className="flex items-center gap-2">
+          <button onClick={handleSave} disabled={saving} className="text-green-700" aria-label="Save">
+            <Check className="w-4 h-4" />
+          </button>
+          <button onClick={() => setEditing(false)} className="text-[#6B5A4E]" aria-label="Cancel">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={startEdit}
+          className="flex items-center gap-1.5 bg-[#8A1C2B] text-[#F3E7D3] text-sm px-3 py-1.5 rounded-lg hover:bg-[#701622] transition"
+        >
+          <Pencil className="w-3.5 h-3.5" />
+          {price ? "Edit Price" : "Add Price"}
+        </button>
+      )}
+    </div>
+  );
+}
+
 function PackageDetailsTable({
   category,
   categoryLabel,
@@ -201,13 +298,16 @@ function PackageDetailsTable({
         Back to categories
       </button>
 
-      <div className="flex items-center justify-between mb-6">
-        <h1
-          className="text-2xl text-[#2B0C14]"
-          style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-        >
-          {categoryLabel} — Package Details
-        </h1>
+      <h1
+        className="text-2xl text-[#2B0C14] mb-4"
+        style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+      >
+        {categoryLabel} — Package Details
+      </h1>
+
+      <PriceEditor categoryKey={category} />
+
+      <div className="flex items-center justify-end mb-6">
         <button
           onClick={startAdd}
           className="flex items-center gap-1.5 bg-[#8A1C2B] text-[#F3E7D3] text-sm px-4 py-2 rounded-lg hover:bg-[#701622] transition"

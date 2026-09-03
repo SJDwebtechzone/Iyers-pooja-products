@@ -86,7 +86,7 @@ const consumerPackageData: PackageData = {
   title: "Consumer Package",
   subtitle: "Essential pooja essentials thoughtfully curated for sacred moments at home.",
   breadcrumb: "Consumer Package",
-  heroImage: "/images/banner.jpeg",
+  heroImage: "/images/banner.png",
   introImage: "/images/banner.jpeg",
   bannerImage: "/images/kalash.jpg",
   bannerTitle: "Sacred Moments, Made Simple",
@@ -485,7 +485,7 @@ function PackagePage({ data }: PackagePageProps) {
   const [activeTab, setActiveTab] = useState("details");
   const [selectedRitual, setSelectedRitual] = useState<OccasionPackage | null>(null);
   const [dynamicItems, setDynamicItems] = useState<PackageItem[] | null>(null);
-
+  const [dynamicPrice, setDynamicPrice] = useState<string | null>(null);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingForm, setBookingForm] = useState({
@@ -535,7 +535,7 @@ function PackagePage({ data }: PackagePageProps) {
       return;
     }
 
-    fetch(`${API_BASE}/consumer-packages/${apiCategory}`)
+        fetch(`${API_BASE}/consumer-packages/${apiCategory}`)
       .then((res) => res.json())
       .then((rows) => {
         const mapped: PackageItem[] = rows.map((r: any) => ({
@@ -548,6 +548,13 @@ function PackagePage({ data }: PackagePageProps) {
         setDynamicItems(mapped);
       })
       .catch(() => setDynamicItems(null));
+
+    fetch(`${API_BASE}/package-prices/${apiCategory}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setDynamicPrice(data?.price || null);
+      })
+      .catch(() => setDynamicPrice(null));
   }, [selectedRitual]);
 
   // Set initial selected ritual based on URL hash or default to first, and listen to hashchange
@@ -947,8 +954,8 @@ function PackagePage({ data }: PackagePageProps) {
                     <div className="font-[family-name:var(--font-cormorant)] text-2xl font-bold text-[#F3D78A]">
                       {selectedRitual.title}
                     </div>
-                    <div className="mt-1 text-lg font-semibold text-white">
-                      {selectedRitual.price}
+                                        <div className="mt-1 text-lg font-semibold text-white">
+                      {dynamicPrice ? `₹${dynamicPrice}` : selectedRitual.price}
                     </div>
 
                     <button

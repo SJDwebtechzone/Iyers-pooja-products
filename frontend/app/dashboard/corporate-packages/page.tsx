@@ -4,7 +4,6 @@ import {
   useEffect,
   useState,
   type Dispatch,
-  type FormEvent,
   type SetStateAction,
 } from "react";
 import {
@@ -14,6 +13,7 @@ import {
   Trash2,
   X,
   Check,
+  IndianRupee,
 } from "lucide-react";
 
 const CATEGORIES = [
@@ -45,154 +45,151 @@ type PackageForm = {
   quantity: string;
 };
 
-type BookingForm = {
-  name: string;
-  mobile: string;
-  address: string;
-  email: string;
-};
-
 const API_BASE = "http://localhost:3001";
 
 export default function CorporatePackagesPage() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
-  // Booking state
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [bookingSuccess, setBookingSuccess] = useState(false);
-
-  const [bookingForm, setBookingForm] = useState<BookingForm>({
-    name: "",
-    mobile: "",
-    address: "",
-    email: "",
-  });
-
-  const handleBookingSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      const res = await fetch(`${API_BASE}/bookings`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...bookingForm,
-          pooja: "Corporate Package",
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Booking failed");
-      }
-
-      setBookingSuccess(true);
-
-      setTimeout(() => {
-        setBookingSuccess(false);
-        setIsBookingOpen(false);
-
-        setBookingForm({
-          name: "",
-          mobile: "",
-          address: "",
-          email: "",
-        });
-      }, 2500);
-    } catch {
-      alert("Something went wrong. Please try again.");
-    }
-  };
-
   if (!activeCategory) {
     return (
-      <>
-        <div>
-          <h1
-            className="mb-1 text-2xl text-[#2B0C14]"
-            style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-          >
-            Corporate Packages
-          </h1>
+      <div>
+        <h1
+          className="mb-1 text-2xl text-[#2B0C14]"
+          style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+        >
+          Corporate Packages
+        </h1>
 
-          <p className="mb-6 text-sm text-[#6B5A4E]">
-            Choose a package to manage its Package Details.
-          </p>
+        <p className="mb-6 text-sm text-[#6B5A4E]">
+          Choose a package to manage its Package Details.
+        </p>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.slug}
-                type="button"
-                onClick={() => setActiveCategory(cat.slug)}
-                className="rounded-xl border border-[#E4D7C3] bg-white p-5 text-left transition hover:border-[#8A1C2B] hover:shadow-sm"
-              >
-                <p className="font-medium text-[#2B0C14]">
-                  {cat.label}
-                </p>
-
-                <p className="mt-1 text-xs text-[#6B5A4E]">
-                  Manage package details
-                </p>
-              </button>
-            ))}
-          </div>
-
-          {/* Booking Buttons */}
-          <div className="mt-8">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {CATEGORIES.map((cat) => (
             <button
+              key={cat.slug}
               type="button"
-              onClick={() => setIsBookingOpen(true)}
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#E7BE6B] px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-[#3D0D14] shadow-lg transition-all duration-300 hover:scale-105 hover:bg-[#D4A950] hover:shadow-xl sm:text-sm"
+              onClick={() => setActiveCategory(cat.slug)}
+              className="rounded-xl border border-[#E4D7C3] bg-white p-5 text-left transition hover:border-[#8A1C2B] hover:shadow-sm"
             >
-              <span>Book Now</span>
-            </button>
+              <p className="font-medium text-[#2B0C14]">
+                {cat.label}
+              </p>
 
-            <button
-              type="button"
-              onClick={() => setIsBookingOpen(true)}
-              className="mt-3 block text-xs text-[#7D1E28] underline transition-colors hover:text-[#42151B]"
-            >
-              Looking to book an experienced Iyer priest for an upcoming
-              pooja?
+              <p className="mt-1 text-xs text-[#6B5A4E]">
+                Manage package details
+              </p>
             </button>
-          </div>
+          ))}
         </div>
-
-        {isBookingOpen && (
-          <BookingModal
-            bookingSuccess={bookingSuccess}
-            bookingForm={bookingForm}
-            setBookingForm={setBookingForm}
-            onClose={() => setIsBookingOpen(false)}
-            onSubmit={handleBookingSubmit}
-          />
-        )}
-      </>
+      </div>
     );
   }
 
   return (
-    <>
-      <PackageDetailsTable
-        category={activeCategory}
-        categoryLabel={
-          CATEGORIES.find((c) => c.slug === activeCategory)?.label ?? ""
-        }
-        onBack={() => setActiveCategory(null)}
-      />
+    <PackageDetailsTable
+      category={activeCategory}
+      categoryLabel={
+        CATEGORIES.find((c) => c.slug === activeCategory)?.label ?? ""
+      }
+      onBack={() => setActiveCategory(null)}
+    />
+  );
+}
 
-      {isBookingOpen && (
-        <BookingModal
-          bookingSuccess={bookingSuccess}
-          bookingForm={bookingForm}
-          setBookingForm={setBookingForm}
-          onClose={() => setIsBookingOpen(false)}
-          onSubmit={handleBookingSubmit}
-        />
+function PriceEditor({ categoryKey }: { categoryKey: string }) {
+  const [price, setPrice] = useState("");
+  const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  async function loadPrice() {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/package-prices/${categoryKey}`);
+      const data = await res.json();
+      setPrice(data.price ?? "");
+    } catch {
+      // ignore, leave price blank
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadPrice();
+    setEditing(false);
+  }, [categoryKey]);
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      const res = await fetch(`${API_BASE}/package-prices/${categoryKey}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ price }),
+      });
+      if (!res.ok) throw new Error();
+      setEditing(false);
+    } catch {
+      alert("Could not save price. Make sure you're logged in.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="flex items-center justify-between bg-white border border-[#E4D7C3] rounded-xl px-5 py-4 mb-4">
+      <div className="flex items-center gap-2">
+        <IndianRupee className="w-4 h-4 text-[#8A1C2B]" />
+        <span className="text-sm text-[#6B5A4E]">Package Price:</span>
+        {editing ? (
+          <input
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            placeholder="e.g. 9999"
+            className="border border-[#E4D7C3] rounded px-2 py-1 text-sm w-32"
+            autoFocus
+          />
+        ) : (
+          <span className="text-[#2B0C14] font-medium">
+            {loading ? "Loading..." : price ? `₹${price}` : "Not set"}
+          </span>
+        )}
+      </div>
+
+      {editing ? (
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="text-green-700 disabled:opacity-50"
+            aria-label="Save price"
+          >
+            <Check className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => {
+              setEditing(false);
+              loadPrice();
+            }}
+            className="text-[#6B5A4E]"
+            aria-label="Cancel"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={() => setEditing(true)}
+          className="flex items-center gap-1.5 bg-[#F3E7D3] text-[#2B0C14] text-sm px-3 py-1.5 rounded-lg hover:bg-[#E4D7C3] transition"
+        >
+          <Pencil className="w-3.5 h-3.5" />
+          {price ? "Edit Price" : "Add Price"}
+        </button>
       )}
-    </>
+    </div>
   );
 }
 
@@ -373,14 +370,16 @@ function PackageDetailsTable({
         Back to categories
       </button>
 
-      <div className="mb-6 flex items-center justify-between">
-        <h1
-          className="text-2xl text-[#2B0C14]"
-          style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-        >
-          {categoryLabel} — Package Details
-        </h1>
+      <h1
+        className="mb-4 text-2xl text-[#2B0C14]"
+        style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+      >
+        {categoryLabel} — Package Details
+      </h1>
 
+      <PriceEditor categoryKey={category} />
+
+      <div className="mb-6 flex items-center justify-end">
         <button
           type="button"
           onClick={startAdd}
@@ -605,122 +604,5 @@ function EditRow({
         </div>
       </td>
     </tr>
-  );
-}
-
-function BookingModal({
-  bookingSuccess,
-  bookingForm,
-  setBookingForm,
-  onClose,
-  onSubmit,
-}: {
-  bookingSuccess: boolean;
-  bookingForm: BookingForm;
-  setBookingForm: Dispatch<SetStateAction<BookingForm>>;
-  onClose: () => void;
-  onSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
-}) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-      <div className="relative w-full max-w-md rounded-2xl border-2 border-[#DECBB0] bg-[#FAF6EE] p-6 shadow-2xl sm:p-8">
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute right-4 top-4 text-[#7A6458] hover:text-[#42151B]"
-          aria-label="Close"
-        >
-          ✕
-        </button>
-
-        {bookingSuccess ? (
-          <div className="py-8 text-center">
-            <h3 className="mb-2 text-2xl font-bold text-[#42151B]">
-              Booking Received!
-            </h3>
-
-            <p className="text-sm text-[#55463E]">
-              Our team will contact you shortly to confirm your priest
-              booking.
-            </p>
-          </div>
-        ) : (
-          <>
-            <h3 className="mb-1 text-2xl font-bold text-[#42151B]">
-              Book an Iyer Priest
-            </h3>
-
-            <p className="mb-5 text-xs text-[#63534B]">
-              Fill in your details and we&apos;ll get back to you shortly.
-            </p>
-
-            <form onSubmit={onSubmit} className="space-y-3.5">
-              <input
-                type="text"
-                required
-                placeholder="Full Name"
-                value={bookingForm.name}
-                onChange={(e) =>
-                  setBookingForm({
-                    ...bookingForm,
-                    name: e.target.value,
-                  })
-                }
-                className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none"
-              />
-
-              <input
-                type="tel"
-                required
-                placeholder="Mobile Number"
-                value={bookingForm.mobile}
-                onChange={(e) =>
-                  setBookingForm({
-                    ...bookingForm,
-                    mobile: e.target.value,
-                  })
-                }
-                className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none"
-              />
-
-              <input
-                type="email"
-                required
-                placeholder="Email Address"
-                value={bookingForm.email}
-                onChange={(e) =>
-                  setBookingForm({
-                    ...bookingForm,
-                    email: e.target.value,
-                  })
-                }
-                className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none"
-              />
-
-              <textarea
-                required
-                rows={2}
-                placeholder="Address"
-                value={bookingForm.address}
-                onChange={(e) =>
-                  setBookingForm({
-                    ...bookingForm,
-                    address: e.target.value,
-                  })
-                }
-                className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none"
-              />
-
-              <button
-                type="submit"
-                className="w-full rounded-lg bg-[#5A121D] py-3 text-sm font-bold tracking-wide text-white transition-colors hover:bg-[#400B13]"
-              >
-                Submit Booking
-              </button>
-            </form>
-          </>
-        )}
-      </div>
-    </div>
   );
 }
