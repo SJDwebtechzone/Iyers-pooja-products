@@ -23,6 +23,7 @@ import {
   X,
 } from "lucide-react";
 
+import OrderNowModal from "../components/order-now-modal";
 // -------------------------------------------------------------
 // API BASE
 // -------------------------------------------------------------
@@ -33,104 +34,53 @@ const API_BASE =
 // -------------------------------------------------------------
 // SAMAGRI ITEM DATA MODEL
 // -------------------------------------------------------------
+// All values come from the admin dashboard. Quantities are grouped by
+// temple type (Mid Size / Divyadesam) with Daily / Weekly / Monthly each.
+// Nothing here is hardcoded — an unset value renders as an em dash.
+
+type QuantityKey =
+  | "mid_daily"
+  | "mid_weekly"
+  | "mid_monthly"
+  | "divya_daily"
+  | "divya_weekly"
+  | "divya_monthly";
 
 interface SamagriItem {
   sno: number;
   nameEn: string;
   nameTa: string;
-  quantity: string;
+  quantities: Record<QuantityKey, string>;
 }
 
-// -------------------------------------------------------------
-// FALLBACK SAMAGRI ITEM DATA
-// -------------------------------------------------------------
-
-const fallbackSamagriList: SamagriItem[] = [
+const QUANTITY_GROUPS: {
+  label: string;
+  fields: { key: QuantityKey; label: string }[];
+}[] = [
   {
-    sno: 1,
-    nameEn: "Betel Leaves",
-    nameTa: "வெற்றிலை",
-    quantity: "21 Pieces",
+    label: "Mid Size Temple",
+    fields: [
+      { key: "mid_daily", label: "Daily" },
+      { key: "mid_weekly", label: "Weekly" },
+      { key: "mid_monthly", label: "Monthly" },
+    ],
   },
   {
-    sno: 2,
-    nameEn: "Areca Nuts",
-    nameTa: "பாக்கு",
-    quantity: "21 Pieces",
-  },
-  {
-    sno: 3,
-    nameEn: "Banana",
-    nameTa: "வாழைப்பழம்",
-    quantity: "12 Pieces",
-  },
-  {
-    sno: 4,
-    nameEn: "Coconut",
-    nameTa: "தேங்காய்",
-    quantity: "2 Pieces",
-  },
-  {
-    sno: 5,
-    nameEn: "Turmeric",
-    nameTa: "மஞ்சள்",
-    quantity: "1 Packet",
-  },
-  {
-    sno: 6,
-    nameEn: "Kumkum",
-    nameTa: "குங்குமம்",
-    quantity: "1 Packet",
-  },
-  {
-    sno: 7,
-    nameEn: "Pooja Flowers",
-    nameTa: "பூக்கள்",
-    quantity: "1 Packet",
-  },
-  {
-    sno: 8,
-    nameEn: "Panchamirtham",
-    nameTa: "பஞ்சாமிர்தம்",
-    quantity: "1 Bowl",
-  },
-  {
-    sno: 9,
-    nameEn: "Ghee (Cow Ghee)",
-    nameTa: "நெய்",
-    quantity: "1 Small Cup",
-  },
-  {
-    sno: 10,
-    nameEn: "Incense Sticks",
-    nameTa: "அகர்பத்தி",
-    quantity: "1 Packet",
-  },
-  {
-    sno: 11,
-    nameEn: "Camphor (Karpooram)",
-    nameTa: "கற்பூரம்",
-    quantity: "1 Packet",
-  },
-  {
-    sno: 12,
-    nameEn: "Sandalwood Paste",
-    nameTa: "சந்தனம்",
-    quantity: "1 Cup",
-  },
-  {
-    sno: 13,
-    nameEn: "Akshatha (Sacred Rice)",
-    nameTa: "அட்சதை",
-    quantity: "1 Packet",
-  },
-  {
-    sno: 14,
-    nameEn: "Cotton Wicks & Oil",
-    nameTa: "பஞ்சு திரி & நல்லெண்ணெய்",
-    quantity: "1 Set",
+    label: "Divyadesam Temple",
+    fields: [
+      { key: "divya_daily", label: "Daily" },
+      { key: "divya_weekly", label: "Weekly" },
+      { key: "divya_monthly", label: "Monthly" },
+    ],
   },
 ];
+
+const QUANTITY_KEYS: QuantityKey[] = QUANTITY_GROUPS.flatMap((group) =>
+  group.fields.map((field) => field.key),
+);
+
+/** Placeholder shown when the admin has not configured a quantity. */
+const NOT_SET = "\u2014";
 
 // -------------------------------------------------------------
 // POOJA PROCESS
@@ -266,8 +216,7 @@ export default function TemplePackagePage() {
   // LIVE SAMAGRI DATA FROM BACKEND
   // -----------------------------------------------------------
 
-  const [samagriList, setSamagriList] =
-    useState<SamagriItem[]>(fallbackSamagriList);
+  const [samagriList, setSamagriList] = useState<SamagriItem[]>([]);
 
   const [itemsLoading, setItemsLoading] = useState(true);
 
@@ -284,31 +233,35 @@ export default function TemplePackagePage() {
 
         const data = await res.json();
 
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           const mapped: SamagriItem[] = data.map(
-            (item: {
-              sno?: number;
-              english?: string;
-              tamil?: string;
-              quantity?: string;
-              nameEn?: string;
-              nameTa?: string;
-              name?: string;
-            }, index: number) => ({
-              sno: item.sno ?? index + 1,
-              nameEn: item.english ?? item.nameEn ?? item.name ?? "",
-              nameTa: item.tamil ?? item.nameTa ?? "",
-              quantity: item.quantity ?? "",
-            })
+            (item: Record<string, unknown>, index: number) => {
+              const quantities = {} as Record<QuantityKey, string>;
+
+              QUANTITY_KEYS.forEach((key) => {
+                const value = item?.[key];
+                quantities[key] =
+                  value === null || value === undefined || value === ""
+                    ? ""
+                    : String(value);
+              });
+
+              return {
+                sno: Number(item?.sno) || index + 1,
+                nameEn: String(item?.english ?? ""),
+                nameTa: String(item?.tamil ?? ""),
+                quantities,
+              };
+            },
           );
 
           setSamagriList(mapped);
+        } else {
+          setSamagriList([]);
         }
       } catch (error) {
         console.error("Failed to load temple package items:", error);
-
-        // Keep fallback data when backend is unavailable
-        setSamagriList(fallbackSamagriList);
+        setSamagriList([]);
       } finally {
         setItemsLoading(false);
       }
@@ -342,6 +295,10 @@ export default function TemplePackagePage() {
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
 
   // BOOKING STATE
+  // ORDER NOW (2-step order + payment) modal state.
+  // Kept separate from the Iyer-request modal below.
+  const [isOrderOpen, setIsOrderOpen] = useState(false);
+
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingForm, setBookingForm] = useState({
@@ -466,147 +423,79 @@ export default function TemplePackagePage() {
         }
       `}</style>
       {/* ========================================================= */}
-      {/* HERO SECTION */}
+      {/* HERO SECTION - FULL WIDTH */}
       {/* ========================================================= */}
 
-      <section className="relative pt-[90px] overflow-hidden bg-[#FAF6EE] border-b border-[#E8DDC8]">
-        <div className="mx-auto max-w-[1600px] grid grid-cols-1 lg:grid-cols-12 items-stretch min-h-[580px] lg:min-h-[640px]">
-          <div className="lg:col-span-6 flex flex-col justify-between pt-10 sm:pt-14 lg:pt-16 pb-8 px-6 sm:px-10 lg:pl-16 lg:pr-10 z-10">
-            <div>
-              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#42151B] leading-[1.15]">
+      <section className="relative mt-[90px] w-full min-h-[520px] sm:min-h-[580px] lg:min-h-[640px] flex items-center overflow-hidden border-b border-[#3D1A14]">
+        {/* Full-width Background Image */}
+        <div className="absolute inset-0 h-full w-full">
+          <Image
+            src="/images/temple_hero_gopuram.jpg"
+            alt="Illuminated ancient South Indian temple gopuram"
+            fill
+            priority
+            className="object-cover object-center brightness-110 saturate-105"
+            sizes="100vw"
+          />
+
+          {/* Lightened overlay for brighter image look */}
+          <div className="absolute inset-0 bg-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/30 to-transparent" />
+        </div>
+
+        {/* Content - Left Center & Moved Down */}
+        <div className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-col justify-center px-6 py-16 sm:px-10 lg:px-16 pt-24 sm:pt-28 lg:pt-32">
+          <div className="w-full max-w-2xl text-left text-white space-y-4 sm:space-y-5">
+            <div className="flex items-center gap-3">
+              <span className="h-px w-10 bg-[#D4B978]/80" />
+              <span className="text-xs text-[#F3D78A]">✦</span>
+              <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#F3D78A]">
                 Temple Package
-              </h1>
-
-              <div className="flex items-center gap-3 my-4 sm:my-5">
-                <span className="h-px w-12 bg-gradient-to-r from-transparent to-[#B08A45]" />
-
-                <div className="flex items-center gap-1.5 text-[#B08A45]">
-                  <span className="w-1.5 h-1.5 rotate-45 border border-[#B08A45]" />
-                  <span className="w-2.5 h-2.5 rotate-45 bg-[#B08A45]" />
-                  <span className="w-1.5 h-1.5 rotate-45 border border-[#B08A45]" />
-                </div>
-
-                <span className="h-px w-24 bg-gradient-to-l from-transparent to-[#B08A45]" />
-              </div>
-
-              <p className="text-[15px] sm:text-base text-[#52443C] leading-relaxed max-w-xl font-normal mt-2">
-                Experience divine blessings with our specially curated Temple
-                Packages performed in sacred temples by experienced priests
-                with traditional rituals for peace, prosperity and spiritual
-                growth.
-              </p>
-
-              <div className="grid grid-cols-3 gap-3 sm:gap-6 mt-8 sm:mt-10 max-w-lg">
-                <div className="flex flex-col items-center text-center p-3 sm:p-4 rounded-xl bg-[#F4EDE0]/70 border border-[#E5D7C0] transition-transform hover:-translate-y-0.5">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center text-[#9E2A2B] mb-2">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="w-8 h-8"
-                    >
-                      <path d="M12 2v2m0 0l-3 3h6l-3-3z" />
-                      <path d="M7 7h10l-1 4H8L7 7z" />
-                      <path d="M5 11h14l-1 5H6l-1-5z" />
-                      <path d="M3 16h18v6H3v-6z" />
-                      <path d="M10 22v-4h4v4" />
-                    </svg>
-                  </div>
-
-                  <span className="text-xs sm:text-[13px] font-semibold text-[#42151B] leading-tight">
-                    Ancient Temples
-                  </span>
-                </div>
-
-                <div className="flex flex-col items-center text-center p-3 sm:p-4 rounded-xl bg-[#F4EDE0]/70 border border-[#E5D7C0] transition-transform hover:-translate-y-0.5">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center text-[#9E2A2B] mb-2">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="w-8 h-8"
-                    >
-                      <circle cx="12" cy="7" r="4" />
-                      <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
-                      <path d="M12 3v2" />
-                      <path d="M10 5h4" />
-                    </svg>
-                  </div>
-
-                  <span className="text-xs sm:text-[13px] font-semibold text-[#42151B] leading-tight">
-                    Experienced Priests
-                  </span>
-                </div>
-
-                <div className="flex flex-col items-center text-center p-3 sm:p-4 rounded-xl bg-[#F4EDE0]/70 border border-[#E5D7C0] transition-transform hover:-translate-y-0.5">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center text-[#9E2A2B] mb-2">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="w-8 h-8"
-                    >
-                      <path d="M12 4c-1.5 3-4 6-4 9a4 4 0 0 0 8 0c0-3-2.5-6-4-9z" />
-                      <path d="M7 18c2.5 1 5 1 7.5 0" />
-                    </svg>
-                  </div>
-
-                  <span className="text-xs sm:text-[13px] font-semibold text-[#42151B] leading-tight">
-                    Traditional Rituals
-                  </span>
-                </div>
-              </div>
+              </span>
+              <span className="text-xs text-[#F3D78A]">✦</span>
+              <span className="h-px w-10 bg-[#D4B978]/80" />
             </div>
 
-            <div className="mt-10 sm:mt-12 -ml-6 sm:-ml-10 lg:-ml-16 self-start">
-              <div className="inline-flex items-center gap-2 bg-[#5A121D] text-[#F3EAD8] text-xs sm:text-sm font-medium py-2.5 pl-6 sm:pl-10 pr-8 rounded-r-3xl shadow-md border-y border-r border-[#782330]">
-                <Link
-                  href="/"
-                  className="hover:text-amber-300 transition-colors"
-                >
-                  Home
-                </Link>
+            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-[#FFFDF8] leading-[1.12] [text-shadow:_0_2px_12px_rgba(0,0,0,0.85)]">
+              Temple <span className="text-[#F3D78A]">Package</span>
+            </h1>
 
-                <ChevronRight size={14} className="text-[#C79D55]" />
+            <p className="text-sm sm:text-base lg:text-[17px] text-[#F3EAD8] leading-relaxed max-w-xl font-medium [text-shadow:_0_1px_8px_rgba(0,0,0,0.9)]">
+              Experience divine blessings with our specially curated Temple
+              Packages performed in sacred temples by experienced priests
+              with traditional rituals for peace, prosperity and spiritual
+              growth.
+            </p>
 
-                <Link
-                  href="/package"
-                  className="hover:text-amber-300 transition-colors"
-                >
-                  Pooja Packages
-                </Link>
+            <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-3 max-w-lg">
+              <div className="flex flex-col items-center text-center p-3 rounded-xl bg-black/40 border border-[#D4B978]/30 backdrop-blur-sm">
+                <span className="text-xs sm:text-[13px] font-semibold text-[#F3D78A] leading-tight">
+                  Ancient Temples
+                </span>
+              </div>
 
-                <ChevronRight size={14} className="text-[#C79D55]" />
+              <div className="flex flex-col items-center text-center p-3 rounded-xl bg-black/40 border border-[#D4B978]/30 backdrop-blur-sm">
+                <span className="text-xs sm:text-[13px] font-semibold text-[#F3D78A] leading-tight">
+                  Experienced Priests
+                </span>
+              </div>
 
-                <span className="text-[#E7BE6B] font-semibold">
-                  Temple Package
+              <div className="flex flex-col items-center text-center p-3 rounded-xl bg-black/40 border border-[#D4B978]/30 backdrop-blur-sm">
+                <span className="text-xs sm:text-[13px] font-semibold text-[#F3D78A] leading-tight">
+                  Traditional Rituals
                 </span>
               </div>
             </div>
-          </div>
 
-          <div className="lg:col-span-6 relative min-h-[380px] lg:min-h-full overflow-hidden">
-            <Image
-              src="/images/temple_hero_gopuram.jpg"
-              alt="Illuminated ancient South Indian temple gopuram"
-              fill
-              priority
-              className="object-cover object-center scale-105"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-            />
-
-            <div className="absolute inset-y-0 left-0 w-24 sm:w-36 lg:w-48 bg-gradient-to-r from-[#FAF6EE] via-[#FAF6EE]/80 to-transparent pointer-events-none hidden lg:block" />
-
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+            <div className="pt-3 flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => scrollToTab("package")}
+                className="inline-flex h-11 items-center justify-center rounded-full bg-[#D4B978] px-7 text-xs font-bold tracking-wider text-[#3B1115] shadow-lg transition-all duration-300 hover:bg-[#F3D78A] hover:scale-105 active:scale-95 sm:text-sm"
+              >
+                <span>View Package Details</span>
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -702,7 +591,7 @@ export default function TemplePackagePage() {
 
                 <button
                   type="button"
-                  onClick={() => setIsBookingOpen(true)}
+                  onClick={() => setIsOrderOpen(true)}
                   className="mt-4 w-full rounded-lg bg-[#E5C77A] py-2.5 text-sm font-bold text-[#3D1418] hover:bg-[#F3D78A] transition-colors"
                 >
                   Order Now
@@ -738,54 +627,118 @@ export default function TemplePackagePage() {
                   </div>
 
                   <div className="overflow-x-auto rounded-lg border border-[#DFCBB0] shadow-sm bg-white">
-                    <table className="w-full text-left text-xs sm:text-sm border-collapse">
+                    <table className="w-full text-left text-xs sm:text-sm border-collapse min-w-[760px]">
                       <thead>
+                        {/* Grouped header: temple type over Daily / Weekly / Monthly */}
                         <tr className="bg-[#5A121D] text-white text-xs sm:text-[13px] font-semibold tracking-wider">
-                          <th className="py-3 px-3 sm:px-4 w-14 text-center">
+                          <th
+                            rowSpan={2}
+                            className="py-3 px-3 sm:px-4 w-14 text-center align-bottom"
+                          >
                             S.No
                           </th>
 
-                          <th className="py-3 px-3 sm:px-5">
+                          <th
+                            rowSpan={2}
+                            className="py-3 px-3 sm:px-5 align-bottom"
+                          >
                             Name (English)
                           </th>
 
-                          <th className="py-3 px-3 sm:px-5">
+                          <th
+                            rowSpan={2}
+                            className="py-3 px-3 sm:px-5 align-bottom"
+                          >
                             Name (Tamil)
                           </th>
 
-                          <th className="py-3 px-3 sm:px-5">
-                            Quantity
-                          </th>
+                          {QUANTITY_GROUPS.map((group) => (
+                            <th
+                              key={group.label}
+                              colSpan={group.fields.length}
+                              className="py-2.5 px-3 sm:px-4 text-center border-l border-white/25 whitespace-nowrap"
+                            >
+                              {group.label}
+                            </th>
+                          ))}
+                        </tr>
+
+                        <tr className="bg-[#42151B] text-[#F3D78A] text-[11px] sm:text-xs font-semibold tracking-wider">
+                          {QUANTITY_GROUPS.map((group) =>
+                            group.fields.map((field, index) => (
+                              <th
+                                key={field.key}
+                                className={`py-2 px-3 sm:px-4 text-center whitespace-nowrap ${
+                                  index === 0 ? "border-l border-white/25" : ""
+                                }`}
+                              >
+                                {field.label}
+                              </th>
+                            )),
+                          )}
                         </tr>
                       </thead>
 
                       <tbody className="divide-y divide-[#EFE3CF]">
-                        {samagriList.map((item, index) => (
-                          <tr
-                            key={`${item.sno}-${index}`}
-                            className={`transition-colors hover:bg-[#F5EDE0] ${
-                              index % 2 === 0
-                                ? "bg-[#FAF7F0]"
-                                : "bg-white"
-                            }`}
-                          >
-                            <td className="py-2.5 px-3 sm:px-4 text-center text-[#7A6458] font-medium">
-                              {item.sno}.
-                            </td>
-
-                            <td className="py-2.5 px-3 sm:px-5 font-medium text-[#3A2226]">
-                              {item.nameEn}
-                            </td>
-
-                            <td className="py-2.5 px-3 sm:px-5 font-normal text-[#5A382A]">
-                              {item.nameTa}
-                            </td>
-
-                            <td className="py-2.5 px-3 sm:px-5 font-medium text-[#7D1E28]">
-                              {item.quantity}
+                        {itemsLoading ? (
+                          <tr>
+                            <td
+                              colSpan={3 + QUANTITY_KEYS.length}
+                              className="py-6 px-4 text-center text-[#7A6458]"
+                            >
+                              Loading items...
                             </td>
                           </tr>
-                        ))}
+                        ) : samagriList.length === 0 ? (
+                          <tr>
+                            <td
+                              colSpan={3 + QUANTITY_KEYS.length}
+                              className="py-6 px-4 text-center text-[#7A6458]"
+                            >
+                              Package details will be updated shortly.
+                            </td>
+                          </tr>
+                        ) : (
+                          samagriList.map((item, index) => (
+                            <tr
+                              key={`${item.sno}-${index}`}
+                              className={`transition-colors hover:bg-[#F5EDE0] ${
+                                index % 2 === 0 ? "bg-[#FAF7F0]" : "bg-white"
+                              }`}
+                            >
+                              <td className="py-2.5 px-3 sm:px-4 text-center text-[#7A6458] font-medium">
+                                {item.sno}.
+                              </td>
+
+                              <td className="py-2.5 px-3 sm:px-5 font-medium text-[#3A2226]">
+                                {item.nameEn || NOT_SET}
+                              </td>
+
+                              <td className="py-2.5 px-3 sm:px-5 font-normal text-[#5A382A]">
+                                {item.nameTa || NOT_SET}
+                              </td>
+
+                              {QUANTITY_GROUPS.map((group) =>
+                                group.fields.map((field, fieldIndex) => (
+                                  <td
+                                    key={field.key}
+                                    className={`py-2.5 px-3 sm:px-4 text-center font-medium whitespace-nowrap ${
+                                      item.quantities[field.key]
+                                        ? "text-[#7D1E28]"
+                                        : "text-[#B0A093]"
+                                    } ${
+                                      fieldIndex === 0
+                                        ? "border-l border-[#EFE3CF]"
+                                        : ""
+                                    }`}
+                                  >
+                                    {item.quantities[field.key] || NOT_SET}
+                                  </td>
+                                )),
+                              )}
+                            </tr>
+                          ))
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -965,7 +918,7 @@ export default function TemplePackagePage() {
       {/* ACTION CARDS */}
       {/* ========================================================= */}
 
-      <section className="py-6 sm:py-10 px-4 sm:px-8 max-w-[1400px] mx-auto">
+      {/* <section className="py-6 sm:py-10 px-4 sm:px-8 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
           <div className="bg-[#FCFAF5] rounded-2xl p-6 sm:p-7 border border-[#DFCBB0] shadow-[0_4px_20px_rgba(80,20,30,0.05)] flex flex-col justify-between">
             <div>
@@ -1033,7 +986,7 @@ export default function TemplePackagePage() {
             </button>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ========================================================= */}
       {/* ENQUIRY BANNER */}
@@ -1209,6 +1162,14 @@ export default function TemplePackagePage() {
       {/* ========================================================= */}
       {/* BOOKING MODAL */}
       {/* ========================================================= */}
+      {/* ORDER NOW — 2-step customer details + payment */}
+      <OrderNowModal
+        open={isOrderOpen}
+        onClose={() => setIsOrderOpen(false)}
+        packageName="Thirumanjam (Temple Package)"
+        packagePrice={dynamicPrice}
+      />
+
       {isBookingOpen && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="relative w-full max-w-md rounded-2xl border-2 border-[#DECBB0] bg-[#FAF6EE] p-6 shadow-2xl sm:p-8">

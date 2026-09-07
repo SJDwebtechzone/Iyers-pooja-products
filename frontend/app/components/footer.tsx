@@ -13,15 +13,14 @@ const quickLinks = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
   { label: "Contact", href: "/contact" },
-  { label: "Order Now", href: "/order" },
 ];
 
 const packageLinks = [
   { label: "Consumer Package", href: "/consumer-package" },
   { label: "Corporate Package", href: "/corporate-package" },
-  { label: "Temple", href: "/temple" },
-  { label: "Overseas", href: "/overseas" },
   { label: "Temple Package", href: "/temple-package" },
+  { label: "Overseas Temple Package", href: "/overseas" },
+ 
   { label: "Festivals Package", href: "/festivals-package" },
 ];
 

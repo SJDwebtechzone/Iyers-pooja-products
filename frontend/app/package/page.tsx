@@ -14,6 +14,7 @@ import {
   Star,
 } from "lucide-react";
 
+import OrderNowModal from "../components/order-now-modal";
 export type PackageItem = {
   sno: number;
   english: string;
@@ -486,6 +487,10 @@ function PackagePage({ data }: PackagePageProps) {
   const [selectedRitual, setSelectedRitual] = useState<OccasionPackage | null>(null);
   const [dynamicItems, setDynamicItems] = useState<PackageItem[] | null>(null);
   const [dynamicPrice, setDynamicPrice] = useState<string | null>(null);
+  // ORDER NOW (2-step order + payment) modal state.
+  // Kept separate from the Iyer-request modal below.
+  const [isOrderOpen, setIsOrderOpen] = useState(false);
+
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingForm, setBookingForm] = useState({
@@ -630,20 +635,20 @@ function PackagePage({ data }: PackagePageProps) {
             className="object-cover object-left md:object-center"
           />
 
-          {/* Smooth overlay across the image so text on the right is readable */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 lg:bg-gradient-to-r lg:from-transparent lg:via-black/50 lg:to-black/85" />
+          {/* Light overlay for clean normal image look */}
+          <div className="absolute inset-0 bg-black/25" />
         </div>
 
-        {/* Right Content without solid black box cut */}
+        {/* Right Content */}
         <div className="relative z-10 ml-auto flex w-full flex-col justify-center px-6 py-16 sm:px-10 lg:w-[50%] lg:px-16 xl:px-24">
 
           <div className="w-full max-w-[650px]">
 
-            <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.35em] text-[#D4B978]">
+            <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.35em] text-[#D4B978] [text-shadow:_0_1px_6px_rgba(0,0,0,0.8)]">
               ✦ POOJA PACKAGE ✦
             </p>
 
-            <h1 className="font-[family-name:var(--font-cormorant)] text-5xl font-medium leading-[1] text-white sm:text-6xl lg:text-7xl">
+            <h1 className="font-[family-name:var(--font-cormorant)] text-5xl font-medium leading-[1] text-white sm:text-6xl lg:text-7xl [text-shadow:_0_2px_12px_rgba(0,0,0,0.85)]">
               {data.title}
             </h1>
 
@@ -658,29 +663,29 @@ function PackagePage({ data }: PackagePageProps) {
               <span className="h-px w-14 bg-[#B08A45]" />
             </div>
 
-            <p className="max-w-lg text-sm leading-7 text-white/90 sm:text-base">
+            <p className="max-w-lg text-sm leading-7 text-white/95 sm:text-base font-medium [text-shadow:_0_1px_8px_rgba(0,0,0,0.9)]">
               {data.subtitle}
             </p>
 
             {/* Breadcrumb */}
-            <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-white/20 pt-6 text-xs font-medium">
+            <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-white/30 pt-6 text-xs font-medium [text-shadow:_0_1px_6px_rgba(0,0,0,0.8)]">
               <a
                 href="/"
-                className="text-white/70 transition-colors hover:text-[#D4B978]"
+                className="text-white/90 transition-colors hover:text-[#D4B978]"
               >
                 Home
               </a>
 
-              <span className="text-white/40">›</span>
+              <span className="text-white/60">›</span>
 
               <a
                 href="/package"
-                className="text-white/70 transition-colors hover:text-[#D4B978]"
+                className="text-white/90 transition-colors hover:text-[#D4B978]"
               >
                 Pooja Packages
               </a>
 
-              <span className="text-white/40">›</span>
+              <span className="text-white/60">›</span>
 
               <span className="text-[#D4B978]">
                 {data.breadcrumb}
@@ -960,7 +965,7 @@ function PackagePage({ data }: PackagePageProps) {
 
                     <button
   type="button"
-  onClick={() => setIsBookingOpen(true)}
+  onClick={() => setIsOrderOpen(true)}
   className="mt-4 w-full rounded-lg bg-[#E5C77A] py-2.5 text-sm font-bold tracking-wide text-[#3D1418] transition-colors hover:bg-[#F3D78A]"
 >
   Order Now
@@ -1131,6 +1136,14 @@ function PackagePage({ data }: PackagePageProps) {
 
         </div>
       </section>
+
+      {/* ORDER NOW — 2-step customer details + payment */}
+      <OrderNowModal
+        open={isOrderOpen}
+        onClose={() => setIsOrderOpen(false)}
+        packageName={selectedRitual?.title || "Consumer Package"}
+        packagePrice={dynamicPrice}
+      />
 
       {isBookingOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">

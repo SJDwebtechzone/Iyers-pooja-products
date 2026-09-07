@@ -5,6 +5,7 @@ import "./globals.css";
 import { usePathname } from "next/navigation";
 import Navbar from "./components/navbar";
 import Footer from "./components/footer";
+import FloatingContact from "./components/floating-contact";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -33,7 +34,7 @@ export default function RootLayout({
   const pathname = usePathname();
 
   const hideNavFooter = HIDE_NAVBAR_FOOTER_PREFIXES.some((prefix) =>
-    pathname?.startsWith(prefix)
+    pathname?.startsWith(prefix),
   );
 
   return (
@@ -42,6 +43,8 @@ export default function RootLayout({
         {!hideNavFooter && <Navbar />}
         {children}
         {!hideNavFooter && <Footer />}
+        {/* Floating WhatsApp / Call buttons — customer-facing pages only. */}
+        {!hideNavFooter && <FloatingContact />}
       </body>
     </html>
   );

@@ -23,6 +23,7 @@ import {
   Phone,
 } from "lucide-react";
 
+import OrderNowModal from "../components/order-now-modal";
 export type PackageItem = {
   sno: number;
   english: string;
@@ -505,7 +506,7 @@ const whyChooseUs = [
   {
     icon: Flame,
     title: "Traditional & Authentic",
-    description: "Poojas performed as per Vedic rituals.",
+    description: "Poojas performed as per Vedic rituals by experienced priests.",
   },
   {
     icon: Clock,
@@ -539,6 +540,10 @@ export default function FestivalPackagePage() {
   const [dynamicPrice, setDynamicPrice] = useState<string | null>(null);
 
   // BOOKING STATE
+  // ORDER NOW (2-step order + payment) modal state.
+  // Kept separate from the Iyer-request modal below.
+  const [isOrderOpen, setIsOrderOpen] = useState(false);
+
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingForm, setBookingForm] = useState({ name: "", mobile: "", address: "", email: "" });
@@ -575,7 +580,7 @@ useEffect(() => {
       setActiveTab("details");
       setTimeout(() => {
         if (detailsSectionRef.current) {
-          const topOffset = detailsSectionRef.current.getBoundingClientRect().top + window.scrollY - 100;
+          const topOffset = detailsSectionRef.current.getBoundingClientRect().top + window.scrollY - 75;
           window.scrollTo({ top: topOffset, behavior: "smooth" });
         }
       }, 120);
@@ -678,7 +683,7 @@ useEffect(() => {
     setSelectedFestival(fest);
     setActiveTab("details");
     if (detailsSectionRef.current) {
-      const topOffset = detailsSectionRef.current.getBoundingClientRect().top + window.scrollY - 100;
+      const topOffset = detailsSectionRef.current.getBoundingClientRect().top + window.scrollY - 75;
       window.scrollTo({ top: topOffset, behavior: "smooth" });
     }
   };
@@ -789,7 +794,7 @@ useEffect(() => {
               <span className="h-px w-10 bg-[#B08A45]" />
             </div>
             <h2 className="font-[family-name:var(--font-cormorant)] text-3xl font-bold tracking-tight text-[#4A171E] sm:text-4xl lg:text-5xl">
-              Upcoming Festivals
+               Festivals Package
             </h2>
             <div className="mx-auto mt-3 h-0.5 w-12 bg-[#B08A45]/40" />
           </div>
@@ -885,43 +890,89 @@ useEffect(() => {
       </section>
 
       {/* ================= WHY CELEBRATE WITH US ================= */}
-      <section className="bg-[#FAF6EE] px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-        <div className="mx-auto max-w-6xl">
+      <section className="bg-[#FAF6EE] px-4 py-16 sm:px-6 sm:py-24 lg:px-8 relative overflow-hidden">
+        <div className="mx-auto max-w-7xl relative z-10">
           {/* Section Header */}
-          <div className="text-center">
-            <div className="mb-2 flex items-center justify-center gap-3">
-              <span className="h-px w-10 bg-[#B08A45]" />
-              <span className="text-xs text-[#B08A45]">✦</span>
-              <span className="h-px w-10 bg-[#B08A45]" />
+          <div className="text-center mb-14">
+            <div className="mb-3 flex items-center justify-center gap-3">
+              <span className="h-px w-16 bg-[#D4B978]/60" />
+              <span className="text-lg text-[#B08A45]">🪷</span>
+              <span className="h-px w-16 bg-[#D4B978]/60" />
             </div>
+
             <h2 className="font-[family-name:var(--font-cormorant)] text-3xl font-bold tracking-tight text-[#4A171E] sm:text-4xl lg:text-5xl">
               Why Celebrate Festivals with Us?
             </h2>
-            <div className="mx-auto mt-3 h-0.5 w-12 bg-[#B08A45]/40" />
+
+            <div className="mx-auto mt-3 h-0.5 w-16 bg-[#B08A45]/40" />
+
+            <p className="mt-4 text-sm sm:text-base text-[#6B5E52]">
+              Experience the perfect blend of tradition, devotion and peace of mind.
+            </p>
           </div>
 
-          {/* 4 Feature Columns */}
-          <div className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {/* 4 Feature Cards */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {whyChooseUs.map((item, idx) => {
               const Icon = item.icon;
               return (
                 <div
                   key={idx}
-                  className="flex flex-col items-center text-center transition-transform duration-300 hover:translate-y-[-4px]"
+                  className="flex flex-col items-center text-center rounded-2xl border border-[#EBE1D1] bg-[#FFFDF9]/95 backdrop-blur-sm p-7 shadow-[0_8px_30px_rgba(70,30,20,0.04)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-[#D4B978]/60"
                 >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[#D4B978]/60 bg-[#FFFDF9] text-[#91202B] shadow-sm">
-                    <Icon size={26} strokeWidth={1.7} />
+                  {/* Decorative Maroon Badge with Ring */}
+                  <div className="relative mb-6 flex items-center justify-center">
+                    <div className="absolute -inset-3 rounded-full border border-[#D4B978]/40 bg-[#F7EFE1]/60 scale-105 flex items-center justify-center">
+                      <svg viewBox="0 0 100 100" className="w-full h-full text-[#D4B978]/30">
+                        <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" />
+                      </svg>
+                    </div>
+                    <div className="relative z-10 flex h-20 w-20 items-center justify-center rounded-full bg-[#5A1C22] text-[#F3D78A] shadow-md border-2 border-[#D4B978]/50">
+                      <Icon size={32} strokeWidth={1.8} />
+                    </div>
                   </div>
-                  <h3 className="mt-5 font-[family-name:var(--font-cormorant)] text-2xl font-semibold text-[#4A171E]">
+
+                  <h3 className="font-[family-name:var(--font-cormorant)] text-2xl font-bold text-[#4A171E] mb-3">
                     {item.title}
                   </h3>
-                  <p className="mt-2 text-xs leading-relaxed text-[#756B62]">
+
+                  <p className="text-xs sm:text-sm leading-relaxed text-[#6B5E52] mb-6">
                     {item.description}
                   </p>
+
+                  <div className="mt-auto pt-2 flex flex-col items-center w-full">
+                    <div className="w-12 h-px bg-[#D4B978]/30 mb-2.5" />
+                    <span className="text-[#B08A45] text-xs">🪷</span>
+                  </div>
                 </div>
               );
             })}
           </div>
+
+          {/* Bottom Banner Strip */}
+          {/* <div className="mt-12 rounded-2xl border border-[#E5D7C2] bg-[#F5EDE0]/90 backdrop-blur-sm p-5 sm:p-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-5">
+            <div className="flex items-center gap-4 text-center sm:text-left flex-col sm:flex-row">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#5A1C22] text-[#F3D78A] shadow-md">
+                <Flame size={26} strokeWidth={1.8} />
+              </div>
+              <div>
+                <h4 className="font-[family-name:var(--font-cormorant)] text-xl sm:text-2xl font-bold text-[#4A171E]">
+                  Let Us Make Your Festival Truly Special
+                </h4>
+                <p className="text-xs sm:text-sm text-[#6B5E52] mt-0.5">
+                  Book your pooja today and receive divine blessings for you and your family.
+                </p>
+              </div>
+            </div>
+
+            <a
+              href="#package-details-table"
+              className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#5A1C22] px-7 py-3 text-xs font-bold tracking-wider text-white shadow-md transition-all hover:bg-[#431418] hover:scale-105 active:scale-95"
+            >
+              <span>ORDER NOW</span>
+              <ChevronRight size={16} />
+            </a>
+          </div> */}
         </div>
       </section>
 
@@ -952,23 +1003,46 @@ useEffect(() => {
           </div>
 
           {/* Quick Festival Switcher Pills */}
-          <div className="mb-12 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-            {festivalPackages.map((fest) => {
-              const active = fest.id === selectedFestival.id;
-              return (
-                <button
-                  key={fest.id}
-                  onClick={() => handleSelectFestival(fest)}
-                  className={`rounded-full px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 sm:px-5 sm:py-2.5 sm:text-sm ${
-                    active
-                      ? "bg-[#5A1C22] text-white shadow-md"
-                      : "border border-[#E9DDC9] bg-[#FAF6EE] text-[#5A4F46] hover:bg-[#F1E7D7] hover:text-[#4A171E]"
-                  }`}
-                >
-                  {fest.name}
-                </button>
-              );
-            })}
+          <div className="mb-12 flex flex-col items-center gap-2.5 sm:gap-3.5">
+            {/* First Row: 5 items */}
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+              {festivalPackages.slice(0, 5).map((fest) => {
+                const active = fest.id === selectedFestival.id;
+                return (
+                  <button
+                    key={fest.id}
+                    onClick={() => handleSelectFestival(fest)}
+                    className={`rounded-full px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 sm:px-5 sm:py-2.5 sm:text-sm ${
+                      active
+                        ? "bg-[#5A1C22] text-white shadow-md"
+                        : "border border-[#E9DDC9] bg-[#FAF6EE] text-[#5A4F46] hover:bg-[#F1E7D7] hover:text-[#4A171E]"
+                    }`}
+                  >
+                    {fest.name}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Second Row: 4 items */}
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+              {festivalPackages.slice(5).map((fest) => {
+                const active = fest.id === selectedFestival.id;
+                return (
+                  <button
+                    key={fest.id}
+                    onClick={() => handleSelectFestival(fest)}
+                    className={`rounded-full px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 sm:px-5 sm:py-2.5 sm:text-sm ${
+                      active
+                        ? "bg-[#5A1C22] text-white shadow-md"
+                        : "border border-[#E9DDC9] bg-[#FAF6EE] text-[#5A4F46] hover:bg-[#F1E7D7] hover:text-[#4A171E]"
+                    }`}
+                  >
+                    {fest.name}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Introduction & Highlights Banner for Selected Festival */}
@@ -999,7 +1073,7 @@ useEffect(() => {
               </div>
             </div>
 
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl">
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-[#E8D5B5]/60 shadow-sm">
               <Image
                 src={selectedFestival.introImage}
                 alt={selectedFestival.name}
@@ -1007,10 +1081,6 @@ useEffect(() => {
                 className="object-cover"
                 sizes="360px"
               />
-              {/* Soft blending gradients to merge image edges into the card background */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#FFFCF7]/60 via-transparent to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#FFFCF7]/70 via-transparent to-[#FFFCF7]/30" />
-              <div className="absolute inset-0 bg-gradient-to-l from-[#FFFCF7]/40 via-transparent to-transparent" />
               <div className="absolute bottom-4 left-4 rounded-lg bg-[#5A1C22]/85 px-3.5 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur-sm">
                 Starting at {selectedFestival.price}
               </div>
@@ -1099,7 +1169,7 @@ useEffect(() => {
 
                   <button
                     type="button"
-                    onClick={() => setIsBookingOpen(true)}
+                    onClick={() => setIsOrderOpen(true)}
                     className="mt-4 flex w-full items-center justify-center rounded-lg bg-[#E5C77A] py-2.5 text-xs font-bold tracking-wider text-[#3D1418] transition hover:bg-[#F3D78A]"
                   >
                     ORDER NOW
@@ -1321,6 +1391,14 @@ useEffect(() => {
         </div>
       </section>
       {/* IYER REQUEST MODAL */}
+      {/* ORDER NOW — 2-step customer details + payment */}
+      <OrderNowModal
+        open={isOrderOpen}
+        onClose={() => setIsOrderOpen(false)}
+        packageName={selectedFestival.name}
+        packagePrice={dynamicPrice}
+      />
+
       {isBookingOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
           <div className="relative w-full max-w-md rounded-2xl border-2 border-[#DECBB0] bg-[#FAF6EE] p-6 shadow-2xl sm:p-8">

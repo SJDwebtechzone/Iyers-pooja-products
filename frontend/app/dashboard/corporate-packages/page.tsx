@@ -193,6 +193,93 @@ function PriceEditor({ categoryKey }: { categoryKey: string }) {
   );
 }
 
+function AvailabilityEditor({ categoryKey }: { categoryKey: string }) {
+  const [weekly, setWeekly] = useState(false);
+  const [monthly, setMonthly] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  async function loadAvailability() {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/package-prices/${categoryKey}`);
+      const data = await res.json();
+      setWeekly(!!data?.availability_weekly);
+      setMonthly(!!data?.availability_monthly);
+    } catch {
+      // ignore
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadAvailability();
+  }, [categoryKey]);
+
+  async function handleToggle(newWeekly: boolean, newMonthly: boolean) {
+    setWeekly(newWeekly);
+    setMonthly(newMonthly);
+    setSaving(true);
+    try {
+      const res = await fetch(`${API_BASE}/package-prices/${categoryKey}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          availability_weekly: newWeekly,
+          availability_monthly: newMonthly,
+        }),
+      });
+      if (!res.ok) throw new Error();
+    } catch {
+      alert("Could not save availability settings.");
+      loadAvailability();
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-white border border-[#E4D7C3] rounded-xl px-5 py-4 mb-4 gap-3">
+      <div>
+        <h3 className="text-sm font-medium text-[#2B0C14]">Package Availability</h3>
+        <p className="text-xs text-[#6B5A4E]">
+          Toggle Weekly and Monthly basis availability for this corporate package
+        </p>
+      </div>
+
+      {loading ? (
+        <span className="text-xs text-[#6B5A4E]">Loading...</span>
+      ) : (
+        <div className="flex items-center gap-6">
+          <label className="flex items-center gap-2 cursor-pointer text-sm text-[#2B0C14] font-medium">
+            <input
+              type="checkbox"
+              checked={weekly}
+              disabled={saving}
+              onChange={(e) => handleToggle(e.target.checked, monthly)}
+              className="w-4 h-4 accent-[#8A1C2B] rounded cursor-pointer"
+            />
+            Weekly
+          </label>
+
+          <label className="flex items-center gap-2 cursor-pointer text-sm text-[#2B0C14] font-medium">
+            <input
+              type="checkbox"
+              checked={monthly}
+              disabled={saving}
+              onChange={(e) => handleToggle(weekly, e.target.checked)}
+              className="w-4 h-4 accent-[#8A1C2B] rounded cursor-pointer"
+            />
+            Monthly
+          </label>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function PackageDetailsTable({
   category,
   categoryLabel,
@@ -378,6 +465,7 @@ function PackageDetailsTable({
       </h1>
 
       <PriceEditor categoryKey={category} />
+      <AvailabilityEditor categoryKey={category} />
 
       <div className="mb-6 flex items-center justify-end">
         <button

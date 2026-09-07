@@ -121,6 +121,7 @@ export default function PackagesSection() {
 
   return (
     <section
+      id="packages-section"
       ref={sectionRef}
       className="relative w-full bg-[#FAF6F0] text-[#29231F] border-t border-[#E8DFC9]"
     >

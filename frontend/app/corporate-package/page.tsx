@@ -24,6 +24,7 @@ import {
   Flame,
 } from "lucide-react";
 
+import OrderNowModal from "../components/order-now-modal";
 // ==========================================
 // DATA MODELS & CEREMONIES
 // ==========================================
@@ -620,6 +621,10 @@ export default function CorporatePackagePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalSuccess, setModalSuccess] = useState(false);
 
+  // ORDER NOW (2-step order + payment) modal state.
+  // Kept separate from the Iyer-request modal below.
+  const [isOrderOpen, setIsOrderOpen] = useState(false);
+
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
@@ -638,6 +643,9 @@ export default function CorporatePackagePage() {
 
       const [dynamicPrice, setDynamicPrice] =
     useState<string | null>(null);
+
+  const [availabilityWeekly, setAvailabilityWeekly] = useState(false);
+  const [availabilityMonthly, setAvailabilityMonthly] = useState(false);
 
   const [formData, setFormData] = useState({
     companyName: "",
@@ -874,10 +882,14 @@ export default function CorporatePackagePage() {
         const data = await res.json();
         if (!cancelled) {
           setDynamicPrice(data?.price || null);
+          setAvailabilityWeekly(!!data?.availability_weekly);
+          setAvailabilityMonthly(!!data?.availability_monthly);
         }
       } catch {
         if (!cancelled) {
           setDynamicPrice(null);
+          setAvailabilityWeekly(false);
+          setAvailabilityMonthly(false);
         }
       }
     }
@@ -1143,55 +1155,57 @@ export default function CorporatePackagePage() {
         }
       `}</style>
 
-      {/* HERO */}
-      <section className="relative pt-[90px] overflow-hidden bg-[#FAF6EE] border-b border-[#E8DDC8]">
-        <div className="mx-auto max-w-[1600px] grid grid-cols-1 lg:grid-cols-12 items-stretch min-h-[560px] lg:min-h-[620px]">
-          <div className="lg:col-span-6 flex flex-col justify-between pt-12 pb-8 px-6 sm:px-10 lg:pl-16 lg:pr-8">
-            <div>
-              <h1 className="font-[family-name:var(--font-cormorant)] text-4xl sm:text-5xl lg:text-6xl font-bold text-[#42151B]">
-                Corporate &amp;
-                <br />
-                Office Package
-              </h1>
+      {/* HERO BANNER */}
+      <section className="relative mt-[90px] w-full min-h-[500px] sm:min-h-[560px] lg:min-h-[620px] flex items-center justify-center overflow-hidden border-b border-[#3D1A14]">
+        {/* Full-width Background Image */}
+        <div className="absolute inset-0 h-full w-full">
+          <Image
+            src="/images/corporate_hero.jpg"
+            alt="Corporate Pooja"
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="100vw"
+          />
 
-              <p className="mt-4 text-[#55463E] max-w-xl">
-                Traditional poojas and homams
-                for offices, new
-                establishments, business
-                spaces and important
-                corporate occasions.
-              </p>
-            </div>
+          {/* Overlay for readable text */}
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
+        </div>
 
-            <div className="mt-8">
-              <div className="inline-flex items-center gap-2 bg-[#4A1015] text-white text-xs py-3 px-6 rounded-r-3xl">
-                <Link href="/">
-                  Home
-                </Link>
-
-                <ChevronRight size={14} />
-
-                <Link href="/package">
-                  Pooja Packages
-                </Link>
-
-                <ChevronRight size={14} />
-
-                <span className="text-[#E7BE6B]">
-                  Corporate Package
-                </span>
-              </div>
-            </div>
+        {/* Banner Content */}
+        <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center justify-center px-6 py-16 text-center sm:px-10 lg:py-24">
+          <div className="mb-4 flex items-center justify-center gap-3">
+            <span className="h-px w-10 bg-[#D4B978]/80" />
+            <span className="text-xs text-[#F3D78A]">✦</span>
+            <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#F3D78A]">
+              Corporate Package
+            </span>
+            <span className="text-xs text-[#F3D78A]">✦</span>
+            <span className="h-px w-10 bg-[#D4B978]/80" />
           </div>
 
-          <div className="lg:col-span-6 relative min-h-[380px]">
-            <Image
-              src="/images/corporate_hero.jpg"
-              alt="Corporate Pooja"
-              fill
-              priority
-              className="object-cover"
-            />
+          <h1 className="font-[family-name:var(--font-cormorant)] text-4xl font-bold tracking-wide text-[#FFFDF8] sm:text-5xl md:text-6xl lg:text-7xl [text-shadow:_0_2px_12px_rgba(0,0,0,0.85)]">
+            Corporate <span className="text-[#F3D78A]">Package</span>
+          </h1>
+
+          <div className="my-5 flex items-center justify-center gap-3 opacity-90">
+            <span className="h-px w-14 bg-gradient-to-r from-transparent via-[#E5C77A] to-transparent" />
+            <span className="text-sm text-[#E5C77A]">❖</span>
+            <span className="h-px w-14 bg-gradient-to-r from-transparent via-[#E5C77A] to-transparent" />
+          </div>
+
+          <p className="max-w-2xl text-sm leading-relaxed text-[#F3EAD8] sm:text-base md:text-lg font-medium [text-shadow:_0_1px_8px_rgba(0,0,0,0.9)]">
+            Traditional poojas and homams for offices, new establishments, business spaces and important corporate occasions.
+          </p>
+
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+            <a
+              href="#choose-ceremony"
+              className="inline-flex h-11 items-center justify-center rounded-full bg-[#D4B978] px-7 text-xs font-bold tracking-wider text-[#3B1115] shadow-lg transition-all duration-300 hover:bg-[#F3D78A] hover:scale-105 active:scale-95 sm:text-sm"
+            >
+              <span>Explore Corporate Poojas</span>
+            </a>
           </div>
         </div>
       </section>
@@ -1199,6 +1213,7 @@ export default function CorporatePackagePage() {
       {/* CHOOSE YOUR CEREMONY */}
       <section
         ref={ceremonySectionRef}
+        id="choose-ceremony"
         className="py-10 sm:py-14 px-4 sm:px-8 max-w-[1400px] mx-auto"
       >
         <div className="text-center mb-10">
@@ -1314,6 +1329,28 @@ export default function CorporatePackagePage() {
           <h2 className="mt-3 font-[family-name:var(--font-cormorant)] text-3xl sm:text-4xl font-bold text-[#42151B]">
             Package Details
           </h2>
+
+          {(() => {
+            const getAvailabilityText = () => {
+              if (availabilityWeekly && availabilityMonthly) {
+                return "Available on weekly / monthly basis";
+              }
+              if (availabilityWeekly) {
+                return "Available on weekly basis";
+              }
+              if (availabilityMonthly) {
+                return "Available on monthly basis";
+              }
+              return null;
+            };
+            const text = getAvailabilityText();
+            if (!text) return null;
+            return (
+              <div className="mt-3 inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#FAF0DF] border border-[#E5C77A] text-xs sm:text-sm font-semibold text-[#8A1C2B] shadow-sm">
+                <span>{text}</span>
+              </div>
+            );
+          })()}
 
           <p className="mt-2 text-sm text-[#7A6458]">
             Select a package to view
@@ -1501,11 +1538,7 @@ export default function CorporatePackagePage() {
                   {/* BOOK NOW */}
                   <button
                     type="button"
-                    onClick={() =>
-                      setIsBookingOpen(
-                        true
-                      )
-                    }
+                    onClick={() => setIsOrderOpen(true)}
                     className="w-full rounded-xl bg-[#E5C77A] px-4 py-3 text-sm font-bold text-[#3D1418] shadow-sm transition-all hover:bg-[#F3D78A] hover:shadow-md active:scale-[0.98]"
                   >
                       Order Now
@@ -2063,6 +2096,14 @@ export default function CorporatePackagePage() {
           </div>
         </div>
       )}
+
+      {/* ORDER NOW — 2-step customer details + payment */}
+      <OrderNowModal
+        open={isOrderOpen}
+        onClose={() => setIsOrderOpen(false)}
+        packageName={selectedPackage.name}
+        packagePrice={dynamicPrice}
+      />
 
       {/* BOOKING MODAL */}
       {isBookingOpen && (

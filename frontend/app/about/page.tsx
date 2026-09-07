@@ -181,10 +181,8 @@ export default function AboutPage() {
             sizes="100vw"
           />
 
-          {/* Gradient overlays so text stays readable without covering the whole image */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#120807] via-[#120807]/80 sm:via-[#120807]/70 to-transparent" />
-
-          <div className="absolute inset-0 bg-gradient-to-t from-[#120807]/70 via-transparent to-[#120807]/30" />
+          {/* Light overlay for clean normal image look */}
+          <div className="absolute inset-0 bg-black/25" />
         </div>
 
         {/* Decorative glows */}
@@ -198,16 +196,15 @@ export default function AboutPage() {
               <Flourish label="About Us" light />
             </div>
 
-            <h1 className="font-[family-name:var(--font-cormorant)] text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-semibold leading-[1.12] tracking-tight">
+            <h1 className="font-[family-name:var(--font-cormorant)] text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-semibold leading-[1.08] tracking-tight text-[#FFFDF8] [text-shadow:_0_2px_12px_rgba(0,0,0,0.85)]">
               Honoring Traditions.
               <br />
-              Serving <span className="text-[#E5B563]">Devotion.</span>
+              <span className="text-[#D4B978]">Serving Devotion.</span>
             </h1>
 
-            <p className="max-w-xl mx-auto lg:ml-auto lg:mr-0 text-sm sm:text-base lg:text-[17px] leading-relaxed text-[#D8C9B8]">
-              At Iyyars Pooja List, we are dedicated to preserving the sacred
-              traditions of our culture and making your spiritual journey
-              simple, authentic, and meaningful.
+            <p className="text-sm sm:text-base lg:text-[17px] leading-relaxed text-[#F3EAD8] max-w-xl mx-auto lg:ml-auto font-medium [text-shadow:_0_1px_8px_rgba(0,0,0,0.9)]">
+              Simplifying sacred pooja preparation for every family, making
+              authentic traditions easier to observe with care and devotion.
             </p>
           </div>
         </div>

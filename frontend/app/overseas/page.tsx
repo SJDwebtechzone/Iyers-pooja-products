@@ -27,6 +27,7 @@ import {
   List,
 } from "lucide-react";
 
+import OrderNowModal from "../components/order-now-modal";
 // ==========================================
 // DATA MODELS
 // ==========================================
@@ -822,6 +823,10 @@ export default function OverseasPackagePage() {
   const packageDetailsRef = useRef<HTMLElement>(null);
   
 // BOOKING STATE
+// ORDER NOW (2-step order + payment) modal state.
+// Kept separate from the Iyer-request modal below.
+const [isOrderOpen, setIsOrderOpen] = useState(false);
+
 const [isBookingOpen, setIsBookingOpen] = useState(false);
 const [bookingSuccess, setBookingSuccess] = useState(false);
 const [bookingForm, setBookingForm] = useState({
@@ -1268,11 +1273,11 @@ return (
 
         <div className="mx-auto max-w-[1600px] grid grid-cols-1 lg:grid-cols-12 items-stretch min-h-[560px] lg:min-h-[620px]">
           {/* LEFT */}
-          <div className="lg:col-span-6 flex flex-col justify-between pt-8 sm:pt-12 lg:pt-14 pb-8 px-6 sm:px-10 lg:pl-16 lg:pr-8 z-10">
+          <div className="lg:col-span-6 flex flex-col justify-center pt-20 sm:pt-28 lg:pt-32 pb-10 px-6 sm:px-10 lg:pl-16 lg:pr-8 z-10">
             <div>
               <h1 className="font-[family-name:var(--font-cormorant)] text-4xl sm:text-5xl lg:text-6xl xl:text-[64px] font-bold tracking-tight text-[#42151B] leading-[1.12]">
                 Overseas
-                <br />
+                
                 Temple Package
               </h1>
 
@@ -1349,7 +1354,7 @@ return (
             </div>
 
             {/* Breadcrumb */}
-            <div className="mt-8 sm:mt-10 -ml-6 sm:-ml-10 lg:-ml-16 self-start">
+            {/* <div className="mt-8 sm:mt-10 -ml-6 sm:-ml-10 lg:-ml-16 self-start">
               <div className="inline-flex items-center gap-2 bg-[#4A1015] text-[#F3EAD8] text-xs sm:text-sm font-medium py-2.5 pl-6 sm:pl-10 pr-8 rounded-r-3xl shadow-md border-y border-r border-[#6B1E26]">
                 <Link
                   href="/"
@@ -1373,7 +1378,7 @@ return (
                   Overseas Temple Package
                 </span>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* RIGHT */}
@@ -1394,7 +1399,7 @@ return (
 
               <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
 
-              <div className="absolute bottom-5 right-5 hidden sm:flex items-center gap-2.5 rounded-xl bg-[#2A0E13]/85 px-4 py-2.5 text-white shadow-xl backdrop-blur-md border border-[#E7BE6B]/30">
+              {/* <div className="absolute bottom-5 right-5 hidden sm:flex items-center gap-2.5 rounded-xl bg-[#2A0E13]/85 px-4 py-2.5 text-white shadow-xl backdrop-blur-md border border-[#E7BE6B]/30">
                 <Globe size={18} className="text-[#E7BE6B]" />
 
                 <div>
@@ -1406,7 +1411,7 @@ return (
                     Worldwide Express Dispatch
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -1484,7 +1489,7 @@ return (
         ref={poojaSectionRef}
         className="py-8 sm:py-14 px-4 sm:px-8 max-w-[1400px] mx-auto"
       >
-        <div className="text-center mb-10 sm:mb-12">
+        {/* <div className="text-center mb-10 sm:mb-12">
           <h2 className="font-[family-name:var(--font-cormorant)] text-3xl sm:text-4xl lg:text-[44px] font-bold text-[#42151B]">
             Choose Your Pooja
           </h2>
@@ -1496,10 +1501,10 @@ return (
             <span className="w-1.5 h-1.5 rotate-45 border border-[#B08A45]" />
             <span className="h-px w-12 bg-gradient-to-l from-transparent to-[#B08A45]" />
           </div>
-        </div>
+        </div> */}
 
         {/* POOJA BUTTONS */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3 sm:gap-3.5">
+        {/* <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3 sm:gap-3.5">
           {overseasPoojas.map((pooja) => {
             const isActive = selectedPooja.id === pooja.id;
 
@@ -1534,7 +1539,7 @@ return (
               </button>
             );
           })}
-        </div>
+        </div> */}
 
         {/* SELECTED POOJA OVERVIEW */}
         <div className="mt-8 rounded-2xl bg-white border border-[#DFCBB0] p-5 sm:p-8 shadow-[0_10px_35px_rgba(80,20,30,0.06)] overflow-hidden">
@@ -1594,6 +1599,10 @@ return (
         className="scroll-mt-28 py-8 sm:py-14 px-4 sm:px-8 max-w-[1400px] mx-auto"
       >
         <div className="text-center mb-8 sm:mb-10">
+          <span className="inline-block px-4 py-1 rounded-full bg-[#EFE3CF] border border-[#DECBB0] text-[11px] font-bold tracking-[0.25em] uppercase text-[#88242F] mb-3">
+            {selectedPooja.name}
+          </span>
+
           <h2 className="font-[family-name:var(--font-cormorant)] text-3xl sm:text-4xl lg:text-[40px] font-bold text-[#42151B]">
             Package Details
           </h2>
@@ -1718,8 +1727,7 @@ return (
 
   <button
     type="button"
-    onClick={() => setIsModalOpen(true)}
-    
+    onClick={() => setIsOrderOpen(true)}
     className="mt-3 w-full rounded-lg bg-[#E5C77A] py-2 text-center text-xs font-bold text-[#3D1418] transition hover:bg-[#F3D78A]"
   >
     Order Now
@@ -1741,14 +1749,10 @@ return (
               {/* DETAILS TAB */}
               {activeTab === "details" && (
                 <div className="space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                  <div>
                     <h3 className="font-[family-name:var(--font-cormorant)] text-xl sm:text-2xl text-[#42151B] font-bold">
                       Pooja Samagri / Items List
                     </h3>
-
-                    <span className="text-xs text-[#7D1E28] font-semibold">
-                      {selectedPooja.name} ({liveItems.length} Items)
-                    </span>
                   </div>
 
                   <div className="grid grid-cols-1 xl:grid-cols-[1fr_240px] gap-5 items-start">
@@ -1835,7 +1839,7 @@ return (
                     </div>
 
                     {/* BADGES */}
-                    <div className="flex flex-col gap-3">
+                    {/* <div className="flex flex-col gap-3">
                       <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-[#DFCBB0] shadow-sm">
                         <div className="w-10 h-10 rounded-full bg-[#FAF3E5] border border-[#D4B978] flex items-center justify-center text-[#7D1E28] shrink-0">
                           <svg
@@ -1886,7 +1890,7 @@ return (
                           Worldwide shipping with tracking
                         </span>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               )}
@@ -2413,6 +2417,14 @@ return (
      {/* ==========================================
           8. IYER REQUEST MODAL
       ========================================== */}
+{/* ORDER NOW — 2-step customer details + payment */}
+<OrderNowModal
+  open={isOrderOpen}
+  onClose={() => setIsOrderOpen(false)}
+  packageName={`${selectedPooja.name} (Overseas)`}
+  packagePrice={dynamicPrice}
+/>
+
 {isBookingOpen && (
   <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
     <div className="relative w-full max-w-md rounded-2xl border-2 border-[#DECBB0] bg-[#FAF6EE] p-6 shadow-2xl sm:p-8">

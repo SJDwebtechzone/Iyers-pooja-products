@@ -15,6 +15,10 @@ import { HomePackageImagesModule } from './home-package-images/home-package-imag
 import { BookingsModule } from './bookings/bookings.module';
 import { PackagePricesModule } from './package-prices/package-prices.module';
 import { IyerRegistrationsModule } from './iyer-registrations/iyer-registrations.module';
+import { PaymentSettingsModule } from './payment-settings/payment-settings.module';
+import { OrdersModule } from './orders/orders.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { ContactSettingsModule } from './contact-settings/contact-settings.module';
 
 @Module({
   imports: [
@@ -32,6 +36,10 @@ import { IyerRegistrationsModule } from './iyer-registrations/iyer-registrations
     BookingsModule,
     PackagePricesModule,
     IyerRegistrationsModule,
+    PaymentSettingsModule,
+    OrdersModule,
+    NotificationsModule,
+    ContactSettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -40,3 +40,44 @@ body {
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
+/* -------------------------------------------------------------
+   Order Now modal — entrance + step transition
+   ------------------------------------------------------------- */
+
+@keyframes order-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes order-step-in {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-order-modal-in {
+  animation: order-modal-in 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-order-step-in {
+  animation: order-step-in 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-order-modal-in,
+  .animate-order-step-in {
+    animation: none;
+  }
+}

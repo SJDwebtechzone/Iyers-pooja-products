@@ -270,7 +270,7 @@ export default function Navbar() {
               width={250}
               height={90}
               priority
-              className="h-[76px] w-[76px] rounded-full object-cover transition-transform duration-300 hover:scale-105 lg:h-[88px] lg:w-[88px]"
+              className="h-[68px] w-[68px] rounded-full object-cover transition-transform duration-300 hover:scale-105 lg:h-[74px] lg:w-[74px]"
             />
           </Link>
 
@@ -348,7 +348,7 @@ export default function Navbar() {
 
             {/* ORDER NOW */}
             <Link
-              href="/order"
+              href="/contact"
               className="inline-flex h-11 items-center justify-center rounded-lg bg-[#D4B978] px-6 text-[12px] font-semibold tracking-[0.08em] text-[#3B1115] transition-all duration-300 hover:bg-[#E5CC8A] hover:shadow-[0_5px_20px_rgba(212,185,120,0.25)]"
             >
               ORDER NOW

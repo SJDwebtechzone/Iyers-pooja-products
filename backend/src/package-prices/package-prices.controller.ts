@@ -20,8 +20,18 @@ export class PackagePricesController {
   @Put(':categoryKey')
   setPrice(
     @Param('categoryKey') categoryKey: string,
-    @Body('price') price: string,
+    @Body()
+    body: {
+      price?: string;
+      availability_weekly?: boolean;
+      availability_monthly?: boolean;
+    },
   ) {
-    return this.service.setPrice(categoryKey, price);
+    return this.service.setPrice(
+      categoryKey,
+      body.price,
+      body.availability_weekly,
+      body.availability_monthly,
+    );
   }
 }

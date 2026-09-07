@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 
+import OrderNowModal from "../../components/order-now-modal";
 type SamagriItem = {
 id: number;
 sno: number;
@@ -68,6 +69,10 @@ const [samagriItems, setSamagriItems] = useState<SamagriItem[]>([]);
 const [loadingItems, setLoadingItems] = useState(true);
 
 // Booking states
+// ORDER NOW (2-step order + payment) modal state.
+// Kept separate from the Iyer-request modal below.
+const [isOrderOpen, setIsOrderOpen] = useState(false);
+
 const [isBookingOpen, setIsBookingOpen] = useState(false);
 const [bookingSuccess, setBookingSuccess] = useState(false);
 
@@ -309,7 +314,7 @@ return ( <main className="min-h-screen bg-[#FAF6EE] text-[#29231F] font-sans ant
 
       <button
         type="button"
-        onClick={() => setIsBookingOpen(true)}
+        onClick={() => setIsOrderOpen(true)}
         className="mt-4 w-full rounded-lg bg-[#5A121D] py-2.5 text-sm font-bold text-white tracking-wide hover:bg-[#400B13] transition-colors"
       >
           Order Now
@@ -450,6 +455,14 @@ return ( <main className="min-h-screen bg-[#FAF6EE] text-[#29231F] font-sans ant
   {/* =========================================================
       BOOKING MODAL
   ========================================================= */}
+  {/* ORDER NOW — 2-step customer details + payment */}
+  <OrderNowModal
+    open={isOrderOpen}
+    onClose={() => setIsOrderOpen(false)}
+    packageName="Ganapathy Homam"
+    packagePrice={packagePrice.replace(/[^\d.,]/g, "")}
+  />
+
   {isBookingOpen && (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
 
