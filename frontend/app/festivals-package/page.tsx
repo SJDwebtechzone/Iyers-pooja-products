@@ -701,46 +701,54 @@ useEffect(() => {
       <section className="relative min-h-[520px] w-full overflow-hidden bg-[#24120E] sm:min-h-[580px] lg:min-h-[640px]">
         {/* Background Image */}
         <div className="absolute inset-0">
-          <Image
-            src="/images/festival-hero.jpg"
-            alt="Celebrate Every Festival"
-            fill
-            priority
-            className="object-cover object-center opacity-75"
-            sizes="100vw"
-          />
-          {/* Subtle warm festive gradient overlays */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1F0C08] via-[#1F0C08]/60 to-[#1F0C08]/40" />
-        </div>
+  <Image
+    src="/images/festival-banner.png"
+    alt="Celebrate Every Festival"
+    fill
+    priority
+    className="object-cover object-center"
+    sizes="100vw"
+  />
+  {/* Light bottom-only gradient just for text legibility, image stays true-color */}
+  <div className="absolute inset-0 bg-gradient-to-t from-[#1F0C08]/70 via-transparent to-transparent" />
+</div>
 
         {/* Content */}
         <div className="relative z-10 mx-auto flex min-h-[520px] max-w-5xl flex-col items-center justify-center px-6 py-20 text-center sm:min-h-[580px] sm:px-10 lg:min-h-[640px]">
-          {/* Decorative Top Accent */}
-          <div className="mb-4 flex items-center justify-center gap-3">
-            <span className="h-px w-10 bg-[#D4B978]/70" />
-            <span className="text-xs text-[#E5C77A]">✦</span>
-            <span className="h-px w-10 bg-[#D4B978]/70" />
-          </div>
+          {/* Small Label */}
+<div className="mb-5 inline-flex items-center justify-center gap-3 rounded-full bg-[#42151B]/90 px-5 py-2 shadow-sm">
+  <span className="h-px w-8 bg-[#D4B978]/80" />
+  <span className="text-xs text-[#F3D78A]">✦</span>
+  <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#F3D78A]">
+    Festival Package
+  </span>
+  <span className="text-xs text-[#F3D78A]">✦</span>
+  <span className="h-px w-8 bg-[#D4B978]/80" />
+</div>
 
-          {/* Heading */}
-          <h1 className="font-[family-name:var(--font-cormorant)] text-4xl font-semibold tracking-wide text-[#FFFDF8] sm:text-5xl md:text-6xl lg:text-7xl">
-            Celebrate Every Festival
-            <br />
-            <span className="text-[#F3D78A]">with Devotion &amp; Tradition</span>
-          </h1>
+{/* Heading */}
+<h1 className="font-[family-name:var(--font-cormorant)] text-4xl font-semibold tracking-wide text-[#FFFDF8] sm:text-5xl md:text-6xl lg:text-7xl">
+  Celebrate Every Festival
+  <br />
+  <span
+    className="text-[#F3D78A]"
+    style={{ textShadow: "0 2px 4px rgba(0,0,0,0.9), 0 4px 16px rgba(0,0,0,0.7)" }}
+  >
+    with Devotion &amp; Tradition
+  </span>
+</h1>
 
           {/* Divider */}
-          <div className="my-5 flex items-center justify-center gap-3 opacity-90">
-            <span className="h-px w-14 bg-gradient-to-r from-transparent via-[#E5C77A] to-transparent" />
-            <span className="text-sm text-[#E5C77A]">❖</span>
-            <span className="h-px w-14 bg-gradient-to-r from-transparent via-[#E5C77A] to-transparent" />
-          </div>
+<div className="my-5 flex items-center justify-center gap-3 opacity-90">
+  <span className="h-px w-14 bg-gradient-to-r from-transparent via-[#E5C77A] to-transparent" />
+  <span className="text-sm text-[#E5C77A]">❖</span>
+  <span className="h-px w-14 bg-gradient-to-r from-transparent via-[#E5C77A] to-transparent" />
+</div>
 
-          {/* Subtitle */}
-          <p className="max-w-2xl text-sm leading-relaxed text-[#F3EAD8]/90 sm:text-base md:text-lg">
-            Festivals are the soul of our culture. Worship, celebrate and receive divine blessings with our specially curated pooja packages.
-          </p>
-
+{/* Subtitle */}
+<p className="max-w-2xl text-sm leading-relaxed text-white sm:text-base md:text-lg [text-shadow:_0_2px_10px_rgba(0,0,0,0.95)]">
+  Festivals are the soul of our culture. Worship, celebrate and receive divine blessings with our specially curated pooja packages.
+</p>
           {/* CTA Button */}
           <div className="mt-8">
             <a

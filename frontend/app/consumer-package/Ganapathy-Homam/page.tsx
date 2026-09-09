@@ -160,23 +160,18 @@ return ( <main className="min-h-screen bg-[#FAF6EE] text-[#29231F] font-sans ant
         GANESHA HERO IMAGE
     ====================================================== */}
     <Image
-      src="/images/diwali.jpg"
-      alt="Lord Ganesha"
-      fill
-      priority
-      sizes="100vw"
-      className="object-cover object-center"
-    />
+  src="/images/consumer-package-banner.png"
+  alt="Consumer Package"
+  fill
+  priority
+  sizes="100vw"
+  className="object-cover object-center"
+/>
 
-    {/* Dark overlay on right side */}
-    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#3a250d]/20 to-[#24190b]/90" />
+   {/* Very light overlay only for text readability */}
+<div className="absolute inset-0 bg-black/10" />
 
-    {/* Right-side readability overlay */}
-    <div className="absolute inset-y-0 right-0 w-[62%] bg-gradient-to-l from-[#21160a]/90 via-[#3a270f]/65 to-transparent" />
-
-    {/* Bottom shadow */}
-    <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/45 to-transparent" />
-
+    
     {/* Top maroon strip */}
     <div className="absolute top-0 left-0 right-0 z-30 h-[28px] bg-[#42151B]" />
 

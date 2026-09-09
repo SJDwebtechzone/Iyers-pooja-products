@@ -10,7 +10,6 @@ import {
   CheckCircle2,
   Globe2,
   Sparkles,
-  Heart,
   Landmark,
   HandHeart,
 } from "lucide-react";
@@ -269,24 +268,30 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <div className="lg:col-span-6 relative flex justify-center">
-              <div className="relative p-2.5 sm:p-3.5 rounded-2xl bg-gradient-to-br from-[#E8DEC8] via-[#FAF6EE] to-[#DFCBB0] shadow-[0_15px_40px_rgba(90,32,38,0.12)] border border-[#DFCBB0]">
-                <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-[#B08A45]" />
-                <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-[#B08A45]" />
-                <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-[#B08A45]" />
-                <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-[#B08A45]" />
+         <div className="lg:col-span-6 relative flex justify-center">
+  <div className="relative w-full max-w-[850px] p-3 rounded-2xl bg-gradient-to-br from-[#E8DEC8] via-[#FAF6EE] to-[#DFCBB0] shadow-[0_15px_40px_rgba(90,32,38,0.12)] border border-[#DFCBB0]">
 
-                <div className="relative w-full max-w-[620px] aspect-[4/3] rounded-xl overflow-hidden group">
-                  <Image
-                    src="/images/about/story_thali.jpg"
-                    alt="Devotee holding sacred brass pooja thali with flowers and diya"
-                    fill
-                    className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                  />
-                </div>
-              </div>
-            </div>
+    <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-[#B08A45]" />
+    <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-[#B08A45]" />
+    <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-[#B08A45]" />
+    <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-[#B08A45]" />
+
+          <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden group">
+      <video
+        poster="/images/about/story_thali.jpg"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+      >
+        <source src="/images/videos/our-story.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+  </div>
+</div>
           </div>
         </div>
       </section>
@@ -444,7 +449,7 @@ export default function AboutPage() {
 
                 <div className="space-y-5 text-sm sm:text-base lg:text-[17px] leading-8 text-[#63574F]">
                   <p>
-                    Our vision is to become a trusted bridge between timeless
+                    <span className="text-black">Our vision</span> is to become a trusted bridge between timeless
                     traditions and modern-day devotees, ensuring that the sacred
                     practices of our culture remain accessible across every
                     home, city, and country.
@@ -782,7 +787,7 @@ export default function AboutPage() {
           <div className="space-y-5 text-sm sm:text-base lg:text-[17px] leading-8 text-[#63574F]">
 
             <p>
-              Our mission is to preserve the authenticity of sacred
+              <span className="text-black">Our mission</span> is to preserve the authenticity of sacred
               traditions while making pooja preparation simple and
               accessible for modern families.
             </p>
@@ -928,21 +933,18 @@ export default function AboutPage() {
 
       <div className="relative mx-auto max-w-5xl overflow-hidden rounded-2xl border border-[#E2D2BA] bg-[#FFFDF9] px-7 py-9 sm:px-12 sm:py-12 text-center shadow-[0_18px_45px_rgba(90,24,32,0.06)]">
 
+        <Image
+          src="/images/vision-mission.png"
+          alt="Devotional lamps floating on the Ganges at dusk"
+          fill
+          className="object-cover"
+          sizes="(max-width: 1024px) 100vw, 1024px"
+        />
+
         <div className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-48 bg-gradient-to-r from-transparent via-[#D4B978] to-transparent" />
 
 
-        <div className="flex justify-center mb-5">
-
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#F8F2E6] border border-[#E2D0AF] text-[#B08A45]">
-
-            <Heart size={22} strokeWidth={1.5} />
-
-          </div>
-
-        </div>
-
-
-        <blockquote className="font-[family-name:var(--font-cormorant)] text-2xl sm:text-3xl lg:text-4xl font-semibold leading-snug text-[#4A141A]">
+        <blockquote className="relative z-10 font-[family-name:var(--font-cormorant)] text-2xl sm:text-3xl lg:text-4xl font-semibold leading-snug text-white">
 
           “Preserving the wisdom of yesterday,
           <br className="hidden sm:block" />
@@ -951,7 +953,7 @@ export default function AboutPage() {
         </blockquote>
 
 
-        <div className="pt-6 flex items-center justify-center gap-2">
+        <div className="relative z-10 pt-6 flex items-center justify-center gap-2">
 
           <span className="h-px w-10 bg-[#C59B4B]/40" />
 

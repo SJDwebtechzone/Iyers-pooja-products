@@ -1159,55 +1159,54 @@ export default function CorporatePackagePage() {
       <section className="relative mt-[90px] w-full min-h-[500px] sm:min-h-[560px] lg:min-h-[620px] flex items-center justify-center overflow-hidden border-b border-[#3D1A14]">
         {/* Full-width Background Image */}
         <div className="absolute inset-0 h-full w-full">
-          <Image
-            src="/images/corporate_hero.jpg"
-            alt="Corporate Pooja"
-            fill
-            priority
-            className="object-cover object-center"
-            sizes="100vw"
-          />
+  <Image
+    src="/images/corporate-package-banner.png"
+    alt="Corporate Pooja"
+    fill
+    priority
+    className="object-cover object-center"
+    sizes="100vw"
+  />
 
-          {/* Overlay for readable text */}
-          <div className="absolute inset-0 bg-black/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
-        </div>
+  {/* Light bottom-only gradient just for text legibility, image stays true-color */}
+  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+</div>
 
         {/* Banner Content */}
-        <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center justify-center px-6 py-16 text-center sm:px-10 lg:py-24">
-          <div className="mb-4 flex items-center justify-center gap-3">
-            <span className="h-px w-10 bg-[#D4B978]/80" />
-            <span className="text-xs text-[#F3D78A]">✦</span>
-            <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#F3D78A]">
-              Corporate Package
-            </span>
-            <span className="text-xs text-[#F3D78A]">✦</span>
-            <span className="h-px w-10 bg-[#D4B978]/80" />
-          </div>
+<div className="relative z-10 ml-auto flex w-full max-w-6xl flex-col items-start justify-center px-6 py-16 text-left sm:px-10 lg:w-[55%] lg:px-16 lg:py-24">
+  <div className="mb-4 inline-flex items-center gap-3 rounded-full bg-[#42151B]/90 px-5 py-2 shadow-sm">
+  <span className="h-px w-8 bg-[#D4B978]/80" />
+  <span className="text-xs text-[#F3D78A]">✦</span>
+  <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#F3D78A]">
+    Corporate Package
+  </span>
+  <span className="text-xs text-[#F3D78A]">✦</span>
+  <span className="h-px w-8 bg-[#D4B978]/80" />
+</div>
 
-          <h1 className="font-[family-name:var(--font-cormorant)] text-4xl font-bold tracking-wide text-[#FFFDF8] sm:text-5xl md:text-6xl lg:text-7xl [text-shadow:_0_2px_12px_rgba(0,0,0,0.85)]">
-            Corporate <span className="text-[#F3D78A]">Package</span>
-          </h1>
+  <h1 className="font-[family-name:var(--font-cormorant)] text-4xl font-bold tracking-wide text-[#FFFDF8] sm:text-5xl md:text-6xl lg:text-7xl [text-shadow:_0_2px_12px_rgba(0,0,0,0.85)]">
+    Corporate <span className="text-[#F3D78A]">Package</span>
+  </h1>
 
-          <div className="my-5 flex items-center justify-center gap-3 opacity-90">
-            <span className="h-px w-14 bg-gradient-to-r from-transparent via-[#E5C77A] to-transparent" />
-            <span className="text-sm text-[#E5C77A]">❖</span>
-            <span className="h-px w-14 bg-gradient-to-r from-transparent via-[#E5C77A] to-transparent" />
-          </div>
+  <div className="my-5 flex items-center gap-3 opacity-90">
+    <span className="h-px w-14 bg-gradient-to-r from-transparent via-[#E5C77A] to-transparent" />
+    <span className="text-sm text-[#E5C77A]">❖</span>
+    <span className="h-px w-14 bg-gradient-to-r from-transparent via-[#E5C77A] to-transparent" />
+  </div>
 
-          <p className="max-w-2xl text-sm leading-relaxed text-[#F3EAD8] sm:text-base md:text-lg font-medium [text-shadow:_0_1px_8px_rgba(0,0,0,0.9)]">
-            Traditional poojas and homams for offices, new establishments, business spaces and important corporate occasions.
-          </p>
+  <p className="max-w-xl text-sm leading-relaxed text-[#F3EAD8] sm:text-base md:text-lg font-medium [text-shadow:_0_1px_8px_rgba(0,0,0,0.9)]">
+    Traditional poojas and homams for offices, new establishments, business spaces and important corporate occasions.
+  </p>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <a
-              href="#choose-ceremony"
-              className="inline-flex h-11 items-center justify-center rounded-full bg-[#D4B978] px-7 text-xs font-bold tracking-wider text-[#3B1115] shadow-lg transition-all duration-300 hover:bg-[#F3D78A] hover:scale-105 active:scale-95 sm:text-sm"
-            >
-              <span>Explore Corporate Poojas</span>
-            </a>
-          </div>
-        </div>
+        <div className="mt-8 flex flex-wrap items-center gap-4">
+  <a
+    href="#choose-ceremony"
+    className="inline-flex h-11 items-center justify-center rounded-full bg-[#D4B978] px-7 text-xs font-bold tracking-wider text-[#3B1115] shadow-lg transition-all duration-300 hover:bg-[#F3D78A] hover:scale-105 active:scale-95 sm:text-sm"
+  >
+    <span>Explore Corporate Poojas</span>
+  </a>
+</div>
+</div>
       </section>
 
       {/* CHOOSE YOUR CEREMONY */}

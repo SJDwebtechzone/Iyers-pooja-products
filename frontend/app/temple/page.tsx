@@ -430,7 +430,7 @@ export default function TemplePackagePage() {
         {/* Full-width Background Image */}
         <div className="absolute inset-0 h-full w-full">
           <Image
-            src="/images/temple_hero_gopuram.jpg"
+            src="/images/temple-package-banner.png"
             alt="Illuminated ancient South Indian temple gopuram"
             fill
             priority
@@ -439,65 +439,51 @@ export default function TemplePackagePage() {
           />
 
           {/* Lightened overlay for brighter image look */}
-          <div className="absolute inset-0 bg-black/20" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/30 to-transparent" />
+          
+         
         </div>
 
-        {/* Content - Left Center & Moved Down */}
-        <div className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-col justify-center px-6 py-16 sm:px-10 lg:px-16 pt-24 sm:pt-28 lg:pt-32">
-          <div className="w-full max-w-2xl text-left text-white space-y-4 sm:space-y-5">
-            <div className="flex items-center gap-3">
-              <span className="h-px w-10 bg-[#D4B978]/80" />
-              <span className="text-xs text-[#F3D78A]">✦</span>
-              <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#F3D78A]">
-                Temple Package
-              </span>
-              <span className="text-xs text-[#F3D78A]">✦</span>
-              <span className="h-px w-10 bg-[#D4B978]/80" />
-            </div>
+        {/* Content - Right Center */}
+<div className="relative z-10 ml-auto flex w-full max-w-[1600px] flex-col justify-center px-6 py-16 sm:px-10 lg:w-[55%] lg:px-16 xl:px-24 pt-24 sm:pt-28 lg:pt-32">
+  <div className="w-full max-w-2xl text-left text-white space-y-4 sm:space-y-5">
 
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-[#FFFDF8] leading-[1.12] [text-shadow:_0_2px_12px_rgba(0,0,0,0.85)]">
-              Temple <span className="text-[#F3D78A]">Package</span>
-            </h1>
+    {/* Small Label */}
+<div className="inline-flex items-center gap-3 rounded-full bg-[#42151B]/90 px-5 py-2 shadow-sm">
+  <span className="h-px w-8 bg-[#D4B978]/80" />
 
-            <p className="text-sm sm:text-base lg:text-[17px] text-[#F3EAD8] leading-relaxed max-w-xl font-medium [text-shadow:_0_1px_8px_rgba(0,0,0,0.9)]">
-              Experience divine blessings with our specially curated Temple
-              Packages performed in sacred temples by experienced priests
-              with traditional rituals for peace, prosperity and spiritual
-              growth.
-            </p>
+  <span className="text-xs text-[#F3D78A]">
+    ✦
+  </span>
 
-            <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-3 max-w-lg">
-              <div className="flex flex-col items-center text-center p-3 rounded-xl bg-black/40 border border-[#D4B978]/30 backdrop-blur-sm">
-                <span className="text-xs sm:text-[13px] font-semibold text-[#F3D78A] leading-tight">
-                  Ancient Temples
-                </span>
-              </div>
+  <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#F3D78A]">
+    Temple Package
+  </span>
 
-              <div className="flex flex-col items-center text-center p-3 rounded-xl bg-black/40 border border-[#D4B978]/30 backdrop-blur-sm">
-                <span className="text-xs sm:text-[13px] font-semibold text-[#F3D78A] leading-tight">
-                  Experienced Priests
-                </span>
-              </div>
+  <span className="text-xs text-[#F3D78A]">
+    ✦
+  </span>
 
-              <div className="flex flex-col items-center text-center p-3 rounded-xl bg-black/40 border border-[#D4B978]/30 backdrop-blur-sm">
-                <span className="text-xs sm:text-[13px] font-semibold text-[#F3D78A] leading-tight">
-                  Traditional Rituals
-                </span>
-              </div>
-            </div>
+  <span className="h-px w-8 bg-[#D4B978]/80" />
+</div>
 
-            <div className="pt-3 flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => scrollToTab("package")}
-                className="inline-flex h-11 items-center justify-center rounded-full bg-[#D4B978] px-7 text-xs font-bold tracking-wider text-[#3B1115] shadow-lg transition-all duration-300 hover:bg-[#F3D78A] hover:scale-105 active:scale-95 sm:text-sm"
-              >
-                <span>View Package Details</span>
-              </button>
-            </div>
-          </div>
-        </div>
+    {/* Main Heading */}
+    <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-[#FFFDF8] leading-[1.12] [text-shadow:_0_3px_12px_rgba(0,0,0,0.9)]">
+      Temple{" "}
+      <span className="text-[#F3D78A]">
+        Package
+      </span>
+    </h1>
+
+    {/* Description */}
+    <p className="text-sm sm:text-base lg:text-[17px] text-[#F3EAD8] leading-relaxed max-w-xl font-medium [text-shadow:_0_2px_8px_rgba(0,0,0,0.95)]">
+      Experience divine blessings with our specially curated Temple
+      Packages performed in sacred temples by experienced priests
+      with traditional rituals for peace, prosperity and spiritual
+      growth.
+    </p>
+
+  </div>
+</div>
       </section>
 
       {/* ========================================================= */}
@@ -507,7 +493,7 @@ export default function TemplePackagePage() {
       <section
         ref={detailsSectionRef}
         id="package-details"
-        className="scroll-mt-28 py-10 sm:py-16 px-4 sm:px-8 max-w-[1400px] mx-auto"
+        className="scroll-mt-28 py-10 sm:py-16 px-4 sm:px-8 max-w-[1400px] ml-auto"
       >
         <div className="text-center mb-8">
           <span className="inline-block px-4 py-1 rounded-full bg-[#EFE3CF] border border-[#DECBB0] text-[11px] font-bold tracking-[0.25em] uppercase text-[#88242F] mb-3">

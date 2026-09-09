@@ -1268,90 +1268,55 @@ return (
           1. HERO SECTION
       ========================================== */}
 
-      <section className="relative pt-[90px] overflow-hidden bg-[#FAF6EE] border-b border-[#E8DDC8]">
-        <div className="pointer-events-none absolute -left-24 -top-24 h-96 w-96 rounded-full bg-[#B08A45]/5 blur-3xl" />
+      <section className="relative pt-[90px] overflow-hidden min-h-[620px] border-b border-[#E8DDC8]">
 
-        <div className="mx-auto max-w-[1600px] grid grid-cols-1 lg:grid-cols-12 items-stretch min-h-[560px] lg:min-h-[620px]">
+  {/* ORIGINAL FULL WIDTH IMAGE - NO EFFECT */}
+  <div className="absolute inset-0 top-[90px]">
+    <Image
+      src="/images/overseas-banner.png"
+      alt="Ancient Indian temple gopuram"
+      fill
+      priority
+      sizes="100vw"
+      className="object-cover object-center"
+    />
+  </div>
+
+<div className="relative z-10 mx-auto max-w-[1600px] min-h-[560px] lg:min-h-[620px]">
           {/* LEFT */}
-          <div className="lg:col-span-6 flex flex-col justify-center pt-20 sm:pt-28 lg:pt-32 pb-10 px-6 sm:px-10 lg:pl-16 lg:pr-8 z-10">
-            <div>
-              <h1 className="font-[family-name:var(--font-cormorant)] text-4xl sm:text-5xl lg:text-6xl xl:text-[64px] font-bold tracking-tight text-[#42151B] leading-[1.12]">
-                Overseas
-                
-                Temple Package
-              </h1>
+    <div className="w-full max-w-[760px] flex flex-col justify-start min-h-[560px] lg:min-h-[620px] pt-20 sm:pt-24 lg:pt-32 pb-10 px-6 sm:px-10 lg:pl-16 lg:pr-8">
+  <div>
+    {/* Small Label */}
+    
+<div className="mb-3 inline-flex items-center gap-3 rounded-full bg-[#42151B]/90 px-5 py-2 shadow-sm">
+      <span className="h-px w-8 bg-[#D4B978]/80" />
+      <span className="text-xs text-[#F3D78A]">✦</span>
+      <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#F3D78A]">
+        Overseas Temple Package
+      </span>
+      <span className="text-xs text-[#F3D78A]">✦</span>
+      <span className="h-px w-8 bg-[#D4B978]/80" />
+    </div>
 
-              <div className="mt-4">
-                <p className="font-[family-name:var(--font-cormorant)] text-xl sm:text-2xl font-semibold text-[#B37D2A] leading-snug">
-                  Divine Blessings,
-                  <br />
-                  No Matter Where You Are
-                </p>
-              </div>
+    <h1
+      className="font-[family-name:var(--font-cormorant)] text-4xl sm:text-5xl lg:text-6xl xl:text-[64px] font-bold tracking-tight text-[#42151B] leading-[1.12]"
+      style={{ textShadow: "0 2px 10px rgba(255,255,255,0.35)" }}
+    >
+      Overseas Temple <span className="text-[#B37D2A]">Package</span>
+    </h1>
 
-              <p className="mt-3 text-sm sm:text-[15px] text-[#55463E] leading-relaxed max-w-xl">
-                We perform authentic temple rituals and poojas in sacred
-                temples on your behalf in India and deliver prasadam to your
-                doorstep anywhere in the world.
-              </p>
+    <div className="mt-4">
+      <p
+        className="font-[family-name:var(--font-cormorant)] text-xl sm:text-2xl font-semibold text-[#42151B] leading-snug"
+        style={{ textShadow: "0 1px 8px rgba(255,255,255,0.4)" }}
+      >
+        Divine Blessings, No Matter Where You Are
+      </p>
+    </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-8 max-w-xl">
-                {/* Feature 1 */}
-                <div className="flex flex-col items-center text-center p-3 rounded-xl bg-[#F5EDE0]/70 border border-[#E5D7C0] transition-transform hover:-translate-y-0.5">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center text-[#7D1E28] mb-1.5 bg-[#FFFDF9] border border-[#DFCBB0]">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.6"
-                      className="w-5 h-5"
-                    >
-                      <path d="M12 2v2m-3 3h6l-3-3z" />
-                      <path d="M7 7h10l-1 4H8L7 7z" />
-                      <path d="M5 11h14l-1 5H6l-1-5z" />
-                      <path d="M3 16h18v6H3z" />
-                    </svg>
-                  </div>
-
-                  <span className="text-[11px] sm:text-xs font-semibold text-[#42151B] leading-tight">
-                    Sacred Temples in India
-                  </span>
-                </div>
-
-                {/* Feature 2 */}
-                <div className="flex flex-col items-center text-center p-3 rounded-xl bg-[#F5EDE0]/70 border border-[#E5D7C0] transition-transform hover:-translate-y-0.5">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center text-[#7D1E28] mb-1.5 bg-[#FFFDF9] border border-[#DFCBB0]">
-                    <Award size={20} strokeWidth={1.8} />
-                  </div>
-
-                  <span className="text-[11px] sm:text-xs font-semibold text-[#42151B] leading-tight">
-                    Experienced Vedic Priests
-                  </span>
-                </div>
-
-                {/* Feature 3 */}
-                <div className="flex flex-col items-center text-center p-3 rounded-xl bg-[#F5EDE0]/70 border border-[#E5D7C0] transition-transform hover:-translate-y-0.5">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center text-[#7D1E28] mb-1.5 bg-[#FFFDF9] border border-[#DFCBB0]">
-                    <Truck size={20} strokeWidth={1.8} />
-                  </div>
-
-                  <span className="text-[11px] sm:text-xs font-semibold text-[#42151B] leading-tight">
-                    Prasadam Delivery Worldwide
-                  </span>
-                </div>
-
-                {/* Feature 4 */}
-                <div className="flex flex-col items-center text-center p-3 rounded-xl bg-[#F5EDE0]/70 border border-[#E5D7C0] transition-transform hover:-translate-y-0.5">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center text-[#7D1E28] mb-1.5 bg-[#FFFDF9] border border-[#DFCBB0]">
-                    <ShieldCheck size={20} strokeWidth={1.8} />
-                  </div>
-
-                  <span className="text-[11px] sm:text-xs font-semibold text-[#42151B] leading-tight">
-                    100% Authentic &amp; Transparent
-                  </span>
-                </div>
-              </div>
-            </div>
+   
+  </div>
+</div>
 
             {/* Breadcrumb */}
             {/* <div className="mt-8 sm:mt-10 -ml-6 sm:-ml-10 lg:-ml-16 self-start">
@@ -1379,25 +1344,8 @@ return (
                 </span>
               </div>
             </div> */}
-          </div>
+        
 
-          {/* RIGHT */}
-          <div className="lg:col-span-6 relative min-h-[380px] lg:min-h-full overflow-hidden">
-            <div className="absolute inset-0 w-full h-full">
-              <Image
-                src="/images/temple_hero_gopuram.jpg"
-                alt="Ancient Indian temple gopuram"
-                fill
-                priority
-                className="object-cover object-center scale-105"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-
-              <div className="absolute inset-y-0 left-0 w-20 sm:w-28 lg:w-40 bg-gradient-to-r from-[#FAF6EE] via-[#FAF6EE]/80 to-transparent pointer-events-none hidden lg:block" />
-
-              <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#FAF6EE] to-transparent pointer-events-none lg:hidden" />
-
-              <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
 
               {/* <div className="absolute bottom-5 right-5 hidden sm:flex items-center gap-2.5 rounded-xl bg-[#2A0E13]/85 px-4 py-2.5 text-white shadow-xl backdrop-blur-md border border-[#E7BE6B]/30">
                 <Globe size={18} className="text-[#E7BE6B]" />
@@ -1412,8 +1360,7 @@ return (
                   </div>
                 </div>
               </div> */}
-            </div>
-          </div>
+           
         </div>
       </section>
 

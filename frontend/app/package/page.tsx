@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import {
   ArrowRight,
   Check,
-  ChevronRight,
   Gift,
   Info,
   List,
@@ -15,6 +14,7 @@ import {
 } from "lucide-react";
 
 import OrderNowModal from "../components/order-now-modal";
+
 export type PackageItem = {
   sno: number;
   english: string;
@@ -71,408 +71,414 @@ type PackagePageProps = {
   data: PackageData;
 };
 
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+
+/*
+  IMPORTANT:
+  The value on the RIGHT must exactly match
+  the category/slug stored in your backend database.
+*/
 const OCCASION_TO_API_CATEGORY: Record<string, string> = {
   "ganapathy-homam": "ganapathi-homam",
   "house-warming": "grahapravesam",
-  "marriage": "marriage",
+  "satyanarayana-vratam": "satyanarayana-vratam",
+  "daily-pooja": "daily-pooja",
+  marriage: "marriage",
   "bhoomi-poojai": "bhoomi-poojai",
-  "punyahavachanam": "punyahavachanam",
+  punyahavachanam: "punyahavachanam",
   "ruthu-punyahavachanam": "ruthu-punyahavachanam",
   "ayush-homam": "ayush-homam",
+  "family-ceremony": "family-ceremony",
 };
-
-const API_BASE = "http://localhost:3001";
 
 const consumerPackageData: PackageData = {
   title: "Consumer Package",
-  subtitle: "Essential pooja essentials thoughtfully curated for sacred moments at home.",
+  subtitle:
+    "Essential pooja essentials thoughtfully curated for sacred moments at home.",
   breadcrumb: "Consumer Package",
-  heroImage: "/images/banner.png",
-  introImage: "/images/banner.jpeg",
+
+  heroImage: "/images/consumer-package-banner.png",
+  introImage: "/images/image.png",
   bannerImage: "/images/kalash.jpg",
+
   bannerTitle: "Sacred Moments, Made Simple",
   bannerSubtitle: "Everything you need for your home pooja",
+
   introTitle: "A complete collection for every family ritual",
+
   introText:
     "Our consumer package brings together carefully selected pooja essentials for daily worship, festivals, and important family ceremonies. Each item is prepared to help you observe your traditions with ease and devotion.",
+
   benefits: [
     { icon: "peace", title: "Peace and positivity" },
     { icon: "obstacles", title: "Remove obstacles" },
     { icon: "family", title: "Family wellbeing" },
     { icon: "success", title: "Prosperity and success" },
   ],
+
   items: [
-    { sno: 1, english: "Pure Brass Pooja Utensils Set", tamil: "பித்தளை பூஜை பாத்திரங்கள்", quantity: "1 set" },
-    { sno: 2, english: "Organic Camphor", tamil: "கற்பூரம்", quantity: "1 pack" },
-    { sno: 3, english: "Pure Kumkum", tamil: "குங்குமம்", quantity: "1 pack" },
-    { sno: 4, english: "Fresh Garland and Mango Leaves", tamil: "மாலை மற்றும் மாவிலை", quantity: "As required" },
-    { sno: 5, english: "Diya Oil and Herbal Incense", tamil: "விளக்கு எண்ணெய் மற்றும் ஊதுபத்தி", quantity: "1 set" },
+    {
+      sno: 1,
+      english: "Pure Brass Pooja Utensils Set",
+      tamil: "பித்தளை பூஜை பாத்திரங்கள்",
+      quantity: "1 set",
+    },
   ],
-  process: [
-    "Clean the pooja space and arrange the required items.",
-    "Light the diya and incense before beginning the prayer.",
-    "Offer flowers, kumkum, and other samagri according to tradition.",
-    "Complete the prayer and distribute prasadam to the family.",
-  ],
-  benefitsDetails: [
-    "Supports a calm and positive atmosphere at home.",
-    "Makes regular family worship easier to prepare.",
-    "Brings essential materials together in one thoughtfully curated package.",
-    "Suitable for daily rituals and auspicious occasions.",
-  ],
-  notes: [
-    "Contents may vary slightly based on availability and the specific ritual.",
-    "Please follow your family tradition or consult your priest for ritual guidance.",
-  ],
+
+  process: [],
+  benefitsDetails: [],
+  notes: [],
+
   occasions: [
     {
       id: "ganapathy-homam",
       title: "Ganapathy Homam",
-      description: "Invoke Lord Ganesha's blessings to remove all obstacles.",
+      description:
+        "Invoke Lord Ganesha's blessings to remove all obstacles.",
       intro:
-        "Ganapathy Homam is a sacred fire ritual performed to invoke the blessings of Lord Ganesha — the remover of all obstacles. This homam is traditionally conducted at the beginning of any new venture, ceremony, or important life event to ensure smooth progress and divine protection. Our package includes all the essential samagri required for this powerful homam.",
+        "Ganapathy Homam is a sacred fire ritual performed to invoke the blessings of Lord Ganesha. Our package includes all the essential samagri required for this ritual.",
       icon: "peace",
       price: "₹2,499",
+
       items: [
-        { sno: 1, english: "Homa Kunda (Fire Pit)", tamil: "ஹோம குண்டம்", quantity: "1" },
-        { sno: 2, english: "Pure A2 Cow Ghee", tamil: "தூய நெய்", quantity: "500 ml" },
-        { sno: 3, english: "Coconut and Betel Leaves", tamil: "தேங்காய் மற்றும் வெற்றிலை", quantity: "As required" },
-        { sno: 4, english: "Modak and Fruits (Naivedyam)", tamil: "மோதகம் மற்றும் பழங்கள்", quantity: "1 set" },
-        { sno: 5, english: "Homa Samagri (Mixed herbs)", tamil: "ஹோம சாமக்ரி", quantity: "1 pack" },
-        { sno: 6, english: "Samithu (Sacred Wood)", tamil: "ஸமித்து", quantity: "1 bundle" },
-        { sno: 7, english: "Kumkum, Turmeric & Vibhuti", tamil: "குங்குமம், மஞ்சள் & விபூதி", quantity: "1 set" },
-        { sno: 8, english: "Fresh Flowers & Garland", tamil: "புதிய மலர் & மாலை", quantity: "As required" },
+        {
+          sno: 1,
+          english: "Homa Kunda (Fire Pit)",
+          tamil: "ஹோம குண்டம்",
+          quantity: "1",
+        },
+        {
+          sno: 2,
+          english: "Pure A2 Cow Ghee",
+          tamil: "தூய நெய்",
+          quantity: "500 ml",
+        },
       ],
+
       process: [
-        "Prepare the homa kunda and arrange all samagri in order.",
-        "Invoke Lord Ganesha with the Ganapathy Dhyana Shloka.",
-        "Perform the sankalpam with water and rice.",
-        "Offer ghee, samithu, and homa samagri to the sacred fire.",
-        "Chant the Ganapathy ashtakam and offer modak as naivedyam.",
-        "Conclude with the purnahuti and distribute prasadam.",
+        "Prepare the homa kunda and arrange all samagri.",
+        "Invoke Lord Ganesha.",
+        "Perform the sankalpam.",
+        "Offer ghee and samagri.",
       ],
+
       benefits: [
-        "Removes obstacles before any new beginning.",
-        "Invokes divine wisdom and clarity.",
-        "Brings peace and prosperity to the household.",
-        "Strengthens devotion and mental focus.",
+        "Removes obstacles before new beginnings.",
+        "Invokes divine wisdom.",
       ],
+
       notes: [
-        "A qualified priest is recommended to conduct this homam.",
-        "Perform on an auspicious day as per the panchangam.",
+        "A qualified priest is recommended.",
       ],
     },
+
     {
       id: "house-warming",
       title: "House Warming (Griha Pravesham)",
-      description: "Bless your new home with divine energy and positivity.",
+      description:
+        "Bless your new home with divine energy and positivity.",
       intro:
-        "Griha Pravesham, or House Warming, is one of the most auspicious ceremonies in Hindu tradition. It sanctifies the new home and invites divine blessings for the family who enters it. The ritual involves Vastu Pooja, Ganapathy Homam, and the sacred entry into the home with a kalash. Our package provides all the materials needed for a complete and traditional Griha Pravesham ceremony.",
+        "Griha Pravesham is an auspicious ceremony performed to sanctify a new home and invite divine blessings.",
+
       icon: "success",
       price: "₹4,999",
+
       items: [
-        { sno: 1, english: "Kalash and Coconut", tamil: "கலசம் மற்றும் தேங்காய்", quantity: "1 set" },
-        { sno: 2, english: "Navadhanyam (Nine grains)", tamil: "நவதானியம்", quantity: "1 set" },
-        { sno: 3, english: "Mango Leaves and Garland", tamil: "மாவிலை மற்றும் மாலை", quantity: "As required" },
-        { sno: 4, english: "Homa Samagri and Ghee", tamil: "ஹோம சாமக்ரி மற்றும் நெய்", quantity: "1 set" },
-        { sno: 5, english: "Turmeric, Kumkum and Rice", tamil: "மஞ்சள், குங்குமம் மற்றும் அரிசி", quantity: "1 set" },
-        { sno: 6, english: "Vastu Pooja Items", tamil: "வாஸ்து பூஜை பொருட்கள்", quantity: "1 set" },
-        { sno: 7, english: "Milk for Boiling (Paal Kaachuthal)", tamil: "பால் காய்ச்சுதல் பொருட்கள்", quantity: "1 set" },
-        { sno: 8, english: "Camphor and Diya", tamil: "கற்பூரம் மற்றும் விளக்கு", quantity: "1 set" },
+        {
+          sno: 1,
+          english: "Kalash and Coconut",
+          tamil: "கலசம் மற்றும் தேங்காய்",
+          quantity: "1 set",
+        },
       ],
+
       process: [
-        "Cleanse the entrance and prepare the kalash with mango leaves.",
-        "Perform Vastu Pooja to sanctify the new home.",
-        "Conduct Ganapathy Homam for blessings and obstacle removal.",
-        "Boil milk at the main entrance as a symbol of prosperity.",
-        "Enter the home with the kalash and family members.",
-        "Offer prasadam and celebrate the new beginning.",
+        "Prepare the home.",
+        "Perform Vastu Pooja.",
+        "Conduct Ganapathy Homam.",
       ],
+
       benefits: [
-        "Creates an auspicious beginning in the new home.",
-        "Invokes blessings for peace, health, and prosperity.",
-        "Purifies the home of negative energies.",
-        "Helps the family prepare with confidence.",
+        "Creates an auspicious beginning.",
+        "Invokes peace and prosperity.",
       ],
+
       notes: [
-        "The priest may recommend additional items based on the family tradition.",
-        "Confirm the muhurtham and ritual requirements before the ceremony.",
+        "Confirm the muhurtham before the ceremony.",
       ],
     },
+
     {
       id: "satyanarayana-vratam",
       title: "Satyanarayana Vratam",
-      description: "Thoughtfully prepared samagri for a devotional vratam with family and friends.",
+      description:
+        "Thoughtfully prepared samagri for a devotional vratam.",
       intro:
-        "Satyanarayana Vratam is a beloved Hindu devotional ritual performed in gratitude to Lord Vishnu in his form as Satyanarayana. It is observed to seek blessings for health, wealth, family happiness, and fulfillment of wishes. This vratam is typically performed on Purnima (full moon) days or on occasions of personal milestones. Our package includes all the samagri required for a complete and traditional observation.",
+        "Satyanarayana Vratam is a devotional ritual performed with family and devotees.",
+
       icon: "family",
       price: "₹2,999",
+
       items: [
-        { sno: 1, english: "Satyanarayana Pooja Book", tamil: "சத்யநாராயண பூஜை புத்தகம்", quantity: "1" },
-        { sno: 2, english: "Panchamirtham Ingredients", tamil: "பஞ்சாமிர்த பொருட்கள்", quantity: "1 set" },
-        { sno: 3, english: "Fruits and Betel Leaves", tamil: "பழங்கள் மற்றும் வெற்றிலை", quantity: "As required" },
-        { sno: 4, english: "Pooja Flowers and Garland", tamil: "பூஜை மலர்கள் மற்றும் மாலை", quantity: "1 set" },
-        { sno: 5, english: "Havan Samagri and Ghee", tamil: "ஹவன் சாமக்ரி மற்றும் நெய்", quantity: "1 set" },
-        { sno: 6, english: "Wheat Flour (for prasadam)", tamil: "கோதுமை மாவு (பிரசாதம்)", quantity: "500 g" },
-        { sno: 7, english: "Banana Leaves", tamil: "வாழை இலைகள்", quantity: "As required" },
-        { sno: 8, english: "Kalash with Water", tamil: "கலசம் (நீர் நிரப்பியது)", quantity: "1" },
+        {
+          sno: 1,
+          english: "Satyanarayana Pooja Book",
+          tamil: "சத்யநாராயண பூஜை புத்தகம்",
+          quantity: "1",
+        },
       ],
+
       process: [
-        "Set up the altar and place the deity and kalash with devotion.",
-        "Follow the vratam katha and offer the prescribed naivedyam.",
-        "Prepare the panchamirtham for abhishekam.",
-        "Distribute the Satyanarayana prasadam to all devotees.",
-        "Complete the aarti and share the blessed food.",
+        "Set up the altar.",
+        "Perform the vratam.",
       ],
+
       benefits: [
-        "Supports family devotion and togetherness.",
-        "Fulfills wishes and resolves difficulties.",
-        "Encourages gratitude and spiritual reflection.",
-        "Suitable for home celebrations and important milestones.",
+        "Supports family devotion.",
       ],
+
       notes: [
-        "Prepare the prasadam fresh and follow the vratam book or priest's guidance.",
-        "Quantities should be increased when inviting a larger group of devotees.",
+        "Follow priest guidance.",
       ],
     },
+
     {
       id: "daily-pooja",
       title: "Daily Pooja",
-      description: "Essential samagri for peaceful daily worship and regular family rituals.",
+      description:
+        "Essential samagri for peaceful daily worship.",
       intro:
-        "Daily Pooja is the foundation of a devotional household — a simple yet powerful practice that brings peace, clarity, and divine connection each morning. Our daily pooja package provides all the essential items needed for regular home worship, carefully curated so your family never runs short of what is needed to maintain a consistent and blessed routine.",
+        "Daily Pooja helps maintain a peaceful and devotional household routine.",
+
       icon: "peace",
       price: "₹999",
+
       items: [
-        { sno: 1, english: "Pure Brass Pooja Utensils Set", tamil: "பித்தளை பூஜை பாத்திரங்கள்", quantity: "1 set" },
-        { sno: 2, english: "Organic Camphor", tamil: "கற்பூரம்", quantity: "1 pack" },
-        { sno: 3, english: "Pure Kumkum", tamil: "குங்குமம்", quantity: "1 pack" },
-        { sno: 4, english: "Fresh Garland and Mango Leaves", tamil: "மாலை மற்றும் மாவிலை", quantity: "As required" },
-        { sno: 5, english: "Diya Oil and Herbal Incense", tamil: "விளக்கு எண்ணெய் மற்றும் ஊதுபத்தி", quantity: "1 set" },
+        {
+          sno: 1,
+          english: "Pure Brass Pooja Utensils Set",
+          tamil: "பித்தளை பூஜை பாத்திரங்கள்",
+          quantity: "1 set",
+        },
       ],
+
       process: [
-        "Clean the pooja space and arrange the required items.",
-        "Light the diya and incense before beginning the prayer.",
-        "Offer flowers, kumkum, and other samagri according to tradition.",
-        "Complete the prayer and distribute prasadam to the family.",
+        "Clean the pooja space.",
+        "Light the diya.",
       ],
+
       benefits: [
-        "Supports a calm and positive atmosphere at home.",
-        "Makes regular family worship easier to prepare.",
-        "Brings essential materials together in one package.",
-        "Suitable for daily rituals and auspicious occasions.",
+        "Supports a positive atmosphere.",
       ],
+
       notes: [
-        "Contents may vary slightly based on availability and the specific ritual.",
-        "Please follow your family tradition or consult your priest for guidance.",
+        "Follow family traditions.",
       ],
     },
+
     {
       id: "marriage",
       title: "Marriage (Vivaha Pooja)",
-      description: "Complete sacred samagri and essentials for traditional Vedic wedding ceremonies.",
+      description:
+        "Complete sacred samagri for wedding ceremonies.",
       intro:
-        "Vivaha Samskara is the sacred union of two souls sanctified by Agni Deva and Vedic rituals. Our comprehensive marriage package provides authentic, auspicious samagri for Kasi Yatra, Oonjal, Kanyadaanam, Mangalya Dharanam, Saptapadi, and Laja Homam.",
+        "Vivaha Samskara is a sacred ceremony performed according to Vedic traditions.",
+
       icon: "family",
       price: "₹15,999",
+
       items: [
-        { sno: 1, english: "Pure Turmeric Roots & Powder", tamil: "மஞ்சள் கிழங்கு & பொடி", quantity: "1 kg" },
-        { sno: 2, english: "Divine Kumkum & Sandalwood", tamil: "குங்குமம் & சந்தனம்", quantity: "250 g" },
-        { sno: 3, english: "Mangalsutra / Thirumangalya Charadu", tamil: "மாங்கல்ய கயிறு & தாலி சரடு", quantity: "1 Set" },
-        { sno: 4, english: "Akshatha (Sacred Yellow Rice)", tamil: "அட்சதை", quantity: "1 kg" },
-        { sno: 5, english: "Pure A2 Cow Ghee for Homam", tamil: "தூய பசு நெய்", quantity: "1 Litre" },
-        { sno: 6, english: "Homa Samagri & Samithu Bundles", tamil: "ஹோம சாமக்ரி & சமித்து", quantity: "2 Sets" },
-        { sno: 7, english: "Laja (Puffed Paddy for Laja Homam)", tamil: "பொரி", quantity: "1 kg" },
-        { sno: 8, english: "Betel Leaves & Areca Nuts", tamil: "வெற்றிலை பாக்கு", quantity: "100 Sets" },
-        { sno: 9, english: "Sacred Coconuts & Silk Vastram", tamil: "தேங்காய் & பட்டு வஸ்திரம்", quantity: "1 Set" },
-        { sno: 10, english: "Fresh Garlands & Jasmine Flowers", tamil: "திருமண மாலைகள் & பூக்கள்", quantity: "As required" },
+        {
+          sno: 1,
+          english: "Pure Turmeric",
+          tamil: "மஞ்சள்",
+          quantity: "1 kg",
+        },
       ],
+
       process: [
-        "Vigneshwara Pooja and Kula Devata invocation.",
-        "Kanyadaanam and sacred water oblations.",
-        "Mangalya Dharanam with Vedic blessings and mangala vadhyam.",
-        "Saptapadi (Seven Sacred Steps) around the Agni Deva.",
-        "Laja Homam and elder Ashirvachanam for lifelong harmony.",
+        "Vigneshwara Pooja.",
+        "Kanyadaanam.",
+        "Mangalya Dharanam.",
       ],
+
       benefits: [
-        "Sanctifies the marital bond with divine grace and Vedic blessings.",
-        "Brings prosperity, mutual understanding, and long-lasting companionship.",
-        "Complete readiness with zero missing items on the auspicious wedding day.",
-        "Traditional packing categorized by each ritual phase.",
+        "Sanctifies the marital bond.",
       ],
+
       notes: [
-        "Pre-packed in labeled compartments for each stage of the marriage rituals.",
-        "Consult with your family vadhyar for any specific community traditions.",
+        "Consult your family priest.",
       ],
     },
+
     {
       id: "bhoomi-poojai",
       title: "Bhoomi Poojai",
-      description: "Sacred groundbreaking ritual seeking Mother Earth's blessings before construction.",
+      description:
+        "Sacred groundbreaking ritual before construction.",
       intro:
-        "Bhoomi Pooja is performed to venerate Bhoomi Devi (Mother Earth) and Vastu Purusha before commencing construction on a new plot or property. It seeks forgiveness for disturbing the earth and invokes divine protection against structural impediments and evil eyes.",
+        "Bhoomi Pooja seeks blessings before beginning construction.",
+
       icon: "success",
       price: "₹3,499",
+
       items: [
-        { sno: 1, english: "Navaratnam (Nine Precious Gems)", tamil: "நவரத்தினங்கள்", quantity: "1 Set" },
-        { sno: 2, english: "Panchaloham (Five Sacred Metals)", tamil: "ஐம்பொன்", quantity: "1 Set" },
-        { sno: 3, english: "Sacred Bhoomi Pooja Bricks & Kalash", tamil: "பூஜை செங்கற்கள் & கலசம்", quantity: "5 Nos" },
-        { sno: 4, english: "Navadhanyam (9 Sacred Grains)", tamil: "நவதானியம்", quantity: "1 Set" },
-        { sno: 5, english: "Pure Turmeric, Kumkum & Sandalwood", tamil: "மஞ்சள், குங்குமம் & சந்தனம்", quantity: "1 Set" },
-        { sno: 6, english: "Coconuts & Betel Leaves", tamil: "தேங்காய் மற்றும் வெற்றிலை", quantity: "5 Sets" },
-        { sno: 7, english: "Fresh Lemon & Drishti Gourd", tamil: "எலுமிச்சை & பூசணிக்காய்", quantity: "1 Set" },
-        { sno: 8, english: "Camphor, Incense & Mustard Oil", tamil: "கற்பூரம், சாம்பிராணி & எண்ணெய்", quantity: "1 Set" },
+        {
+          sno: 1,
+          english: "Navadhanyam",
+          tamil: "நவதானியம்",
+          quantity: "1 set",
+        },
       ],
+
       process: [
-        "Purification of the Ishanya (North-East) corner of the construction site.",
-        "Bhoomi Devi invocation and prayer for divine permission to build.",
-        "Vastu Purusha Pooja and Navagraha blessings.",
-        "Laying the sacred foundation brick with Navaratnam and Panchaloham.",
-        "Drishti removal with white pumpkin and coconut breaking.",
+        "Purify the construction site.",
+        "Perform Bhoomi Devi invocation.",
       ],
+
       benefits: [
-        "Neutralizes geological and directional vastu doshas.",
-        "Ensures safe, timely, and accident-free construction progress.",
-        "Attracts peace, wealth, and enduring stability for future residents.",
-        "Brings auspiciousness to the whole property.",
+        "Brings auspiciousness to the property.",
       ],
+
       notes: [
-        "Must be performed during auspicious Muhurtham facing North-East.",
-        "Incorporate water from holy rivers if available for Kalasha abhishekam.",
+        "Perform during an auspicious Muhurtham.",
       ],
     },
+
     {
       id: "punyahavachanam",
       title: "Punyahavachanam",
-      description: "Sacred purification ceremony for sanctifying the home and family members.",
+      description:
+        "Sacred purification ceremony.",
       intro:
-        "Punyahavachanam is the Vedic purification ritual performed on the 11th or 28th day following childbirth (Namakaranam), after major life events, or to purify the home after an eclipse or prolonged vacancy. Holy water charged with Vedic suktams is sprinkled across the premises.",
+        "Punyahavachanam is a traditional Vedic purification ceremony.",
+
       icon: "peace",
       price: "₹1,999",
+
       items: [
-        { sno: 1, english: "Copper / Brass Kalash", tamil: "செம்பு / பித்தளை கலசம்", quantity: "1 No" },
-        { sno: 2, english: "Mango Leaves & Darbha Grass", tamil: "மாவிலை மற்றும் தர்பை புல்", quantity: "1 Bundle" },
-        { sno: 3, english: "Sacred Teertha Herbs & Cardamom", tamil: "பச்சை கற்பூரம், ஏலக்காய்", quantity: "1 Set" },
-        { sno: 4, english: "Turmeric, Kumkum & Akshatha", tamil: "மஞ்சள், குங்குமம் & அட்சதை", quantity: "1 Set" },
-        { sno: 5, english: "Pure Cow Ghee & Diya", tamil: "பசு நெய் & விளக்கு", quantity: "1 Set" },
-        { sno: 6, english: "Coconuts & Seasonal Fruits", tamil: "தேங்காய் மற்றும் பழங்கள்", quantity: "1 Set" },
-        { sno: 7, english: "Betel Leaves & Areca Nuts", tamil: "வெற்றிலை பாக்கு", quantity: "12 Sets" },
+        {
+          sno: 1,
+          english: "Copper Kalash",
+          tamil: "செம்பு கலசம்",
+          quantity: "1",
+        },
       ],
+
       process: [
-        "Sankalpam and invocation of Varuna Deva into the sacred Kalash.",
-        "Chanting of Pavamana Suktam and cleansing Vedic mantras.",
-        "Energizing the holy water with Darbha pavithram.",
-        "Sprinkling the consecrated Teertham throughout the house and over attendees.",
-        "Ashirvachanam and distribution of prasadam.",
+        "Perform Sankalpam.",
+        "Invoke Varuna Deva.",
       ],
+
       benefits: [
-        "Removes spiritual impurities (Asaucha) and negative vibrations.",
-        "Restores tranquility, purity, and positive aura to the household.",
-        "Blesses newborn infants with longevity, health, and protection.",
-        "Sanctifies the domestic atmosphere before initiating any ritual.",
+        "Restores purity and positivity.",
       ],
+
       notes: [
-        "Often combined with Namakaranam (naming ceremony) or Ayush Homam.",
+        "Can be combined with other ceremonies.",
       ],
     },
+
     {
       id: "ruthu-punyahavachanam",
       title: "Ruthu Punyahavachanam",
-      description: "Traditional coming-of-age ceremony blessing young women with health and prosperity.",
+      description:
+        "Traditional coming-of-age ceremony.",
       intro:
-        "Ruthu Punyahavachanam (Manjal Neerattu Vizha / Ritu Shanti) is celebrated to honor a young girl entering womanhood. The ceremony invokes Goddess Lakshmi, Parvati, and Saraswati to bless her with radiant health, auspiciousness, longevity, and future marital bliss.",
+        "A traditional family ceremony with prayers and blessings.",
+
       icon: "family",
       price: "₹4,499",
+
       items: [
-        { sno: 1, english: "Pure Turmeric Root & Kasturi Turmeric", tamil: "கஸ்தூரி மஞ்சள் & மஞ்சள் கிழங்கு", quantity: "500 g" },
-        { sno: 2, english: "Divine Kumkum, Chandanam & Vibhuti", tamil: "குங்குமம், சந்தனம் & விபூதி", quantity: "1 Set" },
-        { sno: 3, english: "Silk Half-Saree / Pattu Pavadai Vastram", tamil: "பட்டு பாவாடை வஸ்திரம்", quantity: "1 Set" },
-        { sno: 4, english: "Fresh Fragrant Flower Garlands & Jada Alankaram", tamil: "பூ மாலை & ஜடை அலங்காரம்", quantity: "1 Set" },
-        { sno: 5, english: "Kalash, Mango Leaves & Sacred Thread", tamil: "கலசம் & மாவிலை", quantity: "1 Set" },
-        { sno: 6, english: "Seer Bakshanam & Sweets Set", tamil: "சீர் பலகார பொருட்கள்", quantity: "1 Set" },
-        { sno: 7, english: "Betel Leaves, Areca Nuts & Seasonal Fruits", tamil: "வெற்றிலை பாக்கு & பழங்கள்", quantity: "21 Sets" },
-        { sno: 8, english: "Camphor, Agarbatti & Ghee Diya", tamil: "கற்பூரம், ஊதுபத்தி & நெய் தீபம்", quantity: "1 Set" },
+        {
+          sno: 1,
+          english: "Turmeric Root",
+          tamil: "மஞ்சள் கிழங்கு",
+          quantity: "500 g",
+        },
       ],
+
       process: [
-        "Vigneshwara invocation and Kalasha Sthapana.",
-        "Turmeric water blessing (Manjal Neerattu) by maternal relatives.",
-        "Alankaram with new traditional vastrams and floral ornaments.",
-        "Aarthi by married women (Sumangalis) to ward off evil eye (Drishti).",
-        "Vedic blessings (Ashirvachanam) and celebratory feast.",
+        "Perform Vigneshwara invocation.",
+        "Kalasha Sthapana.",
       ],
+
       benefits: [
-        "Invokes divine feminine blessings for health, grace, and vitality.",
-        "Wards off negative energies and removes adolescent hurdles.",
-        "Fosters family bonding and joyful traditional heritage celebration.",
-        "Instills cultural values and spiritual confidence.",
+        "Celebrates cultural traditions.",
       ],
+
       notes: [
-        "Arrangements can be scaled for both intimate home ceremonies and grand celebrations.",
+        "Can be arranged according to family tradition.",
       ],
     },
+
     {
       id: "ayush-homam",
       title: "Ayush Homam",
-      description: "Vedic longevity homam invoking Ayur Devata for health, vitality, and protection.",
+      description:
+        "Vedic longevity homam.",
       intro:
-        "Ayush Homam is performed to seek the blessings of Ayur Devata, Markandeya, and the Chiranjeevis for long life, robust physical health, and protection against ailments. Traditionally conducted on a child's first birthday (Bodhana) and subsequently on every Janma Nakshatra.",
+        "Ayush Homam is performed to seek blessings for health and long life.",
+
       icon: "peace",
       price: "₹2,799",
+
       items: [
-        { sno: 1, english: "Homa Kunda & Special Dravya Samagri", tamil: "ஹோம குண்டம் & சாமக்ரி", quantity: "1 Set" },
-        { sno: 2, english: "Pure A2 Cow Ghee", tamil: "தூய பசு நெய்", quantity: "1 Litre" },
-        { sno: 3, english: "Charu (Cooked Rice & Ghee offering)", tamil: "சரு பொருட்கள்", quantity: "1 Set" },
-        { sno: 4, english: "Samithu (Sacred wood sticks)", tamil: "சமித்து கட்டுகள்", quantity: "2 Bundles" },
-        { sno: 5, english: "Sweet Payasam / Modak Ingredients", tamil: "பாயாசம் & நைவேத்திய பொருட்கள்", quantity: "1 Set" },
-        { sno: 6, english: "Fresh Garlands, Betel Leaves & Coconuts", tamil: "மாலை, வெற்றிலை & தேங்காய்", quantity: "1 Set" },
-        { sno: 7, english: "Turmeric, Kumkum & Akshatha", tamil: "மஞ்சள், குங்குமம் & அட்சதை", quantity: "1 Set" },
+        {
+          sno: 1,
+          english: "Homa Kunda",
+          tamil: "ஹோம குண்டம்",
+          quantity: "1 set",
+        },
       ],
+
       process: [
-        "Sankalpam with the person's Janma Nakshatra, Rasi, and Gotra.",
-        "Invocation of Ayur Devata, Brahma, Vishnu, Shiva, and Chiranjeevis.",
-        "Offering of Charu, Ghee, and sacred Samithu into the homa fire.",
-        "Maha Poornahuthi and recitation of Ayushya Suktam.",
-        "Applying energized homa raksha (Bhasma) and receiving elder blessings.",
+        "Perform Sankalpam.",
+        "Invoke Ayur Devata.",
       ],
+
       benefits: [
-        "Promotes long life (Dirgha Ayush), immunity, and sound physical health.",
-        "Clears planetary malefic influences (Arishta Dosha) in horoscope.",
-        "Bestows vitality, mental sharpness, and cheerful disposition.",
-        "Ideal for children on birth star and elders on Shastiabdhapoorthi.",
+        "Seeks blessings for longevity.",
       ],
+
       notes: [
-        "Most effective when performed on the birth star (Janma Nakshatram) day.",
+        "Often performed on the birth star.",
       ],
     },
+
     {
       id: "family-ceremony",
       title: "Family Ceremony",
-      description: "A flexible pooja collection for birthdays, anniversaries, and other family milestones.",
+      description:
+        "A flexible pooja collection for family milestones.",
       intro:
-        "Family ceremonies mark life's most cherished milestones — from birthdays and wedding anniversaries to naming ceremonies and thread ceremonies. Our Family Ceremony package is thoughtfully assembled to cover a wide range of personal and family occasions, giving you a complete collection of sacred items so you can focus on the celebration rather than the preparation.",
+        "A package designed for birthdays, anniversaries and family ceremonies.",
+
       icon: "obstacles",
       price: "₹2,499",
+
       items: [
-        { sno: 1, english: "Brass Diya and Pooja Plate", tamil: "பித்தளை விளக்கு மற்றும் பூஜை தட்டு", quantity: "1 set" },
-        { sno: 2, english: "Flowers and Garland", tamil: "மலர்கள் மற்றும் மாலை", quantity: "As required" },
-        { sno: 3, english: "Turmeric, Kumkum and Sandalwood", tamil: "மஞ்சள், குங்குமம் மற்றும் சந்தனம்", quantity: "1 set" },
-        { sno: 4, english: "Fruits and Coconut", tamil: "பழங்கள் மற்றும் தேங்காய்", quantity: "As required" },
-        { sno: 5, english: "Camphor and Incense", tamil: "கற்பூரம் மற்றும் ஊதுபத்தி", quantity: "1 set" },
+        {
+          sno: 1,
+          english: "Brass Diya",
+          tamil: "பித்தளை விளக்கு",
+          quantity: "1",
+        },
       ],
+
       process: [
-        "Arrange the altar and place the family offering before the deity.",
-        "Light the diya and offer flowers, fruits, and traditional samagri.",
-        "Complete the blessing prayer and share prasadam together.",
+        "Arrange the altar.",
+        "Perform the prayer.",
       ],
+
       benefits: [
-        "Marks meaningful family moments with tradition.",
-        "Helps remove obstacles before a new milestone.",
-        "Creates a warm and auspicious gathering at home.",
-        "Flexible enough for several family occasions.",
+        "Creates an auspicious family gathering.",
       ],
+
       notes: [
-        "Choose offerings according to the occasion and your family custom.",
-        "Ask your priest if the ceremony requires additional samagri.",
+        "Items can vary according to the ceremony.",
       ],
     },
   ],
@@ -484,15 +490,25 @@ export default function ConsumerPackagePage() {
 
 function PackagePage({ data }: PackagePageProps) {
   const [activeTab, setActiveTab] = useState("details");
-  const [selectedRitual, setSelectedRitual] = useState<OccasionPackage | null>(null);
-  const [dynamicItems, setDynamicItems] = useState<PackageItem[] | null>(null);
-  const [dynamicPrice, setDynamicPrice] = useState<string | null>(null);
-  // ORDER NOW (2-step order + payment) modal state.
-  // Kept separate from the Iyer-request modal below.
-  const [isOrderOpen, setIsOrderOpen] = useState(false);
 
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [selectedRitual, setSelectedRitual] =
+    useState<OccasionPackage | null>(null);
+
+  const [dynamicItems, setDynamicItems] =
+    useState<PackageItem[] | null>(null);
+
+  const [dynamicPrice, setDynamicPrice] =
+    useState<string | null>(null);
+
+  const [isOrderOpen, setIsOrderOpen] =
+    useState(false);
+
+  const [isBookingOpen, setIsBookingOpen] =
+    useState(false);
+
+  const [bookingSuccess, setBookingSuccess] =
+    useState(false);
+
   const [bookingForm, setBookingForm] = useState({
     name: "",
     mobile: "",
@@ -500,279 +516,407 @@ function PackagePage({ data }: PackagePageProps) {
     email: "",
   });
 
-  const handleBookingSubmit = async (e: React.FormEvent) => {
+  const handleBookingSubmit = async (
+    e: React.FormEvent
+  ) => {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${API_BASE}/bookings`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...bookingForm,
-          pooja: selectedRitual?.title || "Consumer Package",
-        }),
-      });
+      const res = await fetch(
+        `${API_BASE}/bookings`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...bookingForm,
+            pooja:
+              selectedRitual?.title ||
+              "Consumer Package",
+          }),
+        }
+      );
 
-      if (!res.ok) throw new Error("Booking failed");
+      if (!res.ok) {
+        throw new Error("Booking failed");
+      }
 
       setBookingSuccess(true);
 
       setTimeout(() => {
         setBookingSuccess(false);
         setIsBookingOpen(false);
-        setBookingForm({ name: "", mobile: "", address: "", email: "" });
+
+        setBookingForm({
+          name: "",
+          mobile: "",
+          address: "",
+          email: "",
+        });
       }, 2500);
-    } catch {
+    } catch (error) {
+      console.error(error);
       alert("Something went wrong. Please try again.");
     }
   };
 
+  /*
+    ====================================================
+    FETCH DYNAMIC ITEMS + DYNAMIC PRICE
+    ====================================================
+  */
+
   useEffect(() => {
-    if (!selectedRitual) {
+    const fetchPackageData = async () => {
+      // VERY IMPORTANT:
+      // Reset previous ritual values immediately
       setDynamicItems(null);
-      return;
-    }
+      setDynamicPrice(null);
 
-    const apiCategory = OCCASION_TO_API_CATEGORY[selectedRitual.id];
+      if (!selectedRitual) return;
 
-    if (!apiCategory) {
-      setDynamicItems(null);
-      return;
-    }
+      const apiCategory =
+        OCCASION_TO_API_CATEGORY[
+          selectedRitual.id
+        ];
 
-        fetch(`${API_BASE}/consumer-packages/${apiCategory}`)
-      .then((res) => res.json())
-      .then((rows) => {
-        const mapped: PackageItem[] = rows.map((r: any) => ({
-          sno: r.sno,
-          english: r.name_english,
-          tamil: r.name_tamil,
-          quantity: r.quantity,
-        }));
-
-        setDynamicItems(mapped);
-      })
-      .catch(() => setDynamicItems(null));
-
-    fetch(`${API_BASE}/package-prices/${apiCategory}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setDynamicPrice(data?.price || null);
-      })
-      .catch(() => setDynamicPrice(null));
-  }, [selectedRitual]);
-
-  // Set initial selected ritual based on URL hash or default to first, and listen to hashchange
-  useEffect(() => {
-    const handleHash = () => {
-      if (typeof window === "undefined") return;
-      const rawHash = window.location.hash.replace("#", "").toLowerCase().trim();
-      if (!rawHash) {
-        if (!selectedRitual && data.occasions.length > 0) {
-          setSelectedRitual(data.occasions[0]);
-        }
+      if (!apiCategory) {
+        console.warn(
+          "No API mapping found for:",
+          selectedRitual.id
+        );
         return;
       }
 
-      const match = data.occasions.find(
-        (o) =>
-          o.id.toLowerCase() === rawHash ||
-          (rawHash === "grahapravesam" && (o.id === "grahapravesam" || o.id === "house-warming")) ||
-          (rawHash === "house-warming" && (o.id === "grahapravesam" || o.id === "house-warming")) ||
-          o.id.toLowerCase().replace(/-/g, "") === rawHash.replace(/-/g, "") ||
-          o.title.toLowerCase().replace(/[^a-z0-9]/g, "-").includes(rawHash) ||
-          rawHash.includes(o.id.toLowerCase())
-      );
+      /*
+        FETCH ITEMS
+      */
+
+      try {
+        const url =
+          `${API_BASE}/consumer-packages/${apiCategory}`;
+
+        console.log(
+          "Fetching Consumer Package Items:",
+          url
+        );
+
+        const itemsRes =
+          await fetch(url);
+
+        if (!itemsRes.ok) {
+          throw new Error(
+            `Items API failed: ${itemsRes.status}`
+          );
+        }
+
+        const itemsData =
+          await itemsRes.json();
+
+        console.log(
+          "Consumer Items API Response:",
+          itemsData
+        );
+
+        const rows =
+          Array.isArray(itemsData)
+            ? itemsData
+            : Array.isArray(itemsData?.items)
+            ? itemsData.items
+            : Array.isArray(itemsData?.data)
+            ? itemsData.data
+            : [];
+
+        const mapped: PackageItem[] =
+          rows.map(
+            (r: any, index: number) => ({
+              sno:
+                r.sno ??
+                r.id ??
+                index + 1,
+
+              english:
+                r.name_english ??
+                r.english ??
+                r.nameEnglish ??
+                r.name ??
+                "",
+
+              tamil:
+                r.name_tamil ??
+                r.tamil ??
+                r.nameTamil ??
+                "",
+
+              quantity:
+                r.quantity ??
+                r.qty ??
+                "",
+            })
+          );
+
+        if (mapped.length > 0) {
+          setDynamicItems(mapped);
+        } else {
+          setDynamicItems(null);
+        }
+      } catch (error) {
+        console.error(
+          "Failed to fetch consumer package items:",
+          error
+        );
+
+        setDynamicItems(null);
+      }
+
+      /*
+        FETCH PRICE
+      */
+
+      try {
+        const url =
+          `${API_BASE}/package-prices/${apiCategory}`;
+
+        console.log(
+          "Fetching Consumer Package Price:",
+          url
+        );
+
+        const priceRes =
+          await fetch(url);
+
+        if (!priceRes.ok) {
+          throw new Error(
+            `Price API failed: ${priceRes.status}`
+          );
+        }
+
+        const priceData =
+          await priceRes.json();
+
+        console.log(
+          "Consumer Price API Response:",
+          priceData
+        );
+
+        const price =
+          priceData?.price ??
+          priceData?.data?.price ??
+          null;
+
+        if (
+          price !== null &&
+          price !== undefined
+        ) {
+          setDynamicPrice(
+            String(price)
+          );
+        } else {
+          setDynamicPrice(null);
+        }
+      } catch (error) {
+        console.error(
+          "Failed to fetch consumer package price:",
+          error
+        );
+
+        setDynamicPrice(null);
+      }
+    };
+
+    fetchPackageData();
+  }, [selectedRitual]);
+
+  /*
+    ====================================================
+    INITIAL RITUAL FROM URL HASH
+    ====================================================
+  */
+
+  useEffect(() => {
+    const handleHash = () => {
+      const rawHash =
+        window.location.hash
+          .replace("#", "")
+          .toLowerCase()
+          .trim();
+
+      if (!rawHash) {
+        if (
+          data.occasions.length > 0
+        ) {
+          setSelectedRitual(
+            data.occasions[0]
+          );
+        }
+
+        return;
+      }
+
+      const match =
+        data.occasions.find(
+          (occasion) =>
+            occasion.id
+              .toLowerCase() ===
+              rawHash ||
+            occasion.id
+              .toLowerCase()
+              .replace(/-/g, "") ===
+              rawHash.replace(/-/g, "")
+        );
 
       if (match) {
         setSelectedRitual(match);
         setActiveTab("details");
+
         setTimeout(() => {
-          const el = document.getElementById("ritual-details-section") || document.getElementById(match.id);
-          if (el) {
-            el.scrollIntoView({ behavior: "smooth" });
-          }
-        }, 120);
+          document
+            .getElementById(
+              "ritual-details-section"
+            )
+            ?.scrollIntoView({
+              behavior: "smooth",
+            });
+        }, 150);
       }
     };
 
     handleHash();
-    window.addEventListener("hashchange", handleHash);
-    return () => window.removeEventListener("hashchange", handleHash);
+
+    window.addEventListener(
+      "hashchange",
+      handleHash
+    );
+
+    return () => {
+      window.removeEventListener(
+        "hashchange",
+        handleHash
+      );
+    };
   }, [data.occasions]);
 
   const tabs = [
-    { id: "details", label: "Package Details", icon: Gift },
-    { id: "process", label: "Pooja Process", icon: List },
-    { id: "benefits", label: "Benefits", icon: Star },
-    { id: "notes", label: "Important Notes", icon: Info },
+    {
+      id: "details",
+      label: "Package Details",
+      icon: Gift,
+    },
+    {
+      id: "process",
+      label: "Pooja Process",
+      icon: List,
+    },
+    {
+      id: "benefits",
+      label: "Benefits",
+      icon: Star,
+    },
+    {
+      id: "notes",
+      label: "Important Notes",
+      icon: Info,
+    },
   ];
+
+  const displayPrice = dynamicPrice
+    ? dynamicPrice.startsWith("₹")
+      ? dynamicPrice
+      : `₹${dynamicPrice}`
+    : selectedRitual?.price || "";
 
   return (
     <main className="bg-[#FCFAF6] text-[#29231F]">
-      <style jsx global>{`
-      @keyframes priest-blink {
-        0%, 100% { opacity: 1; box-shadow: 0 0 0 rgba(243, 215, 138, 0); }
-        50% { opacity: 0.7; box-shadow: 0 0 14px rgba(243, 215, 138, 0.9); }
-      }
-      .animate-priest-blink {
-        animation: priest-blink 1.6s ease-in-out infinite;
-      }
-    `}</style>
 
-      {/* =====================================================
-          HERO
-      ===================================================== */}
+      <style jsx global>{`
+        @keyframes priest-blink {
+          0%, 100% {
+            opacity: 1;
+            box-shadow:
+              0 0 0
+              rgba(243, 215, 138, 0);
+          }
+
+          50% {
+            opacity: 0.7;
+            box-shadow:
+              0 0 14px
+              rgba(243, 215, 138, 0.9);
+          }
+        }
+
+        .animate-priest-blink {
+          animation:
+            priest-blink
+            1.6s
+            ease-in-out
+            infinite;
+        }
+      `}</style>
+
+      {/* HERO */}
+
       <section className="relative mt-[90px] flex min-h-[calc(100vh-90px)] items-center overflow-hidden">
 
-        {/* Full-width Hero Image */}
         <div className="absolute inset-0 h-full w-full">
-          <Image
-            src={data.heroImage}
-            alt={data.title}
-            fill
-            priority
-            className="object-cover object-left md:object-center"
-          />
 
-          {/* Light overlay for clean normal image look */}
-          <div className="absolute inset-0 bg-black/25" />
-        </div>
+  <Image
+    src={data.heroImage}
+    alt={data.title}
+    fill
+    priority
+    sizes="100vw"
+    className="object-cover object-left md:object-center"
+  />
 
-        {/* Right Content */}
+  {/* Light bottom-only gradient just for text legibility, image stays true-color */}
+  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+
+</div>
         <div className="relative z-10 ml-auto flex w-full flex-col justify-center px-6 py-16 sm:px-10 lg:w-[50%] lg:px-16 xl:px-24">
 
           <div className="w-full max-w-[650px]">
 
-            <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.35em] text-[#D4B978] [text-shadow:_0_1px_6px_rgba(0,0,0,0.8)]">
-              ✦ POOJA PACKAGE ✦
-            </p>
+          <p className="mb-5 inline-block rounded-full bg-[#42151B]/90 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.35em] text-[#F3D78A] shadow-sm">
+  ✦ POOJA PACKAGE ✦
+</p>
 
-            <h1 className="font-[family-name:var(--font-cormorant)] text-5xl font-medium leading-[1] text-white sm:text-6xl lg:text-7xl [text-shadow:_0_2px_12px_rgba(0,0,0,0.85)]">
+            <h1 className="font-[family-name:var(--font-cormorant)] text-5xl font-semibold leading-[1] text-white sm:text-6xl lg:text-7xl xl:text-8xl">
               {data.title}
             </h1>
 
-            {/* Gold divider */}
             <div className="my-7 flex items-center gap-3">
+
               <span className="h-px w-14 bg-[#B08A45]" />
+
               <Sparkles
                 size={14}
-                strokeWidth={1}
                 className="text-[#D4B978]"
               />
+
               <span className="h-px w-14 bg-[#B08A45]" />
+
             </div>
 
-            <p className="max-w-lg text-sm leading-7 text-white/95 sm:text-base font-medium [text-shadow:_0_1px_8px_rgba(0,0,0,0.9)]">
+            <p className="max-w-xl text-base font-semibold leading-8 text-white sm:text-lg">
               {data.subtitle}
             </p>
 
-            {/* Breadcrumb */}
-            <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-white/30 pt-6 text-xs font-medium [text-shadow:_0_1px_6px_rgba(0,0,0,0.8)]">
-              <a
-                href="/"
-                className="text-white/90 transition-colors hover:text-[#D4B978]"
-              >
-                Home
-              </a>
-
-              <span className="text-white/60">›</span>
-
-              <a
-                href="/package"
-                className="text-white/90 transition-colors hover:text-[#D4B978]"
-              >
-                Pooja Packages
-              </a>
-
-              <span className="text-white/60">›</span>
-
-              <span className="text-[#D4B978]">
-                {data.breadcrumb}
-              </span>
-            </div>
-
           </div>
+
         </div>
+
       </section>
 
+      {/* INTRO */}
 
-      {/* =====================================================
-          DECORATIVE BANNER (Kalash on left, Text in center, Diya on right)
-      ===================================================== */}
-      <section className="px-5 py-8 sm:px-8 lg:px-12 lg:py-10">
-
-        <div className="relative mx-auto max-w-[1400px] overflow-hidden rounded-2xl border border-[#E8D5B5] bg-gradient-to-r from-[#FFF9EE] via-[#FFFDF8] to-[#FFF9EE] px-4 py-6 shadow-sm sm:px-8 sm:py-8 lg:px-12">
-
-          {/* Subtle patterned background */}
-          <div className="absolute inset-0 opacity-[0.03]">
-            <div
-              className="h-full w-full"
-              style={{
-                backgroundImage:
-                  "radial-gradient(#A71930 1px, transparent 1px)",
-                backgroundSize: "18px 18px",
-              }}
-            />
-          </div>
-
-          <div className="relative flex flex-col items-center justify-between gap-4 sm:flex-row sm:gap-6 lg:gap-10">
-
-            {/* Left side: Kalasam (blended seamlessly without hard box) */}
-            <div className="relative h-28 w-28 shrink-0 sm:h-36 sm:w-36 md:h-44 md:w-44 lg:h-48 lg:w-48">
-              <Image
-                src="/images/kalasam_banner.png"
-                alt="Sacred Kalasam"
-                fill
-                className="object-contain"
-              />
-            </div>
-
-            {/* Center: Text */}
-            <div className="flex-1 text-center">
-
-              <p className="font-[family-name:var(--font-cormorant)] text-2xl italic text-[#7C3030] sm:text-3xl lg:text-4xl">
-                {data.bannerSubtitle}
-              </p>
-
-              <h2 className="mt-1 font-[family-name:var(--font-cormorant)] text-3xl font-semibold text-[#5A2026] sm:text-4xl lg:text-5xl">
-                {data.bannerTitle}
-              </h2>
-
-              <div className="mx-auto mt-4 flex items-center justify-center gap-2">
-                <span className="h-px w-12 bg-[#B08A45]" />
-                <span className="h-1.5 w-1.5 rotate-45 bg-[#B08A45]" />
-                <span className="h-px w-12 bg-[#B08A45]" />
-              </div>
-
-            </div>
-
-            {/* Right side: Hanging Diya (blended seamlessly) */}
-            <div className="relative h-28 w-28 shrink-0 sm:h-36 sm:w-36 md:h-44 md:w-44 lg:h-48 lg:w-48">
-              <Image
-                src="/images/diya_banner.png"
-                alt="Sacred Diya"
-                fill
-                className="object-contain"
-              />
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-
-      {/* =====================================================
-          INTRODUCTION
-      ===================================================== */}
       <section className="px-5 py-14 sm:px-8 lg:px-12 lg:py-20">
 
         <div className="mx-auto max-w-[1400px]">
 
-          {/* TOP GRID: text + image */}
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
 
-            {/* LEFT CONTENT */}
             <div>
 
               <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#B08A45]">
@@ -784,465 +928,679 @@ function PackagePage({ data }: PackagePageProps) {
               </h2>
 
               <div className="my-6 flex items-center gap-2">
+
                 <span className="h-px w-12 bg-[#B08A45]" />
+
                 <span className="h-1.5 w-1.5 rotate-45 bg-[#B08A45]" />
+
               </div>
 
               <p className="max-w-xl text-[15px] leading-8 text-[#4B4540]">
                 {data.introText}
               </p>
 
-              {/* Benefits */}
               <div className="mt-10 grid grid-cols-2 gap-7 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-                {data.benefits.map((benefit) => (
-                  <Benefit key={benefit.title} type={benefit.icon} title={benefit.title} />
-                ))}
+
+                {data.benefits.map(
+                  (benefit) => (
+                    <Benefit
+                      key={benefit.title}
+                      type={benefit.icon}
+                      title={benefit.title}
+                    />
+                  )
+                )}
+
               </div>
 
             </div>
 
-            {/* RIGHT IMAGE */}
             <div className="relative">
+
               <div className="absolute -inset-3 rounded-2xl border border-[#D9BC86]/40" />
+
               <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
+
                 <Image
                   src={data.introImage}
                   alt={data.introTitle}
                   fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover transition-transform duration-700 hover:scale-105"
                 />
+
               </div>
-              <div className="absolute -bottom-5 -left-5 hidden h-20 w-20 border-b border-l border-[#B08A45] sm:block" />
-              <div className="absolute -right-5 -top-5 hidden h-20 w-20 border-r border-t border-[#B08A45] sm:block" />
+
             </div>
 
           </div>
 
-          {/* RITUAL TYPE BUTTONS — below the grid */}
-          <div className="mt-16 border-b border-[#E8D5B5] pb-12 mb-8">
+          {/* RITUAL SELECTOR */}
+
+          <div className="mb-8 mt-16 border-b border-[#E8D5B5] pb-12">
 
             <div className="mb-6 flex items-center gap-3">
+
               <span className="h-px w-10 bg-[#B08A45]" />
+
               <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#B08A45]">
                 SELECT A RITUAL TO VIEW PACKAGE DETAILS
               </p>
+
             </div>
 
             <div className="flex flex-wrap gap-3">
-              {data.occasions.map((occasion) => {
-                const isActive = selectedRitual?.id === occasion.id;
-                return (
-                  <button
-                    key={occasion.id}
-                    type="button"
-                    onClick={() => {
-                      setSelectedRitual(occasion);
-                      setActiveTab("details");
-                    }}
-                    className={`group flex items-center gap-2.5 rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
-                      isActive
-                        ? "border-[#7A1524] bg-[#7A1524] text-white shadow-md"
-                        : "border-[#D9BC86] bg-[#FFF9EF] text-[#5A2026] hover:border-[#7A1524] hover:bg-[#7A1524] hover:text-white"
-                    }`}
-                  >
-                    <RitualIcon type={occasion.icon} active={isActive} />
-                    <span>{occasion.title}</span>
-                  </button>
-                );
-              })}
+
+              {data.occasions.map(
+                (occasion) => {
+                  const isActive =
+                    selectedRitual?.id ===
+                    occasion.id;
+
+                  return (
+                    <button
+                      key={occasion.id}
+                      type="button"
+                      onClick={() => {
+
+                        setSelectedRitual(
+                          occasion
+                        );
+
+                        setActiveTab(
+                          "details"
+                        );
+
+                        window.history.replaceState(
+                          null,
+                          "",
+                          `#${occasion.id}`
+                        );
+                      }}
+                      className={`group flex items-center gap-2.5 rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
+                        isActive
+                          ? "border-[#7A1524] bg-[#7A1524] text-white shadow-md"
+                          : "border-[#D9BC86] bg-[#FFF9EF] text-[#5A2026] hover:border-[#7A1524] hover:bg-[#7A1524] hover:text-white"
+                      }`}
+                    >
+
+                      <RitualIcon
+                        type={occasion.icon}
+                        active={isActive}
+                      />
+
+                      <span>
+                        {occasion.title}
+                      </span>
+
+                    </button>
+                  );
+                }
+              )}
+
             </div>
 
           </div>
 
         </div>
+
       </section>
 
+      {/* PACKAGE DETAILS */}
 
-      {/* =====================================================
-          PACKAGE DETAILS (Only visible when a ritual is selected)
-      ===================================================== */}
       {selectedRitual && (
-        <section className="scroll-mt-28 bg-white px-5 py-14 sm:px-8 lg:px-12 lg:py-20" id="ritual-details-section">
+
+        <section
+          id="ritual-details-section"
+          className="scroll-mt-28 bg-white px-5 py-14 sm:px-8 lg:px-12 lg:py-20"
+        >
+
           <div className="mx-auto max-w-[1400px]">
 
-            {/* Heading & Optional Image */}
-            {selectedRitual.image ? (
-              <div className="mb-14 grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-                
-                {/* Left: Image */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-[#D9BC86]/40 shadow-sm">
-                  <Image
-                    src={selectedRitual.image}
-                    alt={selectedRitual.title}
-                    fill
-                    className="object-cover transition-transform duration-700 hover:scale-105"
-                  />
-                </div>
+            <div className="mb-14 text-center">
 
-                {/* Right: Text */}
-                <div className="text-left">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#B08A45]">
-                    RITUAL OVERVIEW
-                  </p>
-                  <h2 className="mt-3 font-[family-name:var(--font-cormorant)] text-4xl font-semibold text-[#5A2026] sm:text-5xl">
-                    {selectedRitual.title}
-                  </h2>
-                  <div className="mt-5 flex items-center gap-2">
-                    <span className="h-px w-12 bg-[#B08A45]" />
-                    <span className="h-1.5 w-1.5 rotate-45 bg-[#B08A45]" />
-                  </div>
-                  <p className="mt-6 text-[15px] leading-8 text-[#4B4540]">
-                    {selectedRitual.intro}
-                  </p>
-                </div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#B08A45]">
+                RITUAL OVERVIEW
+              </p>
 
-              </div>
-            ) : (
-              <div className="mb-14 text-center">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#B08A45]">
-                  RITUAL OVERVIEW
-                </p>
-                <h2 className="mt-2 font-[family-name:var(--font-cormorant)] text-4xl font-semibold text-[#5A2026] sm:text-5xl">
-                  {selectedRitual.title}
-                </h2>
-                <div className="mx-auto mt-4 flex items-center justify-center gap-2">
-                  <span className="h-px w-12 bg-[#B08A45]" />
-                  <span className="h-1.5 w-1.5 rotate-45 bg-[#B08A45]" />
-                  <span className="h-px w-12 bg-[#B08A45]" />
-                </div>
-                <p className="mx-auto mt-5 max-w-3xl text-[15px] leading-8 text-[#4B4540]">
-                  {selectedRitual.intro}
-                </p>
-              </div>
-            )}
+              <h2 className="mt-2 font-[family-name:var(--font-cormorant)] text-4xl font-semibold text-[#5A2026] sm:text-5xl">
+                {selectedRitual.title}
+              </h2>
 
-            {/* Details Card */}
+              <p className="mx-auto mt-5 max-w-3xl text-[15px] leading-8 text-[#4B4540]">
+                {selectedRitual.intro}
+              </p>
+
+            </div>
+
             <div className="overflow-hidden rounded-xl border border-[#E8D5B5] bg-[#FFFCF7]">
+
               <div className="grid lg:grid-cols-[250px_1fr]">
 
                 {/* SIDEBAR */}
-                <div className="bg-[#5A2026] p-4 lg:p-5">
-                  <div className="flex gap-2 overflow-x-auto scrollbar-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:block lg:space-y-2">
-                    {tabs.map((tab) => {
-                      const Icon = tab.icon;
-                      const active = activeTab === tab.id;
 
-                      return (
-                        <button
-                          key={tab.id}
-                          type="button"
-                          onClick={() => setActiveTab(tab.id)}
-                          className={`flex min-w-max items-center gap-3 rounded-lg px-4 py-3.5 text-left text-sm transition-all duration-300 lg:w-full ${
-                            active
-                              ? "bg-[#7A202B] text-white shadow-md"
-                              : "text-white/80 hover:bg-white/10 hover:text-white"
-                          }`}
-                        >
-                          <Icon
-                            size={19}
-                            strokeWidth={1.5}
-                            className={active ? "text-[#D4B978]" : "text-white/70"}
-                          />
-                          <span>{tab.label}</span>
-                          {active && (
-                            <span className="ml-auto hidden text-[#D4B978] lg:block">›</span>
-                          )}
-                        </button>
-                      );
-                    })}
+                <div className="bg-[#5A2026] p-4 lg:p-5">
+
+                  <div className="flex gap-2 overflow-x-auto lg:block lg:space-y-2">
+
+                    {tabs.map(
+                      (tab) => {
+
+                        const Icon =
+                          tab.icon;
+
+                        const active =
+                          activeTab ===
+                          tab.id;
+
+                        return (
+                          <button
+                            key={tab.id}
+                            type="button"
+                            onClick={() =>
+                              setActiveTab(
+                                tab.id
+                              )
+                            }
+                            className={`flex min-w-max items-center gap-3 rounded-lg px-4 py-3.5 text-left text-sm transition-all lg:w-full ${
+                              active
+                                ? "bg-[#7A202B] text-white shadow-md"
+                                : "text-white/80 hover:bg-white/10"
+                            }`}
+                          >
+
+                            <Icon
+                              size={19}
+                              className={
+                                active
+                                  ? "text-[#D4B978]"
+                                  : "text-white/70"
+                              }
+                            />
+
+                            <span>
+                              {tab.label}
+                            </span>
+
+                          </button>
+                        );
+                      }
+                    )}
+
                   </div>
 
                   <div className="mt-6 border-t border-white/15 pt-6">
+
                     <span className="text-[10px] uppercase tracking-wider text-[#D4B978]">
                       Selected Package
                     </span>
+
                     <div className="font-[family-name:var(--font-cormorant)] text-2xl font-bold text-[#F3D78A]">
                       {selectedRitual.title}
                     </div>
-                                        <div className="mt-1 text-lg font-semibold text-white">
-                      {dynamicPrice ? `₹${dynamicPrice}` : selectedRitual.price}
+
+                    <div className="mt-1 text-lg font-semibold text-white">
+                      {displayPrice}
                     </div>
 
                     <button
-  type="button"
-  onClick={() => setIsOrderOpen(true)}
-  className="mt-4 w-full rounded-lg bg-[#E5C77A] py-2.5 text-sm font-bold tracking-wide text-[#3D1418] transition-colors hover:bg-[#F3D78A]"
->
-  Order Now
-</button>
+                      type="button"
+                      onClick={() =>
+                        setIsOrderOpen(true)
+                      }
+                      className="mt-4 w-full rounded-lg bg-[#E5C77A] py-2.5 text-sm font-bold text-[#3D1418]"
+                    >
+                      Order Now
+                    </button>
 
-<button
-  type="button"
-  onClick={() => setIsBookingOpen(true)}
-  className="mt-3 w-full rounded-lg bg-[#F3D78A] px-3 py-2.5 text-center text-[11px] font-semibold text-[#3D1418] animate-priest-blink"
->
-  Looking for an experienced Iyer for an
-  upcoming pooja?
-</button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setIsBookingOpen(true)
+                      }
+                      className="mt-3 w-full rounded-lg bg-[#F3D78A] px-3 py-2.5 text-[11px] font-semibold text-[#3D1418] animate-priest-blink"
+                    >
+                      Looking for an experienced Iyer for an upcoming pooja?
+                    </button>
+
                   </div>
+
                 </div>
 
                 {/* CONTENT */}
+
                 <div className="min-w-0 p-2 sm:p-7 lg:p-9">
 
-                  {/* PACKAGE DETAILS */}
-                  {activeTab === "details" && (
+                  {activeTab ===
+                    "details" && (
+
                     <div>
+
                       <h3 className="font-[family-name:var(--font-cormorant)] text-xl font-semibold text-[#5A2026] sm:text-2xl">
                         Pooja Samagri / Items List
                       </h3>
+
                       <div className="mt-4 overflow-hidden rounded-lg border border-[#E8DCD0] shadow-sm">
+
                         <table className="w-full table-fixed border-collapse text-[10px] sm:text-xs md:text-sm">
+
                           <thead>
+
                             <tr className="bg-[#7A1524] text-white">
-                              <th className="w-[10%] sm:w-[8%] px-1 py-2 sm:px-3 sm:py-3 text-center font-medium">S.No</th>
-                              <th className="w-[36%] sm:w-[36%] px-1.5 py-2 sm:px-4 sm:py-3 text-left font-medium">Name (English)</th>
-                              <th className="w-[32%] sm:w-[34%] px-1.5 py-2 sm:px-4 sm:py-3 text-left font-medium">Name (Tamil)</th>
-                              <th className="w-[22%] sm:w-[22%] px-1.5 py-2 sm:px-4 sm:py-3 text-right sm:text-left font-medium">Quantity</th>
+
+                              <th className="w-[10%] px-2 py-3 text-center">
+                                S.No
+                              </th>
+
+                              <th className="w-[36%] px-2 py-3 text-left">
+                                Name (English)
+                              </th>
+
+                              <th className="w-[32%] px-2 py-3 text-left">
+                                Name (Tamil)
+                              </th>
+
+                              <th className="w-[22%] px-2 py-3 text-left">
+                                Quantity
+                              </th>
+
                             </tr>
+
                           </thead>
+
                           <tbody>
-                            {(dynamicItems ?? selectedRitual.items).map((item, index) => (
-                              <tr
-                                key={item.sno}
-                                className={index % 2 === 0 ? "bg-white" : "bg-[#FBF5EC]"}
-                              >
-                                <td className="border-b border-[#EEE5D9] px-1 py-2 sm:px-3 sm:py-3 text-center text-[#7A6E65] align-top">{item.sno}.</td>
-                                <td className="border-b border-[#EEE5D9] px-1.5 py-2 sm:px-4 sm:py-3 font-medium text-[#29231F] align-top break-words leading-tight">{item.english}</td>
-                                <td className="border-b border-[#EEE5D9] px-1.5 py-2 sm:px-4 sm:py-3 text-[#5A4F46] align-top break-words leading-tight">{item.tamil}</td>
-                                <td className="border-b border-[#EEE5D9] px-1.5 py-2 sm:px-4 sm:py-3 text-right sm:text-left font-semibold sm:font-normal text-[#91202B] sm:text-[#4B4540] align-top break-words">{item.quantity}</td>
-                              </tr>
-                            ))}
+
+                            {(
+                              dynamicItems ??
+                              selectedRitual.items
+                            ).map(
+                              (
+                                item,
+                                index
+                              ) => (
+
+                                <tr
+                                  key={`${item.sno}-${index}`}
+                                  className={
+                                    index % 2 ===
+                                    0
+                                      ? "bg-white"
+                                      : "bg-[#FBF5EC]"
+                                  }
+                                >
+
+                                  <td className="border-b px-2 py-3 text-center">
+                                    {item.sno}.
+                                  </td>
+
+                                  <td className="border-b px-2 py-3 font-medium break-words">
+                                    {item.english}
+                                  </td>
+
+                                  <td className="border-b px-2 py-3 break-words">
+                                    {item.tamil}
+                                  </td>
+
+                                  <td className="border-b px-2 py-3 break-words">
+                                    {item.quantity}
+                                  </td>
+
+                                </tr>
+
+                              )
+                            )}
+
                           </tbody>
+
                         </table>
+
                       </div>
-                      <div className="mt-4 flex gap-2 text-xs text-[#876B50]">
-                        <Info size={15} className="mt-0.5 shrink-0 text-[#B08A45]" />
-                        <span>
-                          The items and quantities may vary slightly based on the priest&apos;s guidance and tradition.
-                        </span>
-                      </div>
+
                     </div>
+
                   )}
 
-                  {/* PROCESS */}
-                  {activeTab === "process" && (
+                  {activeTab ===
+                    "process" && (
+
                     <div>
+
                       <h3 className="font-[family-name:var(--font-cormorant)] text-2xl font-semibold text-[#5A2026]">
                         Pooja Process
                       </h3>
+
                       <div className="mt-6 space-y-4">
-                        {selectedRitual.process.map((step, index) => (
-                          <div key={step} className="flex gap-4 rounded-lg border border-[#E9DDC9] bg-white p-4">
-                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#F6EAD5] text-sm font-semibold text-[#7A202B]">
-                              {index + 1}
+
+                        {selectedRitual.process.map(
+                          (
+                            step,
+                            index
+                          ) => (
+
+                            <div
+                              key={step}
+                              className="flex gap-4 rounded-lg border border-[#E9DDC9] bg-white p-4"
+                            >
+
+                              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#F6EAD5]">
+                                {index + 1}
+                              </div>
+
+                              <div className="flex items-center text-sm">
+                                {step}
+                              </div>
+
                             </div>
-                            <div className="flex items-center text-sm leading-6 text-[#4B4540]">
-                              {step}
-                            </div>
-                          </div>
-                        ))}
+
+                          )
+                        )}
+
                       </div>
+
                     </div>
+
                   )}
 
-                  {/* BENEFITS */}
-                  {activeTab === "benefits" && (
+                  {activeTab ===
+                    "benefits" && (
+
                     <div>
+
                       <h3 className="font-[family-name:var(--font-cormorant)] text-2xl font-semibold text-[#5A2026]">
                         Benefits of the Pooja
                       </h3>
+
                       <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                        {selectedRitual.benefits.map((benefit) => (
-                          <div key={benefit} className="flex gap-3 rounded-lg border border-[#E9DDC9] bg-white p-5">
-                            <Check size={19} className="mt-0.5 shrink-0 text-[#B08A45]" />
-                            <p className="text-sm leading-6 text-[#4B4540]">{benefit}</p>
-                          </div>
-                        ))}
+
+                        {selectedRitual.benefits.map(
+                          (
+                            benefit
+                          ) => (
+
+                            <div
+                              key={benefit}
+                              className="flex gap-3 rounded-lg border border-[#E9DDC9] bg-white p-5"
+                            >
+
+                              <Check
+                                size={19}
+                                className="text-[#B08A45]"
+                              />
+
+                              <p className="text-sm">
+                                {benefit}
+                              </p>
+
+                            </div>
+
+                          )
+                        )}
+
                       </div>
+
                     </div>
+
                   )}
 
-                  {/* NOTES */}
-                  {activeTab === "notes" && (
+                  {activeTab ===
+                    "notes" && (
+
                     <div>
+
                       <h3 className="font-[family-name:var(--font-cormorant)] text-2xl font-semibold text-[#5A2026]">
                         Important Notes
                       </h3>
+
                       <div className="mt-6 space-y-4">
-                        {selectedRitual.notes.map((note) => (
-                          <div key={note} className="flex gap-3 rounded-lg bg-[#FBF5EC] p-5">
-                            <Info size={19} className="mt-0.5 shrink-0 text-[#B08A45]" />
-                            <p className="text-sm leading-6 text-[#4B4540]">{note}</p>
-                          </div>
-                        ))}
+
+                        {selectedRitual.notes.map(
+                          (
+                            note
+                          ) => (
+
+                            <div
+                              key={note}
+                              className="flex gap-3 rounded-lg bg-[#FBF5EC] p-5"
+                            >
+
+                              <Info
+                                size={19}
+                                className="text-[#B08A45]"
+                              />
+
+                              <p className="text-sm">
+                                {note}
+                              </p>
+
+                            </div>
+
+                          )
+                        )}
+
                       </div>
+
                     </div>
+
                   )}
 
                 </div>
+
               </div>
+
             </div>
 
           </div>
+
         </section>
+
       )}
 
+      {/* CTA */}
 
-      {/* =====================================================
-          CTA
-      ===================================================== */}
       <section className="px-5 py-8 sm:px-8 lg:px-12">
 
-        <div className="relative mx-auto flex max-w-[1400px] flex-col items-center justify-between gap-7 overflow-hidden rounded-xl border border-[#E8D5B5] bg-[#FFF8EC] px-7 py-8 sm:px-10 lg:flex-row">
+        <div className="mx-auto flex max-w-[1400px] flex-col items-center justify-between gap-7 rounded-xl border border-[#E8D5B5] bg-[#FFF8EC] px-7 py-8 lg:flex-row">
 
-          {/* Decorative pattern */}
-          <div className="absolute -left-10 -top-10 h-40 w-40 rounded-full border border-[#B08A45]/20" />
-          <div className="absolute -bottom-20 -right-10 h-48 w-48 rounded-full border border-[#B08A45]/20" />
+          <div className="flex items-center gap-5">
 
-          <div className="relative flex items-center gap-5">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border bg-white">
 
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-[#E5C98E] bg-white">
               <Phone
                 size={23}
-                strokeWidth={1.5}
                 className="text-[#B87916]"
               />
+
             </div>
 
             <div>
+
               <h3 className="font-[family-name:var(--font-cormorant)] text-2xl font-semibold text-[#5A2026]">
                 Have Questions?
               </h3>
 
-              <p className="mt-1 text-sm text-[#5B514A]">
+              <p className="mt-1 text-sm">
                 Our team is here to help you!
               </p>
+
             </div>
 
           </div>
 
           <a
             href="/contact"
-            className="group relative inline-flex h-14 items-center gap-4 rounded-lg bg-[#7A1524] px-9 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#5A2026]"
+            className="inline-flex h-14 items-center gap-4 rounded-lg bg-[#7A1524] px-9 text-sm font-semibold text-white"
           >
-            {data.enquireText || "Enquire Now"}
+
+            {data.enquireText ||
+              "Enquire Now"}
 
             <ArrowRight
               size={18}
-              className="transition-transform duration-300 group-hover:translate-x-1"
             />
+
           </a>
 
         </div>
+
       </section>
 
-      {/* ORDER NOW — 2-step customer details + payment */}
+      {/* ORDER NOW */}
+
       <OrderNowModal
         open={isOrderOpen}
-        onClose={() => setIsOrderOpen(false)}
-        packageName={selectedRitual?.title || "Consumer Package"}
-        packagePrice={dynamicPrice}
+        onClose={() =>
+          setIsOrderOpen(false)
+        }
+        packageName={
+          selectedRitual?.title ||
+          "Consumer Package"
+        }
+        packagePrice={
+          dynamicPrice
+        }
       />
 
+      {/* IYER BOOKING MODAL */}
+
       {isBookingOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="relative w-full max-w-md rounded-2xl border-2 border-[#DECBB0] bg-[#FAF6EE] p-6 shadow-2xl sm:p-8">
+
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+
+          <div className="relative w-full max-w-md rounded-2xl bg-[#FAF6EE] p-6 shadow-2xl">
+
             <button
               type="button"
-              onClick={() => setIsBookingOpen(false)}
-              className="absolute right-4 top-4 text-[#7A6458] hover:text-[#42151B]"
-              aria-label="Close"
+              onClick={() =>
+                setIsBookingOpen(false)
+              }
+              className="absolute right-4 top-4"
             >
               ✕
             </button>
 
             {bookingSuccess ? (
+
               <div className="py-8 text-center">
-                <h3 className="mb-2 font-[family-name:var(--font-cormorant)] text-2xl font-bold text-[#42151B]">
+
+                <h3 className="text-2xl font-bold">
                   Request Received!
                 </h3>
-                <p className="text-sm text-[#55463E]">
-                  Our team will contact you shortly to confirm.
-                </p>
-              </div>
-            ) : (
-              <>
-                <h3 className="mb-1 font-[family-name:var(--font-cormorant)] text-2xl font-bold text-[#42151B]">
-                  Request for an Iyer
-                </h3>
-                <p className="mb-5 text-xs text-[#63534B]">
-                  Fill in your details and we&apos;ll get back to you shortly.
+
+                <p className="mt-2">
+                  Our team will contact you shortly.
                 </p>
 
-                <form onSubmit={handleBookingSubmit} className="space-y-3.5">
-                  <input
-                    type="text"
-                    required
-                    placeholder="Full Name"
-                    value={bookingForm.name}
-                    onChange={(e) =>
-                      setBookingForm({ ...bookingForm, name: e.target.value })
-                    }
-                    className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none"
-                  />
-                  <input
-                    type="tel"
-                    required
-                    placeholder="Mobile Number"
-                    value={bookingForm.mobile}
-                    onChange={(e) =>
-                      setBookingForm({ ...bookingForm, mobile: e.target.value })
-                    }
-                    className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none"
-                  />
-                  <input
-                    type="email"
-                    required
-                    placeholder="Email Address"
-                    value={bookingForm.email}
-                    onChange={(e) =>
-                      setBookingForm({ ...bookingForm, email: e.target.value })
-                    }
-                    className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none"
-                  />
-                  <textarea
-                    required
-                    rows={2}
-                    placeholder="Address"
-                    value={bookingForm.address}
-                    onChange={(e) =>
-                      setBookingForm({ ...bookingForm, address: e.target.value })
-                    }
-                    className="w-full rounded-lg border border-[#DFCBB0] bg-white px-3 py-2.5 text-sm focus:border-[#7D1E28] focus:outline-none"
-                  />
-                  <button
-                    type="submit"
-                    className="w-full rounded-lg bg-[#5A121D] py-3 text-sm font-bold tracking-wide text-white transition-colors hover:bg-[#400B13]"
-                  >
-                    Submit  
-                  </button>
-                </form>
-              </>
+              </div>
+
+            ) : (
+
+              <form
+                onSubmit={
+                  handleBookingSubmit
+                }
+                className="space-y-3"
+              >
+
+                <h3 className="text-2xl font-bold">
+                  Request for an Iyer
+                </h3>
+
+                <input
+                  required
+                  placeholder="Full Name"
+                  value={bookingForm.name}
+                  onChange={(e) =>
+                    setBookingForm({
+                      ...bookingForm,
+                      name:
+                        e.target.value,
+                    })
+                  }
+                  className="w-full rounded-lg border p-3"
+                />
+
+                <input
+                  required
+                  placeholder="Mobile Number"
+                  value={bookingForm.mobile}
+                  onChange={(e) =>
+                    setBookingForm({
+                      ...bookingForm,
+                      mobile:
+                        e.target.value,
+                    })
+                  }
+                  className="w-full rounded-lg border p-3"
+                />
+
+                <input
+                  required
+                  type="email"
+                  placeholder="Email Address"
+                  value={bookingForm.email}
+                  onChange={(e) =>
+                    setBookingForm({
+                      ...bookingForm,
+                      email:
+                        e.target.value,
+                    })
+                  }
+                  className="w-full rounded-lg border p-3"
+                />
+
+                <textarea
+                  required
+                  rows={3}
+                  placeholder="Address"
+                  value={
+                    bookingForm.address
+                  }
+                  onChange={(e) =>
+                    setBookingForm({
+                      ...bookingForm,
+                      address:
+                        e.target.value,
+                    })
+                  }
+                  className="w-full rounded-lg border p-3"
+                />
+
+                <button
+                  type="submit"
+                  className="w-full rounded-lg bg-[#5A121D] py-3 font-bold text-white"
+                >
+                  Submit
+                </button>
+
+              </form>
+
             )}
+
           </div>
+
         </div>
+
       )}
 
     </main>
   );
 }
 
-
-/* ============================================================
-   BENEFIT ICON
-============================================================ */
+/*
+============================================================
+BENEFIT
+============================================================
+*/
 
 function Benefit({
   type,
   title,
 }: {
-  type: "peace" | "obstacles" | "family" | "success";
+  type:
+    | "peace"
+    | "obstacles"
+    | "family"
+    | "success";
   title: string;
 }) {
   const icons = {
@@ -1258,14 +1616,15 @@ function Benefit({
     <div className="text-center">
 
       <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-[#E9D8BA] bg-[#FFF9EF]">
+
         <Icon
           size={24}
-          strokeWidth={1.3}
           className="text-[#C48117]"
         />
+
       </div>
 
-      <p className="mx-auto mt-3 max-w-[130px] text-xs font-medium leading-5 text-[#29231F]">
+      <p className="mx-auto mt-3 max-w-[130px] text-xs font-medium">
         {title}
       </p>
 
@@ -1273,15 +1632,21 @@ function Benefit({
   );
 }
 
-/* ============================================================
-   RITUAL ICON (icon-only, for clickable ritual list buttons)
-============================================================ */
+/*
+============================================================
+RITUAL ICON
+============================================================
+*/
 
 function RitualIcon({
   type,
   active,
 }: {
-  type: "peace" | "obstacles" | "family" | "success";
+  type:
+    | "peace"
+    | "obstacles"
+    | "family"
+    | "success";
   active: boolean;
 }) {
   const icons = {
@@ -1290,12 +1655,18 @@ function RitualIcon({
     family: Gift,
     success: Star,
   };
+
   const Icon = icons[type];
+
   return (
     <Icon
       size={20}
       strokeWidth={1.3}
-      className={active ? "text-[#D4B978]" : "text-[#C48117]"}
+      className={
+        active
+          ? "text-[#D4B978]"
+          : "text-[#C48117]"
+      }
     />
   );
 }
