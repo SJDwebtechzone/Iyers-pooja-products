@@ -527,7 +527,7 @@ const whyChooseUs = [
 ];
 
 export default function FestivalPackagePage() {
-  const API_BASE = "http://localhost:3001";
+  const API_BASE = "https://iyerspoojaproducts.com/api";
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const detailsSectionRef = useRef<HTMLElement>(null);

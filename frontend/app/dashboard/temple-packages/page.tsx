@@ -69,7 +69,7 @@ const EMPTY_FORM: FormState = {
   divya_monthly: "",
 };
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://iyerspoojaproducts.com/api";
 const CATEGORY_KEY = "thirumanjam";
 
 // Total column count: S.No + English + Tamil + 6 quantities + Actions

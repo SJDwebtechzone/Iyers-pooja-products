@@ -27,7 +27,7 @@ import {
 import NextImage from "next/image";
 import { DASHBOARD_BADGES_EVENT } from "./dashboard-events";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://iyerspoojaproducts.com/api";
 /** How often the shell re-asks the backend for live counts. */
 const POLL_INTERVAL_MS = 20000;
 

@@ -177,7 +177,7 @@ export default function Navbar() {
     setRegSubmitting(true);
 
     try {
-      const res = await fetch("http://localhost:3001/iyer-registrations", {
+      const res = await fetch("https://iyerspoojaproducts.com/api/iyer-registrations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(regForm),

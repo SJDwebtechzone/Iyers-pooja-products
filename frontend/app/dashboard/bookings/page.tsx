@@ -13,7 +13,7 @@ type Booking = {
   created_at: string;
 };
 
-const API_BASE = "http://localhost:3001";
+const API_BASE = "https://iyerspoojaproducts.com/api";
 
 export default function BookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);

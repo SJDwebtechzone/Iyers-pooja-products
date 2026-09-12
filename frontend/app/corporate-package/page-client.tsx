@@ -606,7 +606,7 @@ const featureCards = [
 // ==========================================
 
 export default function CorporatePackagePage() {
-  const API_BASE = "http://localhost:3001";
+  const API_BASE = "https://iyerspoojaproducts.com/api";
 
   const [selectedCeremony, setSelectedCeremony] =
     useState<CeremonyData>(ceremonies[0]);

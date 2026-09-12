@@ -10,7 +10,7 @@ async function bootstrap() {
   // Allow the Next.js frontend (localhost:3000) to send/receive cookies.
   // Update the origin when you deploy to a real domain.
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: 'https://iyerspoojaproducts.com',
     credentials: true,
   });
 

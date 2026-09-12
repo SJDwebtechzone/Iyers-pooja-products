@@ -10,7 +10,7 @@ import {
   Save,
 } from "lucide-react";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://iyerspoojaproducts.com/api";
 
 type ContactSettings = {
   whatsapp_number: string | null;

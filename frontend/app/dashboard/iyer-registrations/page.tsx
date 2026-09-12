@@ -12,7 +12,7 @@ type Registration = {
   created_at: string;
 };
 
-const API_BASE = "http://localhost:3001";
+const API_BASE = "https://iyerspoojaproducts.com/api";
 
 export default function IyerRegistrationsPage() {
   const [registrations, setRegistrations] = useState<Registration[]>([]);

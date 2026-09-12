@@ -4,7 +4,7 @@ import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Flame, Lock, Eye, EyeOff, ArrowRight, CheckCircle2 } from "lucide-react";
 
-const API_URL = "http://localhost:3001";
+const API_URL = "https://iyerspoojaproducts.com/api";
 
 function getPasswordError(password: string): string | null {
   if (password.length < 6) return "Password must be at least 6 characters.";

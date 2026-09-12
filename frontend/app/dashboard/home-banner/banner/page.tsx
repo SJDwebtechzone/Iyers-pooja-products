@@ -11,7 +11,7 @@ type Banner = {
   image_filename: string;
 };
 
-const API_BASE = "http://localhost:3001";
+const API_BASE = "https://iyerspoojaproducts.com/api";
 const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
 
 export default function HomeBannerFormPage() {

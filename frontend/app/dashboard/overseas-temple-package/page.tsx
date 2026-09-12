@@ -13,7 +13,7 @@ type PackageItem = {
   quantity: string | null;
 };
 
-const API_BASE = "http://localhost:3001";
+const API_BASE = "https://iyerspoojaproducts.com/api";
 const CATEGORY_KEY = "overseas-thirumanjam";
 
 export default function OverseasTemplePackagePage() {

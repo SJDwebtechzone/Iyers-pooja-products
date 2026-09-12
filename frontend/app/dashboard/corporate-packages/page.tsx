@@ -46,7 +46,7 @@ type PackageForm = {
   quantity: string;
 };
 
-const API_BASE = "http://localhost:3001";
+const API_BASE = "https://iyerspoojaproducts.com/api";
 
 export default function CorporatePackagesPage() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);

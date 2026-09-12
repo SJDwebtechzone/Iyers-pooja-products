@@ -29,7 +29,7 @@ import OrderNowModal from "../components/order-now-modal";
 // -------------------------------------------------------------
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+  process.env.NEXT_PUBLIC_API_URL || "https://iyerspoojaproducts.com/api";
 
 // -------------------------------------------------------------
 // SAMAGRI ITEM DATA MODEL

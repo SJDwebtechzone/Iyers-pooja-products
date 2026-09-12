@@ -8,7 +8,7 @@ import Faq from "./components/faq";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
-const API_BASE = "http://localhost:3001";
+const API_BASE = "https://iyerspoojaproducts.com/api";
 
 type Banner = {
   heading_line1: string;

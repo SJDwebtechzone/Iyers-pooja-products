@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Mail, ArrowRight } from "lucide-react";
 
-const API_URL = "http://localhost:3001";
+const API_URL = "https://iyerspoojaproducts.com/api";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");

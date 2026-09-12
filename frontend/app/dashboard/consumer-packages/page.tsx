@@ -23,7 +23,7 @@ type PackageItem = {
   quantity: string | null;
 };
 
-const API_BASE = "http://localhost:3001";
+const API_BASE = "https://iyerspoojaproducts.com/api";
 
 export default function ConsumerPackagesPage() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);

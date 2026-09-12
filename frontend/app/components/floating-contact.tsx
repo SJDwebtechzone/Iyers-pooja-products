@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Phone } from "lucide-react";
 import Image from "next/image";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://iyerspoojaproducts.com/api";
 const DEFAULT_PHONE_NUMBER = "9884462960";
 const DEFAULT_WHATSAPP_NUMBER = "9884462960";
 

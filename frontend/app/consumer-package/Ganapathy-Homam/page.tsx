@@ -14,7 +14,7 @@ name_tamil: string | null;
 quantity: string | null;
 };
 
-const API_BASE = "http://localhost:3000";
+const API_BASE = "https://iyerspoojaproducts.com/api";
 
 const processSteps = [
 {

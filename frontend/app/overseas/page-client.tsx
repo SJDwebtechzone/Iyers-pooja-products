@@ -786,7 +786,7 @@ const overseasFeatures = [
 // ==========================================
 
 export default function OverseasPackagePage() {
-  const API_BASE = "http://localhost:3001";
+  const API_BASE = "https://iyerspoojaproducts.com/api";
 
   const [selectedPooja, setSelectedPooja] =
     useState<OverseasPoojaData>(overseasPoojas[0]);
