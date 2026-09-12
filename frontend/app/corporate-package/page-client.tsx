@@ -1161,7 +1161,7 @@ export default function CorporatePackagePage() {
   {/* Background Image */}
   <div className="absolute inset-0">
     <Image
-      src="/images/corporate-banner.png"
+      src="/images/corporate-hero-banner.png"
       alt="Corporate Package"
       fill
       priority
