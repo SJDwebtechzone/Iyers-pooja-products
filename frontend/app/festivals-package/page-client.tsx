@@ -527,7 +527,9 @@ const whyChooseUs = [
 ];
 
 export default function FestivalPackagePage() {
-  const API_BASE = "https://iyerspoojaproducts.com/api";
+  const API_BASE =
+    process.env.NEXT_PUBLIC_API_URL ||
+    "https://iyerspoojaproducts.com/api";
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const detailsSectionRef = useRef<HTMLElement>(null);
@@ -536,7 +538,9 @@ export default function FestivalPackagePage() {
 
 
 
-   const [liveItems, setLiveItems] = useState<PackageItem[]>(festivalPackages[0].items);
+  // Filled from the admin-managed API. The `items` arrays in
+  // festivalPackages are sample content, never a fallback.
+  const [liveItems, setLiveItems] = useState<PackageItem[]>([]);
   const [itemsLoading, setItemsLoading] = useState(false);
   const [dynamicPrice, setDynamicPrice] = useState<string | null>(null);
 
@@ -617,11 +621,11 @@ useEffect(() => {
             quantity: row.quantity ?? "",
           }));
 
-          setLiveItems(mapped.length > 0 ? mapped : selectedFestival.items);
+          setLiveItems(mapped);
         }
       } catch {
         if (!cancelled) {
-          setLiveItems(selectedFestival.items);
+          setLiveItems([]);
         }
       } finally {
         if (!cancelled) {
@@ -1212,6 +1216,12 @@ useEffect(() => {
                             <tr>
                               <td colSpan={4} className="py-4 px-3 text-center text-[#876B50]">
                                 Loading items...
+                              </td>
+                            </tr>
+                          ) : liveItems.length === 0 ? (
+                            <tr>
+                              <td colSpan={4} className="py-4 px-3 text-center text-[#876B50]">
+                                No items available.
                               </td>
                             </tr>
                           ) : (

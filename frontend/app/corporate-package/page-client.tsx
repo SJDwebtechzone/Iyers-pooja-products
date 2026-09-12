@@ -606,7 +606,9 @@ const featureCards = [
 // ==========================================
 
 export default function CorporatePackagePage() {
-  const API_BASE = "https://iyerspoojaproducts.com/api";
+  const API_BASE =
+    process.env.NEXT_PUBLIC_API_URL ||
+    "https://iyerspoojaproducts.com/api";
 
   const [selectedCeremony, setSelectedCeremony] =
     useState<CeremonyData>(ceremonies[0]);
@@ -635,8 +637,10 @@ export default function CorporatePackagePage() {
     email: "",
   });
 
+  // Starts empty: the admin-managed API is the only source for this table.
+  // The `items` arrays in `ceremonies` are sample content, never a fallback.
   const [liveItems, setLiveItems] =
-    useState<SamagriItem[]>(ceremonies[0].items);
+    useState<SamagriItem[]>([]);
 
   const [itemsLoading, setItemsLoading] =
     useState(false);
@@ -836,11 +840,7 @@ export default function CorporatePackagePage() {
               })
             );
 
-          setLiveItems(
-            mapped.length > 0
-              ? mapped
-              : selectedPackage.items
-          );
+          setLiveItems(mapped);
         }
       } catch (error) {
         console.error(
@@ -849,9 +849,7 @@ export default function CorporatePackagePage() {
         );
 
         if (!cancelled) {
-          setLiveItems(
-            selectedPackage.items
-          );
+          setLiveItems([]);
         }
       } finally {
         if (!cancelled) {
@@ -925,7 +923,10 @@ export default function CorporatePackagePage() {
   ) => {
     setSelectedPackage(ceremony);
 
-    setLiveItems(ceremony.items);
+    // Do NOT seed liveItems from the hardcoded `ceremony.items` here.
+    // The loadItems effect owns this state. Re-selecting the package that
+    // is already active keeps the same object reference, so the effect does
+    // not re-run - assigning sample data here would leave it on screen.
 
     setActiveTab("details");
   };

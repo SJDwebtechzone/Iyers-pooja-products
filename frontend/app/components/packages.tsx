@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
 import { packagesData as staticPackagesData, PackageItem } from "../data/packagesData";
 
-const API_BASE = "https://iyerspoojaproducts.com/api";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://iyerspoojaproducts.com/api";
 
 export default function PackagesSection() {
   const sectionRef = useRef<HTMLDivElement>(null);

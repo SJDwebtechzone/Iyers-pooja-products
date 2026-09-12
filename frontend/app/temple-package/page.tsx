@@ -365,7 +365,7 @@ export default function TemplePackagePage() {
         {/* Full-width Background Image */}
         <div className="absolute inset-0 h-full w-full">
           <Image
-            src="/images/temple_hero_gopuram.jpg"
+            src="/images/overseas-banner.png"
             alt="Illuminated ancient South Indian temple gopuram"
             fill
             priority

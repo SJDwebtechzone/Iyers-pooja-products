@@ -786,14 +786,17 @@ const overseasFeatures = [
 // ==========================================
 
 export default function OverseasPackagePage() {
-  const API_BASE = "https://iyerspoojaproducts.com/api";
+  const API_BASE =
+    process.env.NEXT_PUBLIC_API_URL ||
+    "https://iyerspoojaproducts.com/api";
 
   const [selectedPooja, setSelectedPooja] =
     useState<OverseasPoojaData>(overseasPoojas[0]);
 
-  const [liveItems, setLiveItems] = useState<SamagriItem[]>(
-    overseasPoojas[0].items
-  );
+  // Thirumanjam is admin-managed, so this starts empty and is filled from
+  // the API. The other overseas poojas have no API and keep their static
+  // lists, assigned by the effect below.
+  const [liveItems, setLiveItems] = useState<SamagriItem[]>([]);
   const [itemsLoading, setItemsLoading] = useState(false);
     const [dynamicPrice, setDynamicPrice] = useState<string | null>(null); 
 
@@ -896,64 +899,11 @@ const handleBookingSubmit = async (e: React.FormEvent) => {
             quantity: row.quantity ?? "",
           }));
 
-          setLiveItems(
-            mapped.length > 0 ? mapped : selectedPooja.items
-          );
+          setLiveItems(mapped);
         }
       } catch {
         if (!cancelled) {
-          setLiveItems(selectedPooja.items);
-        }
-      } finally {
-        if (!cancelled) {
-          setItemsLoading(false);
-        }
-      }
-    }
-
-    loadItems();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [selectedPooja.id]);
-
-    useEffect(() => {
-    if (selectedPooja.id !== "thirumanjam") {
-      setLiveItems(selectedPooja.items);
-      setItemsLoading(false);
-      return;
-    }
-
-    let cancelled = false;
-
-    async function loadItems() {
-      setItemsLoading(true);
-
-      try {
-        const res = await fetch(`${API_BASE}/overseas-temple-package`);
-
-        if (!res.ok) {
-          throw new Error("Failed to load");
-        }
-
-        const data = await res.json();
-
-        if (!cancelled) {
-          const mapped: SamagriItem[] = data.map((row: any) => ({
-            sno: row.sno,
-            english: row.english,
-            tamil: row.tamil ?? "",
-            quantity: row.quantity ?? "",
-          }));
-
-          setLiveItems(
-            mapped.length > 0 ? mapped : selectedPooja.items
-          );
-        }
-      } catch {
-        if (!cancelled) {
-          setLiveItems(selectedPooja.items);
+          setLiveItems([]);
         }
       } finally {
         if (!cancelled) {

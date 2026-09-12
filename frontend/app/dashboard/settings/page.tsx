@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 
-const API_URL = "https://iyerspoojaproducts.com/api";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://iyerspoojaproducts.com/api";
 
 function getPasswordError(password: string): string | null {
   if (password.length < 6) return "New password must be at least 6 characters.";

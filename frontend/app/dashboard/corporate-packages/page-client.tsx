@@ -45,7 +45,9 @@ type PackageForm = {
   quantity: string;
 };
 
-const API_BASE = "https://iyerspoojaproducts.com/api";
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://iyerspoojaproducts.com/api";
 
 export default function CorporatePackagesPage() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);

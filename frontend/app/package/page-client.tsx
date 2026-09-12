@@ -499,6 +499,13 @@ export default function ConsumerPackagePage() {
 }
 
 function PackagePage({ data }: PackagePageProps) {
+  // Only the rituals listed in `consumerRitualIds` are offered. The others
+  // (satyanarayana-vratam, daily-pooja, family-ceremony) stay in the data
+  // but are hidden everywhere - add their id back to that list to restore.
+  const visibleOccasions = data.occasions.filter((occasion) =>
+    consumerRitualIds.includes(occasion.id)
+  );
+
   const [activeTab, setActiveTab] = useState("details");
 
   const [selectedRitual, setSelectedRitual] =
@@ -666,18 +673,16 @@ function PackagePage({ data }: PackagePageProps) {
             })
           );
 
-        if (mapped.length > 0) {
-          setDynamicItems(mapped);
-        } else {
-          setDynamicItems(null);
-        }
+        // Trust the API even when it returns zero rows: an emptied
+        // category must render the empty state, not the static sample list.
+        setDynamicItems(mapped);
       } catch (error) {
         console.error(
           "Failed to fetch consumer package items:",
           error
         );
 
-        setDynamicItems(null);
+        setDynamicItems([]);
       }
 
       /*
@@ -754,10 +759,10 @@ function PackagePage({ data }: PackagePageProps) {
 
       if (!rawHash) {
         if (
-          data.occasions.length > 0
+          visibleOccasions.length > 0
         ) {
           setSelectedRitual(
-            data.occasions[0]
+            visibleOccasions[0]
           );
         }
 
@@ -765,7 +770,7 @@ function PackagePage({ data }: PackagePageProps) {
       }
 
       const match =
-        data.occasions.find(
+        visibleOccasions.find(
           (occasion) =>
             occasion.id
               .toLowerCase() ===
@@ -835,6 +840,13 @@ function PackagePage({ data }: PackagePageProps) {
       ? dynamicPrice
       : `₹${dynamicPrice}`
     : selectedRitual?.price || "";
+
+  // Items come from the admin-managed API once it has answered for this
+  // ritual. The static list in the package data is only a pre-load
+  // placeholder, never a fallback for an emptied category.
+  // null = still loading. The static list in the package data is sample
+  // content and must never stand in for an emptied category.
+  const itemsToShow: PackageItem[] = dynamicItems ?? [];
 
   return (
     <main className="bg-[#FCFAF6] text-[#29231F]">
@@ -909,8 +921,8 @@ function PackagePage({ data }: PackagePageProps) {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
-          {data.occasions.map((occasion) => {
+        <div className="mx-auto flex max-w-6xl flex-wrap justify-center gap-3 sm:gap-4">
+          {visibleOccasions.map((occasion) => {
             const isActive = selectedRitual?.id === occasion.id;
 
             return (
@@ -922,7 +934,7 @@ function PackagePage({ data }: PackagePageProps) {
                   setActiveTab("details");
                   window.history.replaceState(null, "", `#${occasion.id}`);
                 }}
-                className={`flex flex-col items-center justify-center rounded-2xl border p-4 transition-all sm:p-5 ${
+                className={`flex w-[calc(50%_-_0.375rem)] flex-col items-center justify-center rounded-2xl border p-4 transition-all sm:w-[calc(33.333%_-_0.667rem)] sm:p-5 lg:w-[calc(20%_-_0.8rem)] ${
                   isActive
                     ? "border-[#4A1015] bg-[#4A1015] text-white shadow-md"
                     : "border-[#E8DEC8] bg-[#FAF7F0] text-[#42151B] hover:border-[#B08A45]"
@@ -1001,10 +1013,7 @@ function PackagePage({ data }: PackagePageProps) {
               </p>
 
               <div className="mt-6 flex flex-wrap justify-center gap-2 sm:gap-3">
-                {data.occasions
-                  .filter((occasion) =>
-                    consumerRitualIds.includes(occasion.id)
-                  )
+                {visibleOccasions
                   .map((occasion) => {
                     const isActive = selectedRitual.id === occasion.id;
 
@@ -1144,7 +1153,7 @@ function PackagePage({ data }: PackagePageProps) {
                         </h3>
 
                         <span className="inline-flex w-fit rounded-full bg-[#F5EDE0] px-3 py-1 text-xs font-semibold text-[#7D1E28]">
-                          {selectedRitual.title} ({(dynamicItems ?? selectedRitual.items).length} Items)
+                          {selectedRitual.title} ({itemsToShow.length} Items)
                         </span>
                       </div>
 
@@ -1178,10 +1187,18 @@ function PackagePage({ data }: PackagePageProps) {
 
                           <tbody>
 
-                            {(
-                              dynamicItems ??
-                              selectedRitual.items
-                            ).map(
+                            {itemsToShow.length === 0 ? (
+                              <tr>
+                                <td
+                                  colSpan={4}
+                                  className="border-b px-2 py-6 text-center text-[#7A6458]"
+                                >
+                                  {dynamicItems === null
+                                    ? "Loading..."
+                                    : "No items available."}
+                                </td>
+                              </tr>
+                            ) : itemsToShow.map(
                               (
                                 item,
                                 index

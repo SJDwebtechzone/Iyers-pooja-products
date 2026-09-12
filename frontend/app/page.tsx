@@ -8,7 +8,7 @@ import Faq from "./components/faq";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
-const API_BASE = "https://iyerspoojaproducts.com/api";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://iyerspoojaproducts.com/api";
 
 type Banner = {
   heading_line1: string;

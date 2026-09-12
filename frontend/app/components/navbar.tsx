@@ -6,6 +6,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL || "https://iyerspoojaproducts.com/api";
+
 const navItems = [
   {
     label: "About Us",
@@ -110,7 +113,7 @@ const navItems = [
       },
       {
         label: "Maatu Pongal",
-        href: "/festivals-package#m-pongal",
+        href: "/festivals-package#maatu-pongal",
       },
       {
         label: "Telugu New Year",
@@ -122,7 +125,7 @@ const navItems = [
       },
       {
         label: "Vinayagarchaturdhi",
-        href: "/festivals-package#vinayagarchaturdhi",
+        href: "/festivals-package#vinayagarchaturthi",
       },
       {
         label: "Ayudha Pooja",
@@ -177,7 +180,7 @@ export default function Navbar() {
     setRegSubmitting(true);
 
     try {
-      const res = await fetch("https://iyerspoojaproducts.com/api/iyer-registrations", {
+      const res = await fetch(`${API_BASE}/iyer-registrations`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(regForm),
@@ -261,7 +264,7 @@ export default function Navbar() {
           {/* LOGO */}
           <Link
             href="/"
-            className="mr-10 flex shrink-0 items-center py-1 2xl:mr-12"
+            className="mr-6 flex shrink-0 items-center py-1 min-[1700px]:mr-10"
             aria-label="Home"
           >
             <Image
@@ -275,13 +278,13 @@ export default function Navbar() {
           </Link>
 
           {/* DESKTOP NAVIGATION */}
-          <nav className="hidden min-w-0 flex-1 items-center justify-center xl:flex">
-            <div className="flex items-center gap-5 2xl:gap-8">
+          <nav className="hidden min-w-0 flex-1 items-center justify-center min-[1500px]:flex">
+            <div className="flex items-center gap-4 min-[1700px]:gap-6 min-[1850px]:gap-8">
               {navItems.map((item) => (
                 <div key={item.label} className="group relative">
                   <Link
                     href={item.href}
-                    className="flex items-center gap-1 whitespace-nowrap py-7 text-[15px] font-medium text-white transition-colors duration-300 hover:text-[#D4B978]"
+                    className="flex items-center gap-1 whitespace-nowrap py-7 text-[14px] font-medium text-white transition-colors duration-300 hover:text-[#D4B978] min-[1700px]:text-[15px]"
                   >
                     {item.label}
 
@@ -322,7 +325,7 @@ export default function Navbar() {
           </nav>
 
           {/* DESKTOP BUTTONS */}
-          <div className="ml-6 hidden shrink-0 items-center gap-3 xl:flex 2xl:ml-8">
+          <div className="ml-4 hidden shrink-0 items-center gap-3 min-[1500px]:flex min-[1700px]:ml-6">
             {/* IYER REGISTRATION */}
             <button
               type="button"
@@ -359,7 +362,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMobileOpen((prev) => !prev)}
-            className="ml-auto flex h-10 w-10 items-center justify-center text-white transition-colors duration-300 hover:text-[#D4B978] xl:hidden"
+            className="ml-auto flex h-10 w-10 items-center justify-center text-white transition-colors duration-300 hover:text-[#D4B978] min-[1500px]:hidden"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
           >
@@ -373,7 +376,7 @@ export default function Navbar() {
 
         {/* MOBILE MENU */}
         <div
-          className={`overflow-hidden border-t border-[#D4B978]/30 bg-[#3B1115] transition-all duration-300 xl:hidden ${
+          className={`overflow-hidden border-t border-[#D4B978]/30 bg-[#3B1115] transition-all duration-300 min-[1500px]:hidden ${
             mobileOpen
               ? "max-h-[90vh] opacity-100"
               : "max-h-0 opacity-0"

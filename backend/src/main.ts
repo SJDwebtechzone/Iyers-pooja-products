@@ -7,10 +7,11 @@ async function bootstrap() {
 
   app.use(cookieParser());
 
-  // Allow the Next.js frontend (localhost:3000) to send/receive cookies.
-  // Update the origin when you deploy to a real domain.
+  // Allow the Next.js frontend to send/receive cookies.
+  // Locally this is http://localhost:3000 (set FRONTEND_URL in backend/.env);
+  // in production set FRONTEND_URL to the real domain.
   app.enableCors({
-    origin: 'https://iyerspoojaproducts.com',
+    origin: process.env.FRONTEND_URL ?? 'http://localhost:3000',
     credentials: true,
   });
 
