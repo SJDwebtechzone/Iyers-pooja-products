@@ -1223,7 +1223,7 @@ return (
   {/* ORIGINAL FULL WIDTH IMAGE - NO EFFECT */}
   <div className="absolute inset-0 top-[90px]">
     <Image
-      src="/images/overseas-banner.png"
+      src="/images/overseas-banner.jpg"
       alt="Ancient Indian temple gopuram"
       fill
       priority
