@@ -73,4 +73,19 @@ export class BookingsService {
 
     return { message: 'Deleted successfully' };
   }
+
+  async removeAll() {
+    await this.db.query(`DELETE FROM bookings`);
+
+    try {
+      await this.db.query(
+        `DELETE FROM notifications WHERE entity_type = $1`,
+        [BOOKING_ENTITY],
+      );
+    } catch (err) {
+      console.error('Could not clear booking notifications:', err);
+    }
+
+    return { message: 'All bookings deleted' };
+  }
 }

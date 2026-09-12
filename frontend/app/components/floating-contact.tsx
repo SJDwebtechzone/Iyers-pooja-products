@@ -5,6 +5,8 @@ import { Phone } from "lucide-react";
 import Image from "next/image";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const DEFAULT_PHONE_NUMBER = "9884462960";
+const DEFAULT_WHATSAPP_NUMBER = "9884462960";
 
 /**
  * Business contact details, always fetched from the admin dashboard.
@@ -54,10 +56,12 @@ export default function FloatingContact() {
     };
   }, []);
 
-  const whatsappDigits = contact?.whatsapp_number
-    ? toWhatsAppDigits(contact.whatsapp_number)
-    : "";
-  const telHref = contact?.phone_number ? toTelHref(contact.phone_number) : "";
+  const whatsappDigits = toWhatsAppDigits(
+    contact?.whatsapp_number || DEFAULT_WHATSAPP_NUMBER
+  );
+  const telHref = toTelHref(
+    contact?.phone_number || DEFAULT_PHONE_NUMBER
+  );
 
   const whatsappHref = whatsappDigits
     ? `https://wa.me/${whatsappDigits}${

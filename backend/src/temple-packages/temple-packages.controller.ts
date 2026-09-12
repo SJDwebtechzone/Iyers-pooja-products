@@ -33,6 +33,12 @@ export class TemplePackagesController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Delete('all')
+  removeAll() {
+    return this.templePackagesService.removeAll();
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.templePackagesService.remove(id);

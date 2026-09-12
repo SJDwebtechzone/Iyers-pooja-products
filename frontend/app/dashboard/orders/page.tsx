@@ -65,6 +65,8 @@ export default function OrdersPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<number | null>(null);
+  const [showDeleteAll, setShowDeleteAll] = useState(false);
+  const [deletingAll, setDeletingAll] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -127,14 +129,43 @@ export default function OrdersPage() {
     }
   }
 
+  async function handleDeleteAll() {
+    setDeletingAll(true);
+    try {
+      const res = await fetch(`${API_BASE}/orders/all`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error();
+      setShowDeleteAll(false);
+      load();
+      refreshDashboardBadges();
+    } catch {
+      alert("Delete all failed — make sure you're logged in.");
+    } finally {
+      setDeletingAll(false);
+    }
+  }
+
   return (
     <div>
-      <h1
-        className="text-2xl text-[#2B0C14] mb-1"
-        style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-      >
-        Orders
-      </h1>
+      <div className="flex items-start justify-between gap-4 mb-1">
+        <h1
+          className="text-2xl text-[#2B0C14]"
+          style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+        >
+          Orders
+        </h1>
+        {orders.length > 0 && (
+          <button
+            onClick={() => setShowDeleteAll(true)}
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-red-300 text-red-600 px-3 py-1.5 text-sm font-medium hover:bg-red-50"
+          >
+            <Trash2 className="w-4 h-4" />
+            Clear All Orders
+          </button>
+        )}
+      </div>
       <p className="text-sm text-[#6B5A4E] mb-6 max-w-2xl">
         Orders submitted through the Order Now flow. Open an order to review it,
         then mark it processed once you have verified the payment in your bank
@@ -156,7 +187,7 @@ export default function OrdersPage() {
               <th className="px-4 py-3 font-normal">Customer</th>
               <th className="px-4 py-3 font-normal">Contact</th>
               <th className="px-4 py-3 font-normal">Package</th>
-              <th className="px-4 py-3 font-normal">Preferred Date</th>
+              <th className="px-4 py-3 font-normal">Delivery Date</th>
               <th className="px-4 py-3 font-normal">Placed On</th>
               <th className="px-4 py-3 font-normal w-36">Status</th>
               <th className="px-4 py-3 font-normal w-16 text-right">Actions</th>
@@ -277,6 +308,40 @@ export default function OrdersPage() {
           </tbody>
         </table>
       </div>
+
+      {showDeleteAll && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="bg-white rounded-xl border border-[#E4D7C3] max-w-sm w-full p-6">
+            <h2
+              className="text-lg text-[#2B0C14] mb-2"
+              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+            >
+              Delete all orders?
+            </h2>
+            <p className="text-sm text-[#6B5A4E] mb-6">
+              Are you sure you want to delete all orders? This action cannot be
+              undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowDeleteAll(false)}
+                disabled={deletingAll}
+                className="px-4 py-2 text-sm rounded-lg border border-[#E4D7C3] text-[#6B5A4E] hover:bg-[#FBF6EE] disabled:opacity-60"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteAll}
+                disabled={deletingAll}
+                className="px-4 py-2 text-sm rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-60 inline-flex items-center gap-2"
+              >
+                {deletingAll && <Loader2 className="w-4 h-4 animate-spin" />}
+                Delete All
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -61,4 +61,10 @@ export class FestivalsPackagesService {
     await this.db.query(`DELETE FROM ${table} WHERE id = $1`, [id]);
     return { success: true };
   }
+
+  async removeAll(category: string) {
+    const table = this.getTableName(category);
+    await this.db.query(`DELETE FROM ${table}`);
+    return { success: true, message: 'All items deleted successfully' };
+  }
 }

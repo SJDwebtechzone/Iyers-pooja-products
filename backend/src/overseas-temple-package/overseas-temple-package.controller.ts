@@ -19,6 +19,11 @@ export class OverseasTemplePackageController {
   update(@Param('id') id: string, @Body() data: any) {
     return this.service.update(id, data);
   }
+  
+  @Delete('all')
+  removeAll() {
+    return this.service.removeAll();
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

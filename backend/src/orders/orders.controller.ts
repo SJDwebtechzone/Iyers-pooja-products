@@ -41,6 +41,16 @@ export class OrdersController {
     return this.service.summary();
   }
 
+  /**
+   * Admin-only — delete ALL orders at once.
+   * Declared before ':id' so 'all' is not parsed as an order id.
+   */
+  @UseGuards(JwtAuthGuard)
+  @Delete('all')
+  removeAll() {
+    return this.service.removeAll();
+  }
+
   /** Admin-only — one order, for the detail page. */
   @UseGuards(JwtAuthGuard)
   @Get(':id')

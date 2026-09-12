@@ -6,7 +6,7 @@ import { ChevronLeft, Plus, Pencil, Trash2, X, Check } from "lucide-react";
 const CATEGORIES = [
   { slug: "new-year-festival", label: "New Year Festival" },
   { slug: "pongal", label: "Pongal" },
-  { slug: "maatu-pongal", label: "Maatu Pongal" },
+  { slug: "maatu-pongal", label: "Maatu Pongal" },  
   { slug: "telugu-new-year", label: "Telugu New Year" },
   { slug: "gokulaastami", label: "Gokulaastami" },
   { slug: "vinayagarchaturthi", label: "Vinayagarchaturthi" },
@@ -186,6 +186,8 @@ function PackageDetailsTable({
     quantity: "",
   });
   const [adding, setAdding] = useState(false);
+  const [showDeleteAllConfirm, setShowDeleteAllConfirm] = useState(false);
+  const [deletingAll, setDeletingAll] = useState(false);
 
   async function loadItems() {
     setLoading(true);
@@ -288,6 +290,23 @@ function PackageDetailsTable({
     }
   }
 
+  async function handleDeleteAll() {
+    setDeletingAll(true);
+    try {
+      const res = await fetch(
+        `${API_BASE}/festivals-packages/${category}/all`,
+        { method: "DELETE", credentials: "include" },
+      );
+      if (!res.ok) throw new Error();
+      setShowDeleteAllConfirm(false);
+      loadItems();
+    } catch {
+      alert("Delete all failed. Make sure you're logged in.");
+    } finally {
+      setDeletingAll(false);
+    }
+  }
+
   return (
     <div>
       <button
@@ -307,7 +326,16 @@ function PackageDetailsTable({
 
       <PriceEditor categoryKey={category} />
 
-      <div className="flex items-center justify-end mb-6">
+      <div className="flex items-center justify-end gap-3 mb-6">
+        {items.length > 0 && (
+          <button
+            onClick={() => setShowDeleteAllConfirm(true)}
+            className="flex items-center gap-1.5 border border-red-600 text-red-600 text-sm px-4 py-2 rounded-lg hover:bg-red-50 transition"
+          >
+            <Trash2 className="w-4 h-4" />
+            Delete All
+          </button>
+        )}
         <button
           onClick={startAdd}
           className="flex items-center gap-1.5 bg-[#8A1C2B] text-[#F3E7D3] text-sm px-4 py-2 rounded-lg hover:bg-[#701622] transition"
@@ -401,6 +429,37 @@ function PackageDetailsTable({
           </tbody>
         </table>
       </div>
+
+      {showDeleteAllConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+          <div className="bg-white rounded-xl border border-[#E4D7C3] shadow-xl max-w-sm w-full p-6">
+            <h3 className="text-lg font-semibold text-[#2B0C14] mb-2">
+              Delete all package items?
+            </h3>
+            <p className="text-sm text-[#6B5A4E] mb-6">
+              Are you sure you want to delete all package items in{" "}
+              <span className="font-medium text-[#2B0C14]">{categoryLabel}</span>?
+              This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowDeleteAllConfirm(false)}
+                disabled={deletingAll}
+                className="px-4 py-2 text-sm rounded-lg text-[#6B5A4E] hover:bg-[#F3E7D3] transition disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteAll}
+                disabled={deletingAll}
+                className="px-4 py-2 text-sm rounded-lg bg-red-600 text-white hover:bg-red-700 transition disabled:opacity-50"
+              >
+                {deletingAll ? "Deleting..." : "Yes, Delete All"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -37,6 +37,12 @@ export class ConsumerPackagesController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Delete(':category/all')
+  removeAll(@Param('category') category: string) {
+    return this.service.removeAll(category);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Delete(':category/:id')
   remove(@Param('category') category: string, @Param('id') id: string) {
     return this.service.remove(category, parseInt(id, 10));

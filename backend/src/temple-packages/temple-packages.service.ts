@@ -160,4 +160,10 @@ export class TemplePackagesService implements OnModuleInit {
     await this.db.query(`DELETE FROM temple_packages WHERE id = $1`, [id]);
     return { success: true };
   }
+
+  async removeAll() {
+    await this.ensureColumns();
+    await this.db.query(`DELETE FROM temple_packages`);
+    return { success: true, message: 'All items deleted successfully' };
+  }
 }

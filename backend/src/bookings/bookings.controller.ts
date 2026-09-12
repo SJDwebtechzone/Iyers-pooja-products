@@ -27,6 +27,14 @@ export class BookingsController {
     return this.service.findAll();
   }
 
+  // Admin-only — delete ALL bookings at once.
+  // Declared before ':id' so 'all' is not parsed as a booking id.
+  @UseGuards(JwtAuthGuard)
+  @Delete('all')
+  removeAll() {
+    return this.service.removeAll();
+  }
+
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {

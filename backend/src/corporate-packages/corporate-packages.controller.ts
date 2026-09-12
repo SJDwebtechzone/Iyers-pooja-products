@@ -37,6 +37,12 @@ export class CorporatePackagesController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Delete(':category/all')
+  removeAll(@Param('category') category: string) {
+    return this.corporatePackagesService.removeAll(category);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Delete(':category/:id')
   remove(@Param('category') category: string, @Param('id') id: string) {
     return this.corporatePackagesService.remove(category, id);

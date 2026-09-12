@@ -71,4 +71,19 @@ export class IyerRegistrationsService {
 
     return { message: 'Deleted successfully' };
   }
+
+  async removeAll() {
+    await this.db.query(`DELETE FROM iyer_registrations`);
+
+    try {
+      await this.db.query(
+        `DELETE FROM notifications WHERE entity_type = $1`,
+        [REGISTRATION_ENTITY],
+      );
+    } catch (err) {
+      console.error('Could not clear registration notifications:', err);
+    }
+
+    return { message: 'All registrations deleted' };
+  }
 }

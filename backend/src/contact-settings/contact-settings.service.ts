@@ -7,8 +7,7 @@ import { DatabaseService } from '../database/database.service';
  * Exactly one row is kept (id = 1). Every value the website shows comes from
  * here, so the admin can change the numbers without a code change or redeploy.
  *
- * Seeded empty on purpose: an unset number hides its button rather than
- * dialling a placeholder.
+ * Seeded with the published business contact number.
  */
 const FIELDS = ['whatsapp_number', 'phone_number', 'whatsapp_message'] as const;
 
@@ -17,8 +16,8 @@ type Field = (typeof FIELDS)[number];
 export type ContactSettings = Record<Field, string | null> & { id: number };
 
 const DEFAULTS: Record<Field, string | null> = {
-  whatsapp_number: null,
-  phone_number: null,
+  whatsapp_number: '9884462960',
+  phone_number: '9884462960',
   whatsapp_message:
     'Hello, I would like to know more about your pooja packages.',
 };

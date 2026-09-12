@@ -416,4 +416,23 @@ export class OrdersService implements OnModuleInit {
 
     return { message: 'Deleted successfully' };
   }
+
+  /** Admin — delete every order at once. */
+  async removeAll() {
+    await this.ensureSchema();
+    await this.db.query(`DELETE FROM orders`);
+
+    // Clear out any lingering "order" notifications too, so the bell/sidebar
+    // badges don't keep pointing at orders that no longer exist.
+    try {
+      await this.db.query(
+        `DELETE FROM notifications WHERE entity_type = $1`,
+        [ORDER_ENTITY],
+      );
+    } catch (err) {
+      console.error('Could not clear order notifications:', err);
+    }
+
+    return { message: 'All orders deleted' };
+  }
 }

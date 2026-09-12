@@ -16,6 +16,7 @@ import {
   IndianRupee,
 } from "lucide-react";
 
+
 const CATEGORIES = [
   { slug: "friday-poojas", label: "Friday Poojas" },
   { slug: "amavasai-poojas", label: "Amavasai Poojas" },
@@ -303,6 +304,8 @@ function PackageDetailsTable({
   });
 
   const [adding, setAdding] = useState(false);
+  const [showDeleteAllConfirm, setShowDeleteAllConfirm] = useState(false);
+  const [deletingAll, setDeletingAll] = useState(false);
 
   async function loadItems() {
     setLoading(true);
@@ -446,6 +449,23 @@ function PackageDetailsTable({
     }
   }
 
+  async function handleDeleteAll() {
+    setDeletingAll(true);
+    try {
+      const res = await fetch(
+        `${API_BASE}/corporate-packages/${category}/all`,
+        { method: "DELETE", credentials: "include" },
+      );
+      if (!res.ok) throw new Error();
+      setShowDeleteAllConfirm(false);
+      await loadItems();
+    } catch {
+      alert("Delete all failed. Make sure you're logged in.");
+    } finally {
+      setDeletingAll(false);
+    }
+  }
+
   return (
     <div>
       <button
@@ -467,7 +487,17 @@ function PackageDetailsTable({
       <PriceEditor categoryKey={category} />
       <AvailabilityEditor categoryKey={category} />
 
-      <div className="mb-6 flex items-center justify-end">
+      <div className="mb-6 flex items-center justify-end gap-3">
+        {items.length > 0 && (
+          <button
+            type="button"
+            onClick={() => setShowDeleteAllConfirm(true)}
+            className="flex items-center gap-1.5 rounded-lg border border-red-600 px-4 py-2 text-sm text-red-600 transition hover:bg-red-50"
+          >
+            <Trash2 className="h-4 w-4" />
+            Delete All
+          </button>
+        )}
         <button
           type="button"
           onClick={startAdd}
@@ -597,6 +627,39 @@ function PackageDetailsTable({
           </tbody>
         </table>
       </div>
+
+      {showDeleteAllConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+          <div className="w-full max-w-sm rounded-xl border border-[#E4D7C3] bg-white p-6 shadow-xl">
+            <h3 className="mb-2 text-lg font-semibold text-[#2B0C14]">
+              Delete all package items?
+            </h3>
+            <p className="mb-6 text-sm text-[#6B5A4E]">
+              Are you sure you want to delete all package items in{" "}
+              <span className="font-medium text-[#2B0C14]">{categoryLabel}</span>?
+              This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setShowDeleteAllConfirm(false)}
+                disabled={deletingAll}
+                className="rounded-lg px-4 py-2 text-sm text-[#6B5A4E] transition hover:bg-[#F3E7D3] disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleDeleteAll}
+                disabled={deletingAll}
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm text-white transition hover:bg-red-700 disabled:opacity-50"
+              >
+                {deletingAll ? "Deleting..." : "Yes, Delete All"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -694,3 +757,4 @@ function EditRow({
     </tr>
   );
 }
+

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Trash2 } from "lucide-react";
+import { Trash2, Loader2 } from "lucide-react";
 
 type Registration = {
   id: number;
@@ -18,6 +18,8 @@ export default function IyerRegistrationsPage() {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showDeleteAll, setShowDeleteAll] = useState(false);
+  const [deletingAll, setDeletingAll] = useState(false);
 
   async function loadRegistrations() {
     setLoading(true);
@@ -54,14 +56,42 @@ export default function IyerRegistrationsPage() {
     }
   }
 
+  async function handleDeleteAll() {
+    setDeletingAll(true);
+    try {
+      const res = await fetch(`${API_BASE}/iyer-registrations/all`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error();
+      setShowDeleteAll(false);
+      loadRegistrations();
+    } catch {
+      alert("Delete all failed — make sure you're logged in.");
+    } finally {
+      setDeletingAll(false);
+    }
+  }
+
   return (
     <div>
-      <h1
-        className="text-2xl text-[#2B0C14] mb-1"
-        style={{ fontFamily: "'Fraunces', Georgia, serif" }}
-      >
-        Iyer Registration
-      </h1>
+      <div className="flex items-start justify-between gap-4 mb-1">
+        <h1
+          className="text-2xl text-[#2B0C14]"
+          style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+        >
+          Iyer Registration
+        </h1>
+        {registrations.length > 0 && (
+          <button
+            onClick={() => setShowDeleteAll(true)}
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-red-300 text-red-600 px-3 py-1.5 text-sm font-medium hover:bg-red-50"
+          >
+            <Trash2 className="w-4 h-4" />
+            Clear All Registrations
+          </button>
+        )}
+      </div>
       <p className="text-sm text-[#6B5A4E] mb-6">
         Priests who registered themselves via the website navbar form.
       </p>
@@ -125,6 +155,40 @@ export default function IyerRegistrationsPage() {
           </tbody>
         </table>
       </div>
+
+      {showDeleteAll && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="bg-white rounded-xl border border-[#E4D7C3] max-w-sm w-full p-6">
+            <h2
+              className="text-lg text-[#2B0C14] mb-2"
+              style={{ fontFamily: "'Fraunces', Georgia, serif" }}
+            >
+              Delete all registrations?
+            </h2>
+            <p className="text-sm text-[#6B5A4E] mb-6">
+              Are you sure you want to delete all registrations? This action
+              cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowDeleteAll(false)}
+                disabled={deletingAll}
+                className="px-4 py-2 text-sm rounded-lg border border-[#E4D7C3] text-[#6B5A4E] hover:bg-[#FBF6EE] disabled:opacity-60"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteAll}
+                disabled={deletingAll}
+                className="px-4 py-2 text-sm rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-60 inline-flex items-center gap-2"
+              >
+                {deletingAll && <Loader2 className="w-4 h-4 animate-spin" />}
+                Delete All
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

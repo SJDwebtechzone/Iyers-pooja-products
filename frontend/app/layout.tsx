@@ -1,11 +1,6 @@
-"use client";
-
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import "./globals.css";
-import { usePathname } from "next/navigation";
-import Navbar from "./components/navbar";
-import Footer from "./components/footer";
-import FloatingContact from "./components/floating-contact";
+import SiteShell from "./components/site-shell";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -19,32 +14,25 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-const HIDE_NAVBAR_FOOTER_PREFIXES = [
-  "/dashboard",
-  "/login",
-  "/forgot-password",
-  "/reset-password",
-];
+export const metadata = {
+  metadataBase: new URL("https://yourdomain.com"),
+  applicationName: "Iyyars Pooja Products",
+  authors: [{ name: "Iyyars Pooja Products" }],
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-
-  const hideNavFooter = HIDE_NAVBAR_FOOTER_PREFIXES.some((prefix) =>
-    pathname?.startsWith(prefix),
-  );
-
   return (
     <html lang="en">
       <body className={`${cormorant.variable} ${dmSans.variable}`}>
-        {!hideNavFooter && <Navbar />}
-        {children}
-        {!hideNavFooter && <Footer />}
-        {/* Floating WhatsApp / Call buttons — customer-facing pages only. */}
-        {!hideNavFooter && <FloatingContact />}
+        <SiteShell>{children}</SiteShell>
       </body>
     </html>
   );

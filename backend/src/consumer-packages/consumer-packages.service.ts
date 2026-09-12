@@ -69,4 +69,10 @@ export class ConsumerPackagesService {
     }
     return { message: 'Deleted successfully' };
   }
+
+  async removeAll(category: string) {
+    const table = this.getTableName(category);
+    await this.db.query(`DELETE FROM ${table}`);
+    return { message: 'All items deleted successfully' };
+  }
 }

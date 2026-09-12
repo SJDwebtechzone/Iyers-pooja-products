@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, X, Check } from "lucide-react";
 
+
+
 // -------------------------------------------------------------
 // QUANTITY COLUMNS
 // Grouped by temple type; each group has Daily / Weekly / Monthly.
@@ -81,6 +83,8 @@ export default function TemplePackagesPage() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [adding, setAdding] = useState(false);
+  const [showDeleteAllConfirm, setShowDeleteAllConfirm] = useState(false);
+  const [deletingAll, setDeletingAll] = useState(false);
 
   async function loadItems() {
     setLoading(true);
@@ -178,6 +182,23 @@ export default function TemplePackagesPage() {
     }
   }
 
+  async function handleDeleteAll() {
+    setDeletingAll(true);
+    try {
+      const res = await fetch(`${API_BASE}/temple-packages/all`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error();
+      setShowDeleteAllConfirm(false);
+      loadItems();
+    } catch {
+      alert("Delete all failed. Make sure you're logged in.");
+    } finally {
+      setDeletingAll(false);
+    }
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -198,13 +219,24 @@ export default function TemplePackagesPage() {
           Leave a quantity blank if it does not apply — the website shows
           &ldquo;—&rdquo; for unconfigured values.
         </p>
-        <button
-          onClick={startAdd}
-          className="flex items-center gap-1.5 bg-[#8A1C2B] text-[#F3E7D3] text-sm px-4 py-2 rounded-lg hover:bg-[#701622] transition"
-        >
-          <Plus className="w-4 h-4" />
-          Add Item
-        </button>
+        <div className="flex items-center gap-3">
+          {items.length > 0 && (
+            <button
+              onClick={() => setShowDeleteAllConfirm(true)}
+              className="flex items-center gap-1.5 border border-red-600 text-red-600 text-sm px-4 py-2 rounded-lg hover:bg-red-50 transition"
+            >
+              <Trash2 className="w-4 h-4" />
+              Delete All
+            </button>
+          )}
+          <button
+            onClick={startAdd}
+            className="flex items-center gap-1.5 bg-[#8A1C2B] text-[#F3E7D3] text-sm px-4 py-2 rounded-lg hover:bg-[#701622] transition"
+          >
+            <Plus className="w-4 h-4" />
+            Add Item
+          </button>
+        </div>
       </div>
 
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
@@ -338,6 +370,39 @@ export default function TemplePackagesPage() {
           </tbody>
         </table>
       </div>
+
+      {showDeleteAllConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+          <div className="bg-white rounded-xl border border-[#E4D7C3] shadow-xl max-w-sm w-full p-6">
+            <h3 className="text-lg font-semibold text-[#2B0C14] mb-2">
+              Delete all package items?
+            </h3>
+            <p className="text-sm text-[#6B5A4E] mb-6">
+              Are you sure you want to delete all package items in{" "}
+              <span className="font-medium text-[#2B0C14]">
+                Temple Package (Thirumanjam)
+              </span>
+              ? This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowDeleteAllConfirm(false)}
+                disabled={deletingAll}
+                className="px-4 py-2 text-sm rounded-lg text-[#6B5A4E] hover:bg-[#F3E7D3] transition disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteAll}
+                disabled={deletingAll}
+                className="px-4 py-2 text-sm rounded-lg bg-red-600 text-white hover:bg-red-700 transition disabled:opacity-50"
+              >
+                {deletingAll ? "Deleting..." : "Yes, Delete All"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -37,4 +37,9 @@ export class OverseasTemplePackageService {
     await this.db.query(`DELETE FROM overseas_temple_package WHERE id = $1`, [id]);
     return { success: true };
   }
+
+  async removeAll() {
+    await this.db.query(`DELETE FROM overseas_temple_package`);
+    return { success: true, message: 'All items deleted successfully' };
+  }
 }

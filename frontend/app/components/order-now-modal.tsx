@@ -87,7 +87,7 @@ function validate(form: CustomerForm): FieldErrors {
   }
 
   if (!form.preferredDate) {
-    errors.preferredDate = "Please choose your preferred date.";
+    errors.preferredDate = "Please choose your delivery date.";
   }
 
   return errors;
@@ -648,7 +648,7 @@ export default function OrderNowModal({
 
                   <Field
                     id="order-preferredDate"
-                    label="Preferred Date"
+                    label="Delivery Date"
                     error={errors.preferredDate}
                   >
                     <input
@@ -764,7 +764,7 @@ export default function OrderNowModal({
                     <ReviewRow label="Email" value={form.email} />
                     <ReviewRow label="Address" value={form.address} />
                     <ReviewRow
-                      label="Preferred Date"
+                      label="Delivery Date"
                       value={formatDate(form.preferredDate)}
                     />
                     {packageName ? (

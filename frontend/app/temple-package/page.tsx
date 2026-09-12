@@ -1298,17 +1298,25 @@ export default function TemplePackagePage() {
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 items-center gap-6 sm:gap-8">
 
-            {/* DIYA */}
+                        {/* TEMPLE IMAGE */}
             <div className="lg:col-span-2 flex justify-center lg:justify-start">
 
-              <div className="relative w-28 h-28 sm:w-32 sm:h-32">
+              <div className="relative w-36 h-36 sm:w-40 sm:h-40 shrink-0">
 
-                <Image
-                  src="/images/cta_diya.png"
-                  alt="Traditional Brass Diya Lamp with Marigold Flowers"
-                  fill
-                  className="object-contain drop-shadow-[0_0_20px_rgba(255,180,60,0.4)]"
-                />
+                {/* Glowing gold ring behind the gopuram */}
+                <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(231,190,107,0.35),transparent_70%)] blur-md" />
+
+                <div className="absolute inset-2 rounded-full border border-[#E7BE6B]/50" />
+
+                <div className="relative w-full h-full p-3">
+                  <Image
+                    src="/images/temple-gopuram.png"
+                    alt="Temple gopuram"
+                    fill
+                    sizes="160px"
+                    className="object-contain drop-shadow-[0_4px_18px_rgba(255,190,80,0.35)]"
+                  />
+                </div>
 
               </div>
             </div>
@@ -1316,11 +1324,15 @@ export default function TemplePackagePage() {
             {/* TEXT */}
             <div className="lg:col-span-7 text-center lg:text-left">
 
+              <span className="inline-block text-xs sm:text-[13px] font-semibold tracking-[0.2em] uppercase text-[#F3D78A] mb-1.5">
+                Still Have Doubts?
+              </span>
+
               <h3 className="font-serif text-2xl sm:text-3xl lg:text-[34px] font-normal text-[#FDF7E7] leading-tight mb-2">
                 Have Questions About Our Temple Package?
               </h3>
 
-              <p className="text-xs sm:text-sm text-[#E2CDCD] leading-relaxed max-w-xl">
+              <p className="text-xs sm:text-sm text-[#E2CDCD] leading-relaxed max-w-xl mx-auto lg:mx-0">
                 Our team is here to help you choose the perfect pooja for your
                 needs.
               </p>

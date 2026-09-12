@@ -20,6 +20,11 @@ export class FestivalsPackagesController {
     return this.festivalsPackagesService.update(category, id, body);
   }
 
+  @Delete(':category/all')
+  removeAll(@Param('category') category: string) {
+    return this.festivalsPackagesService.removeAll(category);
+  }
+
   @Delete(':category/:id')
   remove(@Param('category') category: string, @Param('id') id: string) {
     return this.festivalsPackagesService.remove(category, id);

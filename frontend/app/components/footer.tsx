@@ -13,6 +13,9 @@ const quickLinks = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
   { label: "Contact", href: "/contact" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Terms & Conditions", href: "/terms" },
+  { label: "Refund Policy", href: "/refund-policy" },
 ];
 
 const packageLinks = [
@@ -176,7 +179,7 @@ export default function Footer() {
 
               {/* Phone */}
               <a
-                href="tel:+919999999999"
+                href="tel:+919884462960"
                 className="group flex items-start gap-3"
               >
                 <div className="mt-0.5 text-[#D4B978]">
@@ -197,7 +200,7 @@ export default function Footer() {
 
               {/* Email */}
               <a
-                href="mailto:info@example.com"
+                href="mailto:spritualstore@iyerspoojaproducts.com"
                 className="group flex items-start gap-3"
               >
                 <div className="mt-0.5 text-[#D4B978]">
@@ -210,7 +213,7 @@ export default function Footer() {
                   </div>
 
                   <div className="mt-1 text-sm text-[#D8C9B8] transition-colors group-hover:text-white">
-                    info@example.com
+                    spritualstore@iyerspoojaproducts.com
                   </div>
                 </div>
               </a>
@@ -229,7 +232,7 @@ export default function Footer() {
                   </div>
 
                   <div className="mt-1 text-sm leading-6 text-[#D8C9B8]">
-                    Chennai, Tamil Nadu,
+                    Plot 1 & 2, S1 Vasantham Flats, Jayanthi Nagar, 4th cross street, Kolathur, Chennai - 600099
                     <br />
                     India
                   </div>
@@ -248,42 +251,20 @@ export default function Footer() {
           BOTTOM BAR
       ====================================================== */}
       <div className="border-t border-[#B08A45]/20">
-
-        <div className="mx-auto flex max-w-[1700px] flex-col gap-4 px-6 py-6 text-xs text-[#9F8980] sm:px-10 md:flex-row md:items-center md:justify-center lg:px-16">
-
-          {/* Copyright */}
-          <p className="text-center">
-            © {new Date().getFullYear()} DevSpectra   . All rights reserved.
+        <div className="mx-auto max-w-[1700px] px-6 py-6 text-center text-xs text-[#9F8980] sm:px-10 lg:px-16">
+          <p>
+            © {new Date().getFullYear()} {" "}
+            <a
+              href="https://devspectra.in/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-[#D4B978] transition-colors hover:text-white"
+            >
+               DevSpectra 
+            </a>
+            . All rights reserved.
           </p>
-
-          {/* Legal Links */}
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-
-            <Link
-              href="/privacy-policy"
-              className="transition-colors hover:text-[#D4B978]"
-            >
-              Privacy Policy
-            </Link>
-
-            <Link
-              href="/terms"
-              className="transition-colors hover:text-[#D4B978]"
-            >
-              Terms & Conditions
-            </Link>
-
-            <Link
-              href="/refund-policy"
-              className="transition-colors hover:text-[#D4B978]"
-            >
-              Refund Policy
-            </Link>
-
-          </div>
-
         </div>
-
       </div>
 
     </footer>
