@@ -260,11 +260,11 @@ export default function Navbar() {
     <>
       <header className="fixed inset-x-0 top-0 z-50 border-b border-[#D4B978]/30 bg-gradient-to-b from-[#4A171E] via-[#3B1115] to-[#2B0C10] backdrop-blur-md">
         {/* NAVBAR */}
-        <div className="mx-auto flex h-[90px] max-w-[1600px] items-center px-5 sm:px-8 lg:px-10">
+        <div className="mx-auto flex h-[90px] max-w-[1600px] items-center px-5 sm:px-8 lg:px-10 min-[1800px]:max-w-[1760px]">
           {/* LOGO */}
           <Link
             href="/"
-            className="mr-6 flex shrink-0 items-center py-1 min-[1700px]:mr-10"
+            className="mr-4 flex shrink-0 items-center py-1 min-[1280px]:mr-2 min-[1360px]:mr-4 min-[1600px]:mr-10"
             aria-label="Home"
           >
             <Image
@@ -273,18 +273,18 @@ export default function Navbar() {
               width={250}
               height={90}
               priority
-              className="h-[68px] w-[68px] rounded-full object-cover transition-transform duration-300 hover:scale-105 lg:h-[74px] lg:w-[74px]"
+              className="h-[68px] w-[68px] rounded-full object-cover transition-transform duration-300 hover:scale-105 min-[1280px]:h-[48px] min-[1280px]:w-[48px] min-[1360px]:h-[60px] min-[1360px]:w-[60px] min-[1600px]:h-[74px] min-[1600px]:w-[74px]"
             />
           </Link>
 
           {/* DESKTOP NAVIGATION */}
-          <nav className="hidden min-w-0 flex-1 items-center justify-center min-[1500px]:flex">
-            <div className="flex items-center gap-4 min-[1700px]:gap-6 min-[1850px]:gap-8">
+          <nav className="hidden min-w-0 flex-1 items-center justify-center min-[1280px]:flex">
+            <div className="flex items-center gap-[6px] min-[1360px]:gap-3 min-[1600px]:gap-6 min-[1900px]:gap-8">
               {navItems.map((item) => (
                 <div key={item.label} className="group relative">
                   <Link
                     href={item.href}
-                    className="flex items-center gap-1 whitespace-nowrap py-7 text-[14px] font-medium text-white transition-colors duration-300 hover:text-[#D4B978] min-[1700px]:text-[15px]"
+                    className="flex items-center gap-[2px] whitespace-nowrap py-7 text-[12px] font-medium text-white transition-colors duration-300 hover:text-[#D4B978] min-[1360px]:gap-1 min-[1360px]:text-[13px] min-[1600px]:text-[15px] min-[1800px]:text-[17px]"
                   >
                     {item.label}
 
@@ -292,7 +292,7 @@ export default function Navbar() {
                       <ChevronDown
                         size={15}
                         strokeWidth={1.5}
-                        className="transition-transform duration-300 group-hover:rotate-180"
+                        className="h-[12px] w-[12px] shrink-0 transition-transform duration-300 group-hover:rotate-180 min-[1360px]:h-[14px] min-[1360px]:w-[14px] min-[1600px]:h-[15px] min-[1600px]:w-[15px] min-[1800px]:h-[17px] min-[1800px]:w-[17px]"
                       />
                     )}
 
@@ -325,12 +325,12 @@ export default function Navbar() {
           </nav>
 
           {/* DESKTOP BUTTONS */}
-          <div className="ml-4 hidden shrink-0 items-center gap-3 min-[1500px]:flex min-[1700px]:ml-6">
+          <div className="ml-2 hidden shrink-0 items-center gap-1.5 min-[1280px]:flex min-[1360px]:ml-3 min-[1360px]:gap-2.5 min-[1600px]:ml-6 min-[1600px]:gap-3">
             {/* IYER REGISTRATION */}
             <button
               type="button"
               onClick={() => setRegModalOpen(true)}
-              className="flex h-[54px] shrink-0 items-center justify-center gap-2.5 rounded-lg border border-[#D4B978]/50 px-4 text-[#D4B978] transition-all duration-300 hover:bg-[#D4B978]/10"
+              className="flex h-[54px] shrink-0 items-center justify-center gap-1.5 rounded-lg border border-[#D4B978]/50 px-1.5 text-[#D4B978] transition-all duration-300 hover:bg-[#D4B978]/10 min-[1360px]:gap-2.5 min-[1360px]:px-3 min-[1600px]:px-4"
             >
               <UserPlus
                 size={20}
@@ -352,7 +352,7 @@ export default function Navbar() {
             {/* ORDER NOW */}
             <Link
               href="/contact"
-              className="inline-flex h-11 items-center justify-center rounded-lg bg-[#D4B978] px-6 text-[12px] font-semibold tracking-[0.08em] text-[#3B1115] transition-all duration-300 hover:bg-[#E5CC8A] hover:shadow-[0_5px_20px_rgba(212,185,120,0.25)]"
+              className="inline-flex h-11 items-center justify-center rounded-lg bg-[#D4B978] px-2.5 text-[11px] font-semibold tracking-[0.08em] text-[#3B1115] transition-all duration-300 hover:bg-[#E5CC8A] hover:shadow-[0_5px_20px_rgba(212,185,120,0.25)] min-[1360px]:px-4 min-[1360px]:text-[12px] min-[1600px]:px-6"
             >
               ORDER NOW
             </Link>
@@ -362,7 +362,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMobileOpen((prev) => !prev)}
-            className="ml-auto flex h-10 w-10 items-center justify-center text-white transition-colors duration-300 hover:text-[#D4B978] min-[1500px]:hidden"
+            className="ml-auto flex h-10 w-10 items-center justify-center text-white transition-colors duration-300 hover:text-[#D4B978] min-[1280px]:hidden"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
           >
@@ -376,7 +376,7 @@ export default function Navbar() {
 
         {/* MOBILE MENU */}
         <div
-          className={`overflow-hidden border-t border-[#D4B978]/30 bg-[#3B1115] transition-all duration-300 min-[1500px]:hidden ${
+          className={`overflow-hidden border-t border-[#D4B978]/30 bg-[#3B1115] transition-all duration-300 min-[1280px]:hidden ${
             mobileOpen
               ? "max-h-[90vh] opacity-100"
               : "max-h-0 opacity-0"
