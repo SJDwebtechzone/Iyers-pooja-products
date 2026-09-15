@@ -284,7 +284,7 @@ export default function Navbar() {
                 <div key={item.label} className="group relative">
                   <Link
                     href={item.href}
-                    className="flex items-center gap-[2px] whitespace-nowrap py-7 text-[12px] font-medium text-white transition-colors duration-300 hover:text-[#D4B978] min-[1360px]:gap-1 min-[1360px]:text-[13px] min-[1600px]:text-[15px] min-[1800px]:text-[17px]"
+                    className="flex items-center gap-[2px] whitespace-nowrap py-7 text-[12px] font-medium text-[#D4B978] transition-colors duration-300 hover:text-[#F0DFAF] min-[1360px]:gap-1 min-[1360px]:text-[13px] min-[1600px]:text-[15px] min-[1800px]:text-[17px]"
                   >
                     {item.label}
 
@@ -309,7 +309,7 @@ export default function Navbar() {
                             onClick={() =>
                               handleNavClick(dropdownItem.href)
                             }
-                            className="group/item relative block w-full px-5 py-3.5 text-left text-[13px] text-white transition-colors duration-200 hover:bg-[#4A171E] hover:text-[#D4B978]"
+                            className="group/item relative block w-full px-5 py-3.5 text-left text-[13px] text-[#D4B978] transition-colors duration-200 hover:bg-[#4A171E] hover:text-[#F0DFAF]"
                           >
                             {dropdownItem.label}
 
@@ -393,7 +393,7 @@ export default function Navbar() {
                         setMobileOpen(false);
                       }
                     }}
-                    className="flex-1 py-4 text-sm font-medium text-white transition-colors hover:text-[#D4B978]"
+                    className="flex-1 py-4 text-sm font-medium text-[#D4B978] transition-colors hover:text-[#F0DFAF]"
                   >
                     {item.label}
                   </Link>
@@ -406,7 +406,7 @@ export default function Navbar() {
                           current === item.label ? null : item.label
                         )
                       }
-                      className="flex h-12 w-12 items-center justify-center text-white transition-colors hover:text-[#D4B978]"
+                      className="flex h-12 w-12 items-center justify-center text-[#D4B978] transition-colors hover:text-[#F0DFAF]"
                       aria-label={`Toggle ${item.label} menu`}
                       aria-expanded={mobileDropdown === item.label}
                     >
@@ -439,7 +439,7 @@ export default function Navbar() {
                           onClick={() =>
                             handleNavClick(dropdownItem.href)
                           }
-                          className="block w-full px-6 py-3 text-left text-[13px] text-white transition-colors hover:bg-[#4A171E] hover:text-[#D4B978]"
+                          className="block w-full px-6 py-3 text-left text-[13px] text-[#D4B978] transition-colors hover:bg-[#4A171E] hover:text-[#F0DFAF]"
                         >
                           {dropdownItem.label}
                         </button>
