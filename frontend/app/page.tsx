@@ -51,36 +51,53 @@ export default function Home() {
     <main className="bg-[#F8F4EC] pt-[90px]">
 
       {/* ================= HERO BANNER ================= */}
-      <section className="relative w-full h-[460px] sm:h-[500px] md:h-auto md:aspect-[2.5/1] md:min-h-[480px] md:max-h-[750px] overflow-hidden bg-[#1D0C07]">
+      <section className="relative w-full h-auto bg-[#F8F4EC] sm:h-[500px] sm:bg-[#1D0C07] md:h-auto md:aspect-[2.5/1] md:min-h-[480px] md:max-h-[750px] overflow-hidden">
 
-        {/* Background Image */}
+        {/* Phone: the banner is 2112x744 (2.84:1). Cropping it into a tall
+           box meant upscaling a narrow slice, which is what looked blurry.
+           Shown at its own aspect ratio it downscales instead - full image,
+           full detail - and the copy sits below it rather than on top. */}
+        <div className="relative w-full sm:hidden">
+          <Image
+            src={`/images/${banner.image_filename}`}
+            alt="Iyer's Pooja Products"
+            width={2112}
+            height={744}
+            priority
+            className="h-auto w-full"
+            sizes="100vw"
+          />
+        </div>
+
+        {/* sm and up: unchanged full-bleed crop behind the copy */}
         <Image
           src={`/images/${banner.image_filename}`}
-          alt="Iyer's Pooja Products"
+          alt=""
           fill
           priority
-          className="object-cover object-[15%_10%] sm:object-[22%_center] md:object-center"
+          aria-hidden="true"
+          className="hidden object-cover sm:block sm:object-[22%_center] md:object-center"
           sizes="100vw"
         />
 
         {/* Content */}
-        <div className="absolute inset-0 z-10 flex items-end justify-center pb-4 sm:items-center sm:justify-end sm:pb-0">
+        <div className="relative z-10 flex justify-center px-4 pb-6 pt-5 min-[500px]:absolute min-[500px]:inset-0 min-[500px]:items-center min-[500px]:justify-end min-[500px]:px-0 min-[500px]:pb-0 min-[500px]:pt-0">
 
-          <div className="w-full max-w-2xl px-4 py-2 text-center sm:text-right sm:px-10 lg:mr-[6%] lg:px-0 sm:translate-y-6 md:translate-y-8 lg:translate-y-10">
+          <div className="w-full max-w-2xl px-4 py-2 text-center min-[500px]:max-w-[56%] min-[500px]:px-0 min-[500px]:pr-4 min-[500px]:py-0 min-[500px]:text-right sm:max-w-2xl sm:pr-0 sm:px-10 lg:mr-[6%] lg:px-0 sm:translate-y-6 md:translate-y-8 lg:translate-y-10">
 
             {/* Brand */}
-            <div className="mb-2 sm:mb-4 flex items-center justify-center sm:justify-end gap-2 sm:gap-3">
+            <div className="mb-2 sm:mb-4 flex items-center justify-center min-[500px]:justify-end sm:justify-end gap-2 sm:gap-3">
               <span className="h-px w-6 bg-[#9A7228] sm:w-10" />
 
               <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.25em] text-[#8C5D17]">
                 Iyer&apos;s Pooja Products
               </span>
 
-              <span className="h-px w-6 bg-[#9A7228] sm:hidden" />
+              <span className="h-px w-6 bg-[#9A7228] min-[500px]:hidden" />
             </div>
 
             {/* Heading */}
-            <h1 className="font-[family-name:var(--font-cormorant)] text-2xl font-bold leading-tight text-[#4A171E] sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl">
+            <h1 className="font-[family-name:var(--font-cormorant)] text-2xl font-bold leading-tight text-[#4A171E] min-[500px]:text-[22px] min-[560px]:text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl">
               {banner.heading_line1}
 
               <br />
@@ -91,23 +108,23 @@ export default function Home() {
             </h1>
 
             {/* Description */}
-            <p className="mx-auto sm:ml-auto mt-2 sm:mt-4 max-w-sm sm:max-w-xl text-[11px] font-medium leading-relaxed text-[#4A342B] sm:text-sm sm:leading-6 md:text-base md:leading-7">
+            <p className="mx-auto min-[500px]:ml-auto min-[500px]:mr-0 sm:ml-auto mt-2 min-[500px]:mt-1.5 sm:mt-4 max-w-sm sm:max-w-xl text-[11px] min-[500px]:text-[10px] min-[560px]:text-[11px] font-semibold leading-relaxed text-[#3A2820] sm:text-sm sm:leading-6 md:text-base md:leading-7">
               {banner.description}
             </p>
 
             {/* Buttons */}
-            <div className="mt-4 sm:mt-7 flex flex-wrap items-center justify-center sm:justify-end gap-2 sm:gap-4">
+            <div className="mt-4 min-[500px]:mt-2.5 sm:mt-7 flex flex-wrap items-center justify-center min-[500px]:justify-end sm:justify-end gap-2 sm:gap-4">
 
               <Link
                 href="/contact"
-                className="inline-flex h-9 sm:h-11 items-center justify-center rounded-md bg-[#A71930] px-5 sm:px-7 text-[10px] sm:text-xs font-semibold tracking-[0.08em] text-white shadow-md transition-all duration-300 hover:bg-[#831424] active:scale-95"
+                className="inline-flex h-9 min-[500px]:h-8 sm:h-11 items-center justify-center rounded-md bg-[#A71930] px-5 min-[500px]:px-4 sm:px-7 text-[10px] min-[500px]:text-[9px] sm:text-xs font-semibold tracking-[0.08em] text-white shadow-md transition-all duration-300 hover:bg-[#831424] active:scale-95"
               >
                 ORDER NOW
               </Link>
 
               <a
                 href="#packages-section"
-                className="inline-flex h-9 sm:h-11 items-center justify-center rounded-md border border-[#5A2026] bg-white px-5 sm:px-7 text-[10px] sm:text-xs font-semibold tracking-[0.08em] text-[#5A2026] shadow-sm transition-all duration-300 hover:bg-[#5A2026] hover:text-white active:scale-95"
+                className="inline-flex h-9 min-[500px]:h-8 sm:h-11 items-center justify-center rounded-md border border-[#5A2026] bg-white px-5 min-[500px]:px-4 sm:px-7 text-[10px] min-[500px]:text-[9px] sm:text-xs font-semibold tracking-[0.08em] text-[#5A2026] shadow-sm transition-all duration-300 hover:bg-[#5A2026] hover:text-white active:scale-95"
               >
                 EXPLORE PACKAGES
               </a>
