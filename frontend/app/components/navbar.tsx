@@ -5,6 +5,15 @@ import { useState, type ChangeEvent, type FormEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { Cinzel } from "next/font/google";
+
+const cinzel = Cinzel({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-cinzel",
+});
+
+
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || "https://iyerspoojaproducts.com/api";
@@ -260,11 +269,11 @@ export default function Navbar() {
     <>
       <header className="fixed inset-x-0 top-0 z-50 border-b border-[#D4B978]/30 bg-gradient-to-b from-[#4A171E] via-[#3B1115] to-[#2B0C10] backdrop-blur-md">
         {/* NAVBAR */}
-        <div className="mx-auto flex h-[90px] max-w-[1600px] items-center px-5 sm:px-8 lg:px-10 min-[1800px]:max-w-[1760px]">
+        <div className="relative mx-auto flex h-[90px] max-w-[1600px] items-center justify-between gap-4 px-5 sm:px-8 lg:px-10 min-[1800px]:max-w-[1760px]">
           {/* LOGO */}
           <Link
             href="/"
-            className="mr-4 flex shrink-0 items-center py-1 min-[1280px]:mr-2 min-[1360px]:mr-4 min-[1600px]:mr-10"
+            className="mr-3 flex shrink-0 items-center py-1 min-[1280px]:mr-2 min-[1360px]:mr-3 min-[1600px]:mr-6"
             aria-label="Home"
           >
             <Image
@@ -273,18 +282,43 @@ export default function Navbar() {
               width={250}
               height={90}
               priority
-              className="h-[68px] w-[68px] rounded-full object-cover transition-transform duration-300 hover:scale-105 min-[1280px]:h-[48px] min-[1280px]:w-[48px] min-[1360px]:h-[60px] min-[1360px]:w-[60px] min-[1600px]:h-[74px] min-[1600px]:w-[74px]"
+              className="h-[68px] w-[68px] rounded-full object-cover transition-transform duration-300 hover:scale-105 min-[1280px]:h-[54px] min-[1280px]:w-[54px] min-[1360px]:h-[64px] min-[1360px]:w-[64px] min-[1600px]:h-[78px] min-[1600px]:w-[78px]"
             />
           </Link>
 
+                    {/* MOBILE TITLE + TAGLINE — absolutely centered on full header */}
+          <div className="flex min-w-0 flex-1 flex-col items-center justify-center pl-10 pr-0 text-center min-[1280px]:hidden">
+            <span
+              className={`${cinzel.className} block whitespace-nowrap font-semibold leading-tight tracking-[0.01em] text-[#FFD93D]`}
+              style={{ fontSize: "clamp(10px, 3.6vw, 14px)" }}
+            >
+              IYER&apos;S POOJA PRODUCTS
+            </span>
+            <span
+              className="mt-0.5 block whitespace-nowrap font-medium text-[#FFD93D]/80"
+              style={{ fontSize: "clamp(8px, 2.6vw, 10px)" }}
+            >
+              No. 1 Spiritual Store
+            </span>
+          </div>
+
+          {/* MOBILE MENU BUTTON */}
+          <button
+            type="button"
+            onClick={() => setMobileOpen((prev) => !prev)}
+            className="ml-auto flex h-10 w-10 shrink-0 items-center justify-center text-white transition-colors duration-300 hover:text-[#D4B978] min-[1280px]:hidden"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+          ></button>
+
           {/* DESKTOP NAVIGATION */}
-          <nav className="hidden min-w-0 flex-1 items-center justify-center min-[1280px]:flex">
-            <div className="flex items-center gap-[6px] min-[1360px]:gap-3 min-[1600px]:gap-6 min-[1900px]:gap-8">
+          <nav className="hidden min-w-0 flex-1 items-center justify-end min-[1280px]:flex">
+            <div className="flex items-center gap-4">
               {navItems.map((item) => (
                 <div key={item.label} className="group relative">
                   <Link
                     href={item.href}
-                    className="flex items-center gap-[2px] whitespace-nowrap py-7 text-[12px] font-medium text-[#D4B978] transition-colors duration-300 hover:text-[#F0DFAF] min-[1360px]:gap-1 min-[1360px]:text-[13px] min-[1600px]:text-[15px] min-[1800px]:text-[17px]"
+                   className="font-[family-name:var(--font-cormorant)] flex items-center gap-2 whitespace-nowrap py-7 text-[17px] font-semibold tracking-[0.04em] text-[#FFD93D] transition-colors duration-300 hover:text-[#FFE066]"
                   >
                     {item.label}
 
@@ -296,7 +330,7 @@ export default function Navbar() {
                       />
                     )}
 
-                    <span className="absolute bottom-5 left-0 h-px w-0 bg-[#D4B978] transition-all duration-300 group-hover:w-full" />
+                    <span className="absolute bottom-5 left-0 h-px w-0 bg-[#FFD93D] transition-all duration-300 group-hover:w-full" />
                   </Link>
 
                   {item.dropdown && (
@@ -309,11 +343,11 @@ export default function Navbar() {
                             onClick={() =>
                               handleNavClick(dropdownItem.href)
                             }
-                            className="group/item relative block w-full px-5 py-3.5 text-left text-[13px] text-[#D4B978] transition-colors duration-200 hover:bg-[#4A171E] hover:text-[#F0DFAF]"
+                            className="font-[family-name:var(--font-cormorant)] group/item relative block w-full px-5 py-3.5 text-left text-[14px] font-semibold text-[#FFD93D] transition-colors duration-200 hover:bg-[#4A171E] hover:text-[#FFE066]"
                           >
                             {dropdownItem.label}
 
-                            <span className="absolute bottom-0 left-5 h-px w-0 bg-[#D4B978] transition-all duration-300 group-hover/item:w-[calc(100%-40px)]" />
+                           <span className="absolute bottom-0 left-5 h-px w-0 bg-[#FFD93D] transition-all duration-300 group-hover/item:w-[calc(100%-40px)]" />
                           </button>
                         ))}
                       </div>
@@ -325,7 +359,7 @@ export default function Navbar() {
           </nav>
 
           {/* DESKTOP BUTTONS */}
-          <div className="ml-2 hidden shrink-0 items-center gap-1.5 min-[1280px]:flex min-[1360px]:ml-3 min-[1360px]:gap-2.5 min-[1600px]:ml-6 min-[1600px]:gap-3">
+          <div className="hidden shrink-0 items-center gap-1.5 min-[1280px]:flex min-[1360px]:gap-2.5 min-[1600px]:gap-3">
             {/* IYER REGISTRATION */}
             <button
               type="button"
@@ -352,7 +386,7 @@ export default function Navbar() {
             {/* ORDER NOW */}
             <Link
               href="/contact"
-              className="inline-flex h-11 items-center justify-center rounded-lg bg-[#D4B978] px-2.5 text-[11px] font-semibold tracking-[0.08em] text-[#3B1115] transition-all duration-300 hover:bg-[#E5CC8A] hover:shadow-[0_5px_20px_rgba(212,185,120,0.25)] min-[1360px]:px-4 min-[1360px]:text-[12px] min-[1600px]:px-6"
+              className="inline-flex h-11 items-center justify-center rounded-lg bg-[#D4B978] px-2.5 text-[11px] font-semibold tracking-[0.1em] text-[#3B1115] transition-all duration-300 hover:bg-[#E5CC8A] hover:shadow-[0_5px_20px_rgba(212,185,120,0.25)] min-[1360px]:px-4 min-[1360px]:text-[12px] min-[1600px]:px-6"
             >
               ORDER NOW
             </Link>
@@ -387,17 +421,15 @@ export default function Navbar() {
               <div key={item.label}>
                 <div className="flex items-center border-b border-[#D4B978]/20">
                   <Link
-                    href={item.href}
-                    onClick={() => {
-                      if (!item.dropdown) {
-                        setMobileOpen(false);
-                      }
-                    }}
-                    className="flex-1 py-4 text-sm font-medium text-[#D4B978] transition-colors hover:text-[#F0DFAF]"
-                  >
-                    {item.label}
-                  </Link>
-
+  href={item.href}
+  onClick={() => {
+    setMobileOpen(false);
+    setMobileDropdown(null);
+  }}
+  className="font-[family-name:var(--font-cormorant)] flex-1 py-4 text-[15px] font-semibold text-[#FFD75A] transition-colors hover:text-[#FFE39A]"
+>
+  {item.label}
+</Link>
                   {item.dropdown && (
                     <button
                       type="button"
@@ -406,7 +438,7 @@ export default function Navbar() {
                           current === item.label ? null : item.label
                         )
                       }
-                      className="flex h-12 w-12 items-center justify-center text-[#D4B978] transition-colors hover:text-[#F0DFAF]"
+                      className="flex h-12 w-12 items-center justify-center text-[#FFD75A] transition-colors hover:text-[#FFE39A]"
                       aria-label={`Toggle ${item.label} menu`}
                       aria-expanded={mobileDropdown === item.label}
                     >
@@ -439,7 +471,7 @@ export default function Navbar() {
                           onClick={() =>
                             handleNavClick(dropdownItem.href)
                           }
-                          className="block w-full px-6 py-3 text-left text-[13px] text-[#D4B978] transition-colors hover:bg-[#4A171E] hover:text-[#F0DFAF]"
+                          className="font-[family-name:var(--font-cormorant)] block w-full px-6 py-3 text-left text-[14px] font-semibold text-[#FFD75A] transition-colors hover:bg-[#4A171E] hover:text-[#FFE39A]"
                         >
                           {dropdownItem.label}
                         </button>
