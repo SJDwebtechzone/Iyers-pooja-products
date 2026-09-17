@@ -165,7 +165,7 @@ export default function AboutPage() {
       ============================================================ */}
        
 
-      <section className="relative w-full min-h-[520px] sm:min-h-[600px] lg:min-h-[680px] overflow-hidden border-b border-[#3D1A14]">
+      <section className="relative w-full aspect-[1264/848] sm:aspect-auto sm:min-h-[600px] lg:min-h-[680px] overflow-hidden border-b border-[#3D1A14] flex items-center">
         {/* Full-bleed background image */}
         <div className="absolute inset-0">
           <Image
@@ -186,19 +186,19 @@ export default function AboutPage() {
 
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#A71930]/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16 py-24 sm:py-28 lg:py-36 flex items-center min-h-[520px] sm:min-h-[600px] lg:min-h-[680px]">
-          <div className="w-full text-center lg:text-right lg:ml-auto lg:max-w-2xl text-white space-y-5 sm:space-y-6">
-            <div className="flex justify-center lg:justify-end">
+        <div className="relative z-10 mx-auto w-full max-w-[1600px] px-3 sm:px-10 lg:px-16 py-2 sm:py-28 lg:py-36 flex items-center justify-end sm:min-h-[600px] lg:min-h-[680px]">
+          <div className="w-[58%] max-w-2xl text-right ml-auto text-white space-y-1 min-[360px]:space-y-1.5 sm:space-y-6">
+            <div className="flex justify-end">
               {/* <Flourish label="About Us" light /> */}
             </div>
 
-            <h1 className="font-[family-name:var(--font-cormorant)] text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-semibold leading-[1.08] tracking-tight text-[#FFFDF8] [text-shadow:_0_2px_12px_rgba(0,0,0,0.85)]">
+            <h1 className="font-[family-name:var(--font-cormorant)] text-[14px] min-[360px]:text-[17px] min-[420px]:text-[21px] sm:text-5xl lg:text-6xl xl:text-7xl font-semibold leading-[1.08] tracking-tight text-[#FFFDF8] [text-shadow:_0_2px_12px_rgba(0,0,0,0.85)]">
               Honoring Traditions.
               <br />
               <span className="text-[#D4B978]">Serving Devotion.</span>
             </h1>
 
-            <p className="text-sm sm:text-base lg:text-[17px] leading-relaxed text-[#F3EAD8] max-w-xl mx-auto lg:ml-auto font-medium [text-shadow:_0_1px_8px_rgba(0,0,0,0.9)]">
+            <p className="text-[6.5px] min-[360px]:text-[7.5px] min-[420px]:text-[9.5px] sm:text-base lg:text-[17px] leading-tight sm:leading-relaxed text-[#F3EAD8] max-w-xl ml-auto font-medium [text-shadow:_0_1px_8px_rgba(0,0,0,0.9)]">
               Simplifying sacred pooja preparation for every family, making
               authentic traditions easier to observe with care and devotion.
             </p>

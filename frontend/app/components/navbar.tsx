@@ -53,7 +53,7 @@ const navItems = [
         href: "/package#ruthu-punyahavachanam",
       },
       {
-        label: "AYUSH HOMAM",
+        label: "Ayush Homam",
         href: "/package#ayush-homam",
       },
     ],
@@ -298,7 +298,7 @@ export default function Navbar() {
               className="mt-0.5 block whitespace-nowrap font-medium text-[#FFD93D]/80"
               style={{ fontSize: "clamp(8px, 2.6vw, 10px)" }}
             >
-              No. 1 Spiritual Store
+              Unit of Pon Ma Lalli Brands
             </span>
           </div>
 
@@ -334,7 +334,7 @@ export default function Navbar() {
                   </Link>
 
                   {item.dropdown && (
-                    <div className="invisible absolute left-1/2 top-[76px] w-[280px] -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                    <div className="invisible absolute left-1/2 top-[76px] w-[310px] -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
                       <div className="border border-[#D4B978]/30 bg-[#3B1115] py-2 shadow-[0_15px_40px_rgba(0,0,0,0.3)]">
                         {item.dropdown.map((dropdownItem) => (
                           <button
@@ -343,7 +343,7 @@ export default function Navbar() {
                             onClick={() =>
                               handleNavClick(dropdownItem.href)
                             }
-                            className="font-[family-name:var(--font-cormorant)] group/item relative block w-full px-5 py-3.5 text-left text-[14px] font-semibold text-[#FFD93D] transition-colors duration-200 hover:bg-[#4A171E] hover:text-[#FFE066]"
+                            className="font-[family-name:var(--font-cormorant)] group/item relative block w-full px-5 py-3 text-left text-[17px] min-[1600px]:text-[18px] font-semibold tracking-[0.02em] text-[#FFD93D] transition-colors duration-200 hover:bg-[#4A171E] hover:text-[#FFE066]"
                           >
                             {dropdownItem.label}
 
@@ -471,7 +471,7 @@ export default function Navbar() {
                           onClick={() =>
                             handleNavClick(dropdownItem.href)
                           }
-                          className="font-[family-name:var(--font-cormorant)] block w-full px-6 py-3 text-left text-[14px] font-semibold text-[#FFD75A] transition-colors hover:bg-[#4A171E] hover:text-[#FFE39A]"
+                          className="font-[family-name:var(--font-cormorant)] block w-full px-6 py-3.5 text-left text-[16px] font-semibold text-[#FFD75A] transition-colors hover:bg-[#4A171E] hover:text-[#FFE39A]"
                         >
                           {dropdownItem.label}
                         </button>

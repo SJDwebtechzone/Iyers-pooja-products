@@ -514,8 +514,10 @@ function PackagePage({ data }: PackagePageProps) {
   const [dynamicItems, setDynamicItems] =
     useState<PackageItem[] | null>(null);
 
-  const [dynamicPrice, setDynamicPrice] =
+    const [dynamicPrice, setDynamicPrice] =
     useState<string | null>(null);
+
+  const [priceLoading, setPriceLoading] = useState(true);
 
   const [isOrderOpen, setIsOrderOpen] =
     useState(false);
@@ -586,10 +588,11 @@ function PackagePage({ data }: PackagePageProps) {
 
   useEffect(() => {
     const fetchPackageData = async () => {
-      // VERY IMPORTANT:
+            // VERY IMPORTANT:
       // Reset previous ritual values immediately
       setDynamicItems(null);
       setDynamicPrice(null);
+      setPriceLoading(true);
 
       if (!selectedRitual) return;
 
@@ -720,7 +723,7 @@ function PackagePage({ data }: PackagePageProps) {
           priceData?.data?.price ??
           null;
 
-        if (
+                if (
           price !== null &&
           price !== undefined
         ) {
@@ -737,6 +740,8 @@ function PackagePage({ data }: PackagePageProps) {
         );
 
         setDynamicPrice(null);
+      } finally {
+        setPriceLoading(false);
       }
     };
 
@@ -835,11 +840,13 @@ function PackagePage({ data }: PackagePageProps) {
     },
   ];
 
-  const displayPrice = dynamicPrice
+    const displayPrice = priceLoading
+    ? "..."
+    : dynamicPrice
     ? dynamicPrice.startsWith("₹")
       ? dynamicPrice
       : `₹${dynamicPrice}`
-    : selectedRitual?.price || "";
+    : "Price on request";
 
   // Items come from the admin-managed API once it has answered for this
   // ritual. The static list in the package data is only a pre-load
@@ -878,7 +885,7 @@ function PackagePage({ data }: PackagePageProps) {
       `}</style>
 
       {/* HERO BANNER */}
-      <section className="relative mt-[90px] min-h-[620px] w-full items-center overflow-hidden border-b border-[#3D1418] flex">
+      <section className="relative mt-[90px] w-full aspect-[1920/819] overflow-hidden border-b border-[#3D1418] flex items-center md:aspect-auto md:min-h-[620px]">
         <div className="absolute inset-0">
           <Image
             src={data.heroImage}
@@ -891,22 +898,25 @@ function PackagePage({ data }: PackagePageProps) {
           <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-white/10 to-white/25" />
         </div>
 
-        <div className="relative z-10 mx-auto w-full max-w-[1800px] px-6 lg:px-10">
-          <div className="max-w-[650px] lg:ml-[52%]">
-            <h1 className="font-[family-name:var(--font-cormorant)] text-4xl font-semibold leading-none text-[#5A1820] md:text-5xl lg:text-[78px]">
-              <span>{data.title.split(" ")[0]}</span>{" "}
-              <span className="bg-gradient-to-r from-[#B8872F] via-[#E6C977] to-[#A8741F] bg-clip-text text-transparent">
-                {data.title.split(" ").slice(1).join(" ")}
-              </span>
-            </h1>
+        <div className="relative z-10 mx-auto w-full max-w-[1800px] px-3 sm:px-6 lg:px-10">
+          <div className="ml-[48%] max-w-[50%] sm:ml-[50%] sm:max-w-[48%] md:ml-0 md:max-w-[650px] lg:ml-[52%]">
+            <div className="mb-1 min-[360px]:mb-1.5 sm:mb-3 md:mb-4 flex items-center gap-1.5 min-[360px]:gap-2 md:gap-4">
+  <span className="h-px w-6 min-[360px]:w-10 sm:w-16 md:w-24 bg-[#D4B978]" />
+  <span className="text-[10px] min-[360px]:text-xs md:text-xl text-[#5A1820]">❖</span>
+  <span className="h-px w-6 min-[360px]:w-10 sm:w-16 md:w-24 bg-[#D4B978]" />
+</div>
 
-            <div className="my-6 flex items-center gap-4">
-              <span className="h-px w-24 bg-[#D4B978]" />
-              <span className="text-xl text-[#C39A43]">❖</span>
-              <span className="h-px w-24 bg-[#D4B978]" />
-            </div>
+<h1 className="font-[family-name:var(--font-cormorant)] text-[15px] min-[360px]:text-[18px] min-[420px]:text-[22px] sm:text-3xl md:text-5xl lg:text-[78px] font-semibold leading-none text-[#5A1820]">
+  {data.title}
+</h1>
 
-            <p className="max-w-xl text-lg font-medium leading-relaxed text-[#4A1015]">
+<div className="my-1 min-[360px]:my-1.5 sm:my-3 md:my-6 flex items-center gap-1.5 min-[360px]:gap-2 md:gap-4">
+  <span className="h-px w-6 min-[360px]:w-10 sm:w-16 md:w-24 bg-[#D4B978]" />
+  <span className="text-[10px] min-[360px]:text-xs md:text-xl text-[#5A1820]">❖</span>
+  <span className="h-px w-6 min-[360px]:w-10 sm:w-16 md:w-24 bg-[#D4B978]" />
+</div>
+
+            <p className="max-w-xl text-[7px] min-[360px]:text-[8px] min-[420px]:text-[10px] sm:text-sm md:text-lg font-medium leading-tight sm:leading-relaxed text-[#4A1015]">
               {data.subtitle}
             </p>
           </div>
@@ -1042,105 +1052,105 @@ function PackagePage({ data }: PackagePageProps) {
                   })}
               </div>
             </div>
-
-            <div className="overflow-hidden rounded-xl border border-[#E8D5B5] bg-[#FFFCF7]">
-
-              <div className="grid lg:grid-cols-[250px_1fr]">
+                              <div className="min-w-0 lg:col-span-3">
+  <div className="lg:sticky lg:top-28 bg-[#5A2026] rounded-xl p-3 shadow-lg">
 
                 {/* SIDEBAR */}
 
-                <div className="min-w-0 bg-[#5A2026] p-4 lg:p-5">
+                <div className="min-w-0 lg:col-span-3">
+                  <div className="lg:sticky lg:top-28 bg-[#5A2026] rounded-xl p-3 shadow-lg">
 
-                 <div className="space-y-2">
+                    <div className="space-y-2">
 
-                    {tabs.map(
-                      (tab) => {
+                      {tabs.map(
+                        (tab) => {
 
-                        const Icon =
-                          tab.icon;
+                          const Icon =
+                            tab.icon;
 
-                        const active =
-                          activeTab ===
-                          tab.id;
+                          const active =
+                            activeTab ===
+                            tab.id;
 
-                        return (
-                          <button
-                            key={tab.id}
-                            type="button"
-                            onClick={() =>
-                              setActiveTab(
-                                tab.id
-                              )
-                            }
-                            className={`flex w-full items-center gap-3 rounded-lg px-4 py-3.5 text-left text-sm transition-all ${
-                              active
-                                ? "bg-[#7A202B] text-white shadow-md"
-                                : "text-white/80 hover:bg-white/10"
-                            }`}
-                          >
-
-                            <Icon
-                              size={19}
-                              className={
-                                active
-                                  ? "text-[#D4B978]"
-                                  : "text-white/70"
+                          return (
+                            <button
+                              key={tab.id}
+                              type="button"
+                              onClick={() =>
+                                setActiveTab(
+                                  tab.id
+                                )
                               }
-                            />
+                              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                                active
+                                  ? "bg-[#7A202B] text-white shadow-md"
+                                  : "text-white/80 hover:bg-white/10 hover:text-white"
+                              }`}
+                            >
 
-                            <span>
-                              {tab.label}
-                            </span>
+                              <Icon
+                                size={18}
+                                className={
+                                  active
+                                    ? "text-[#F3D78A]"
+                                    : "text-[#D4B978]"
+                                }
+                              />
 
-                          </button>
-                        );
-                      }
-                    )}
+                              <span className="font-medium">
+                                {tab.label}
+                              </span>
 
-                  </div>
+                            </button>
+                          );
+                        }
+                      )}
 
-                                    <div className="mt-4 border-t border-white/15 pt-5">
-
-                    <div className="mb-4">
-                      <span className="block text-[10px] uppercase tracking-[0.16em] text-[#D4B978]">
-                        Selected Package
-                      </span>
-
-                      <h3 className="mt-2 font-[family-name:var(--font-cormorant)] text-2xl font-bold leading-tight text-[#F3D78A]">
-                        {selectedRitual.title}
-                      </h3>
-
-                      <div className="mt-2 text-xl font-bold text-white">
-                        {displayPrice}
-                      </div>
                     </div>
 
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setIsOrderOpen(true)
-                      }
-                      className="w-full rounded-xl bg-[#E5C77A] px-4 py-3 text-sm font-bold text-[#3D1418] shadow-sm transition-all hover:bg-[#F3D78A] hover:shadow-md active:scale-[0.98]"
-                    >
-                      Order Now
-                    </button>
+                    <div className="mt-4 border-t border-white/15 pt-5">
 
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setIsBookingOpen(true)
-                      }
-                      className="mt-3 w-full rounded-xl border border-[#F3D78A]/50 bg-[#F3D78A] px-3 py-3 text-center text-xs font-bold leading-relaxed text-[#3D1418] shadow-sm animate-priest-blink transition-transform hover:scale-[1.01]"
-                    >
-                      Looking for an experienced Iyer for an upcoming pooja?
-                    </button>
+                      <div className="mb-4">
+                        <span className="block text-[10px] uppercase tracking-[0.16em] text-[#D4B978]">
+                          Selected Package
+                        </span>
 
+                        <h3 className="mt-2 font-[family-name:var(--font-cormorant)] text-2xl font-bold leading-tight text-[#F3D78A]">
+                          {selectedRitual.title}
+                        </h3>
+
+                        <div className="mt-2 text-xl font-bold text-white">
+                          {displayPrice}
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setIsOrderOpen(true)
+                        }
+                        className="w-full rounded-xl bg-[#E5C77A] px-4 py-3 text-sm font-bold text-[#3D1418] shadow-sm transition-all hover:bg-[#F3D78A] hover:shadow-md active:scale-[0.98]"
+                      >
+                        Order Now
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setIsBookingOpen(true)
+                        }
+                        className="mt-3 w-full rounded-xl border border-[#F3D78A]/50 bg-[#F3D78A] px-3 py-3 text-center text-xs font-bold leading-relaxed text-[#3D1418] shadow-sm animate-priest-blink transition-transform hover:scale-[1.01]"
+                      >
+                        Looking for an experienced Iyer for an upcoming pooja?
+                      </button>
+
+                    </div>
                   </div>
                 </div>
 
                 {/* CONTENT */}
 
-                <div className="min-w-0 p-2 sm:p-7 lg:p-9">
+                <div className="lg:col-span-9">
 
                   {activeTab ===
                     "details" && (

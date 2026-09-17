@@ -798,7 +798,8 @@ export default function OverseasPackagePage() {
   // lists, assigned by the effect below.
   const [liveItems, setLiveItems] = useState<SamagriItem[]>([]);
   const [itemsLoading, setItemsLoading] = useState(false);
-    const [dynamicPrice, setDynamicPrice] = useState<string | null>(null); 
+        const [dynamicPrice, setDynamicPrice] = useState<string | null>(null); 
+  const [priceLoading, setPriceLoading] = useState(true);
 
   const [activeTab, setActiveTab] = useState<
     "details" | "process" | "benefits" | "notes"
@@ -919,15 +920,17 @@ const handleBookingSubmit = async (e: React.FormEvent) => {
     };
   }, [selectedPooja.id]);
 
-  useEffect(() => {                                    
+    useEffect(() => {                                    
     if (selectedPooja.id !== "thirumanjam") {
       setDynamicPrice(null);
+      setPriceLoading(false);
       return;
     }
 
     let cancelled = false;
 
     async function loadPrice() {
+      setPriceLoading(true);
       try {
         const res = await fetch(`${API_BASE}/package-prices/overseas-thirumanjam`);
         if (res.ok) {
@@ -938,6 +941,10 @@ const handleBookingSubmit = async (e: React.FormEvent) => {
         }
       } catch (error) {
         console.error("Failed to load overseas package price:", error);
+      } finally {
+        if (!cancelled) {
+          setPriceLoading(false);
+        }
       }
     }
 
@@ -1218,10 +1225,10 @@ return (
           1. HERO SECTION
       ========================================== */}
 
-      <section className="relative pt-[90px] overflow-hidden min-h-[620px] border-b border-[#E8DDC8]">
+      <section className="relative mt-[90px] overflow-hidden aspect-[1877/838] border-b border-[#E8DDC8] flex items-start sm:items-center md:aspect-auto md:min-h-[620px] md:mt-0 md:pt-[90px]">
 
   {/* ORIGINAL FULL WIDTH IMAGE - NO EFFECT */}
-  <div className="absolute inset-0 top-[90px]">
+  <div className="absolute inset-0 md:top-[90px]">
     <Image
       src="/images/overseas-banner.jpg"
       alt="Ancient Indian temple gopuram"
@@ -1232,31 +1239,20 @@ return (
     />
   </div>
 
-<div className="relative z-10 mx-auto max-w-[1600px] min-h-[560px] lg:min-h-[620px]">
+<div className="relative z-10 mx-auto w-full max-w-[1600px] flex items-start sm:items-center md:min-h-[560px] lg:min-h-[620px]">
           {/* LEFT */}
-    <div className="w-full max-w-[760px] flex flex-col justify-start min-h-[560px] lg:min-h-[620px] pt-20 sm:pt-24 lg:pt-32 pb-10 px-6 sm:px-10 lg:pl-16 lg:pr-8">
+    <div className="w-[58%] max-w-[760px] flex flex-col justify-start pt-12 md:min-h-[560px] lg:min-h-[620px] px-3 sm:px-10 lg:pl-16 lg:pr-8 sm:pt-24 lg:pt-32 sm:pb-10">
   <div>
-    {/* Small Label
-  <div className="mb-3 inline-flex items-center gap-3 rounded-full bg-[#42151B]/90 px-5 py-2 shadow-sm">
-      <span className="h-px w-8 bg-[#D4B978]/80" />
-      <span className="text-xs text-[#F3D78A]">✦</span>
-      <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#F3D78A]">
-        Overseas Temple Package
-      </span>
-      <span className="text-xs text-[#F3D78A]">✦</span>
-      <span className="h-px w-8 bg-[#D4B978]/80" />
-    </div> */}
-
     <h1
-      className="font-[family-name:var(--font-cormorant)] text-4xl sm:text-5xl lg:text-6xl xl:text-[64px] font-bold tracking-tight text-[#42151B] leading-[1.12]"
+      className="font-[family-name:var(--font-cormorant)] text-[14px] min-[360px]:text-[17px] min-[420px]:text-[21px] sm:text-5xl lg:text-6xl xl:text-[64px] font-bold tracking-tight text-[#42151B] leading-[1.12]"
       style={{ textShadow: "0 2px 10px rgba(255,255,255,0.35)" }}
     >
       Overseas Temple <span className="text-[#B37D2A]">Package</span>
     </h1>
 
-    <div className="mt-4">
+    <div className="mt-1 sm:mt-4">
       <p
-        className="font-[family-name:var(--font-cormorant)] text-xl sm:text-2xl font-semibold text-[#42151B] leading-snug"
+        className="font-[family-name:var(--font-cormorant)] text-[6.5px] min-[360px]:text-[7.5px] min-[420px]:text-[9.5px] sm:text-2xl font-semibold text-[#42151B] leading-tight sm:leading-snug"
         style={{ textShadow: "0 1px 8px rgba(255,255,255,0.4)" }}
       >
         Experience sacred temple rituals performed with devotion and authenticity, helping you stay spiritually connected to timeless traditions and divine blessings.
@@ -1519,125 +1515,111 @@ return (
           <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-[#C79D55]" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-            {/* SIDEBAR */}
-            <div className="lg:col-span-3 bg-[#4A1015] rounded-xl p-3 sm:p-4 text-white shadow-md space-y-2">
-              <button
-                type="button"
-                onClick={() => setActiveTab("details")}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-lg text-left text-xs sm:text-sm font-medium transition-all duration-300 ${
-                  activeTab === "details"
-                    ? "bg-[#7D1E28] text-white shadow-sm border-l-4 border-[#E7BE6B]"
-                    : "text-[#E6CFCE] hover:bg-[#5E1520] hover:text-white"
-                }`}
-              >
-                <Gift
-                  size={18}
-                  className={
-                    activeTab === "details"
-                      ? "text-[#E7BE6B]"
-                      : "text-[#B8860B]"
-                  }
-                />
+                        {/* SIDEBAR */}
+            <div className="min-w-0 lg:col-span-3">
+              <div className="lg:sticky lg:top-28 bg-[#4A1015] rounded-xl p-3 shadow-lg">
+                <div className="space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("details")}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                      activeTab === "details"
+                        ? "bg-[#7D1E28] text-white shadow-md"
+                        : "text-[#D9B8B8] hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    <Gift
+                      size={18}
+                      className={activeTab === "details" ? "text-[#F3D78A]" : "text-[#D4B978]"}
+                    />
+                    <span className="font-medium">Package Details</span>
+                  </button>
 
-                <span>Package Details</span>
-              </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("process")}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                      activeTab === "process"
+                        ? "bg-[#7D1E28] text-white shadow-md"
+                        : "text-[#D9B8B8] hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    <List
+                      size={18}
+                      className={activeTab === "process" ? "text-[#F3D78A]" : "text-[#D4B978]"}
+                    />
+                    <span className="font-medium">Pooja Process</span>
+                  </button>
 
-              <button
-                type="button"
-                onClick={() => setActiveTab("process")}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-lg text-left text-xs sm:text-sm font-medium transition-all duration-300 ${
-                  activeTab === "process"
-                    ? "bg-[#7D1E28] text-white shadow-sm border-l-4 border-[#E7BE6B]"
-                    : "text-[#E6CFCE] hover:bg-[#5E1520] hover:text-white"
-                }`}
-              >
-                <List
-                  size={18}
-                  className={
-                    activeTab === "process"
-                      ? "text-[#E7BE6B]"
-                      : "text-[#B8860B]"
-                  }
-                />
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("benefits")}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                      activeTab === "benefits"
+                        ? "bg-[#7D1E28] text-white shadow-md"
+                        : "text-[#D9B8B8] hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    <Star
+                      size={18}
+                      className={activeTab === "benefits" ? "text-[#F3D78A]" : "text-[#D4B978]"}
+                    />
+                    <span className="font-medium">Benefits</span>
+                  </button>
 
-                <span>Pooja Process</span>
-              </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("notes")}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                      activeTab === "notes"
+                        ? "bg-[#7D1E28] text-white shadow-md"
+                        : "text-[#D9B8B8] hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    <Info
+                      size={18}
+                      className={activeTab === "notes" ? "text-[#F3D78A]" : "text-[#D4B978]"}
+                    />
+                    <span className="font-medium">Important Notes</span>
+                  </button>
+                </div>
 
-              <button
-                type="button"
-                onClick={() => setActiveTab("benefits")}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-lg text-left text-xs sm:text-sm font-medium transition-all duration-300 ${
-                  activeTab === "benefits"
-                    ? "bg-[#7D1E28] text-white shadow-sm border-l-4 border-[#E7BE6B]"
-                    : "text-[#E6CFCE] hover:bg-[#5E1520] hover:text-white"
-                }`}
-              >
-                <Star
-                  size={18}
-                  className={
-                    activeTab === "benefits"
-                      ? "text-[#E7BE6B]"
-                      : "text-[#B8860B]"
-                  }
-                />
+                <div className="mt-4 border-t border-white/15 pt-5">
+                  <div className="mb-4">
+                    <span className="block text-[10px] uppercase tracking-[0.16em] text-[#D4B978]">
+                      Selected Pooja
+                    </span>
 
-                <span>Benefits</span>
-              </button>
+                    <h3 className="mt-2 font-[family-name:var(--font-cormorant)] text-2xl font-bold leading-tight text-[#F3D78A]">
+                      {selectedPooja.name}
+                    </h3>
 
-              <button
-                type="button"
-                onClick={() => setActiveTab("notes")}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-lg text-left text-xs sm:text-sm font-medium transition-all duration-300 ${
-                  activeTab === "notes"
-                    ? "bg-[#7D1E28] text-white shadow-sm border-l-4 border-[#E7BE6B]"
-                    : "text-[#E6CFCE] hover:bg-[#5E1520] hover:text-white"
-                }`}
-              >
-                <Info
-                  size={18}
-                  className={
-                    activeTab === "notes"
-                      ? "text-[#E7BE6B]"
-                      : "text-[#B8860B]"
-                  }
-                />
+                    <div className="text-xs text-white/80 mt-1">
+                      International Sankalpam
+                    </div>
 
-                <span>Important Notes</span>
-              </button>
-<div className="pt-4 border-t border-white/10 hidden sm:block">
-  <span className="text-[10px] uppercase tracking-wider text-[#D4B978]">
-    Selected Pooja
-  </span>
+                    <div className="mt-2 text-xl font-bold text-white">
+                      {priceLoading ? "..." : dynamicPrice ? `₹${dynamicPrice}` : "Price on request"}
+                    </div>
+                  </div>
 
-   <div className="font-[family-name:var(--font-cormorant)] text-xl font-bold text-[#F3D78A]">
-    {selectedPooja.name}
-  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsOrderOpen(true)}
+                    className="w-full rounded-xl bg-[#E5C77A] px-4 py-3 text-sm font-bold text-[#3D1418] shadow-sm transition-all hover:bg-[#F3D78A] hover:shadow-md active:scale-[0.98]"
+                  >
+                    Order Now
+                  </button>
 
-  <div className="text-xs text-white/80 mt-0.5">
-    International Sankalpam
-  </div>
-
-  <div className="text-white text-lg font-semibold mt-1">
-    {dynamicPrice ? `₹${dynamicPrice}` : "Contact for price"}
-  </div>
-
-  <button
-    type="button"
-    onClick={() => setIsOrderOpen(true)}
-    className="mt-3 w-full rounded-lg bg-[#E5C77A] py-2 text-center text-xs font-bold text-[#3D1418] transition hover:bg-[#F3D78A]"
-  >
-    Order Now
-  </button>
-
-  <button
-    type="button"
-    onClick={() => setIsBookingOpen(true)}
-    className="mt-3 w-full rounded-lg bg-[#F3D78A] px-3 py-2.5 text-center text-[11px] font-semibold text-[#3D1418] animate-priest-blink"
-  >
-    Looking for an experienced Iyer for an
-    upcoming pooja?
-  </button>
-</div>
+                  <button
+                    type="button"
+                    onClick={() => setIsBookingOpen(true)}
+                    className="mt-3 w-full rounded-xl border border-[#F3D78A]/50 bg-[#F3D78A] px-3 py-3 text-center text-xs font-bold leading-relaxed text-[#3D1418] shadow-sm animate-priest-blink transition-transform hover:scale-[1.01]"
+                  >
+                    Looking for an experienced Iyer for an upcoming pooja?
+                  </button>
+                </div>
+              </div>
             </div>
 
             {/* CONTENT */}

@@ -270,10 +270,12 @@ export default function TemplePackagePage() {
     fetchTemplePackages();
   }, []);
 
-    const [dynamicPrice, setDynamicPrice] = useState<string | null>(null);
+        const [dynamicPrice, setDynamicPrice] = useState<string | null>(null);
+  const [priceLoading, setPriceLoading] = useState(true);
 
-  useEffect(() => {
+      useEffect(() => {
     const fetchPrice = async () => {
+      setPriceLoading(true);
       try {
         const res = await fetch(`${API_BASE}/package-prices/thirumanjam`);
         if (res.ok) {
@@ -284,6 +286,8 @@ export default function TemplePackagePage() {
         }
       } catch (error) {
         console.error("Failed to load temple package price:", error);
+      } finally {
+        setPriceLoading(false);
       }
     };
 
@@ -426,7 +430,7 @@ export default function TemplePackagePage() {
       {/* HERO SECTION - FULL WIDTH */}
       {/* ========================================================= */}
 
-      <section className="relative mt-[90px] w-full min-h-[520px] sm:min-h-[580px] lg:min-h-[640px] flex items-center overflow-hidden border-b border-[#3D1A14]">
+      <section className="relative mt-[90px] w-full aspect-[1920/819] flex items-center overflow-hidden border-b border-[#3D1A14] sm:aspect-auto sm:min-h-[580px] lg:min-h-[640px]">
         {/* Full-width Background Image */}
         <div className="absolute inset-0 h-full w-full">
           <Image
@@ -437,53 +441,30 @@ export default function TemplePackagePage() {
             className="object-cover object-center brightness-110 saturate-105"
             sizes="100vw"
           />
-
-          {/* Lightened overlay for brighter image look */}
-          
-         
         </div>
 
-        {/* Content - Right Center */}
-<div className="relative z-10 ml-auto flex w-full max-w-[1600px] flex-col justify-center px-6 py-16 sm:px-10 lg:w-[55%] lg:px-16 xl:px-24 pt-24 sm:pt-28 lg:pt-32">
-  <div className="w-full max-w-2xl text-left text-white space-y-4 sm:space-y-5">
+        {/* Content - Right Center matching desktop view on mobile and desktop */}
+        <div className="relative z-10 ml-auto flex w-full max-w-[1600px] flex-col justify-center px-3 sm:px-10 lg:w-[55%] lg:px-16 xl:px-24 pt-4 sm:pt-28 lg:pt-32">
+          <div className="ml-[45%] w-[55%] sm:ml-0 sm:w-full max-w-2xl text-left text-white space-y-1 min-[360px]:space-y-1.5 sm:space-y-5">
 
-    {/* Small Label
-  <div className="inline-flex items-center gap-3 rounded-full bg-[#42151B]/90 px-5 py-2 shadow-sm">
-  <span className="h-px w-8 bg-[#D4B978]/80" />
+            {/* Main Heading */}
+            <h1 className="font-serif text-[15px] min-[360px]:text-[18px] min-[420px]:text-[22px] sm:text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-[#FFFDF8] leading-[1.12] [text-shadow:_0_3px_12px_rgba(0,0,0,0.9)]">
+              Temple{" "}
+              <span className="text-[#F3D78A]">
+                Package
+              </span>
+            </h1>
 
-  <span className="text-xs text-[#F3D78A]">
-    ✦
-  </span>
+            {/* Description */}
+            <p className="text-[6.5px] min-[360px]:text-[7.5px] min-[420px]:text-[9.5px] sm:text-base lg:text-[17px] text-white leading-tight sm:leading-relaxed max-w-xl font-medium [text-shadow:_0_2px_8px_rgba(0,0,0,0.95)]">
+              Experience divine blessings with our specially curated Temple
+              Packages performed in sacred temples by experienced priests
+              with traditional rituals for peace, prosperity and spiritual
+              growth.
+            </p>
 
-  <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#F3D78A]">
-    Temple Package
-  </span>
-
-  <span className="text-xs text-[#F3D78A]">
-    ✦
-  </span>
-
-  <span className="h-px w-8 bg-[#D4B978]/80" />
-</div> */}
-
-    {/* Main Heading */}
-    <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-[#FFFDF8] leading-[1.12] [text-shadow:_0_3px_12px_rgba(0,0,0,0.9)]">
-      Temple{" "}
-      <span className="text-[#F3D78A]">
-        Package
-      </span>
-    </h1>
-
-    {/* Description */}
-    <p className="text-sm sm:text-base lg:text-[17px] text-white leading-relaxed max-w-xl font-medium [text-shadow:_0_2px_8px_rgba(0,0,0,0.95)]">
-      Experience divine blessings with our specially curated Temple
-      Packages performed in sacred temples by experienced priests
-      with traditional rituals for peace, prosperity and spiritual
-      growth.
-    </p>
-
-  </div>
-</div>
+          </div>
+        </div>
       </section>
 
       {/* ========================================================= */}
@@ -509,87 +490,105 @@ export default function TemplePackagePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
             {/* SIDEBAR */}
 
-            <div className="lg:col-span-3 bg-[#4A1018] rounded-xl p-3 sm:p-4 text-white shadow-lg space-y-2">
-              <button
-                type="button"
-                onClick={() => setActiveTab("package")}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-lg text-left text-sm font-medium transition-all ${
-                  activeTab === "package"
-                    ? "bg-gradient-to-r from-[#7D1E28] to-[#8C232E] text-white shadow-md border-l-4 border-[#E7BE6B]"
-                    : "text-[#E6CFCE] hover:bg-[#5E1520]"
-                }`}
-              >
-                <Package size={18} />
-                <span>Package Details</span>
-              </button>
+                        <div className="min-w-0 lg:col-span-3">
+              <div className="lg:sticky lg:top-28 bg-[#4A1018] rounded-xl p-3 shadow-lg">
+                <div className="space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("package")}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                      activeTab === "package"
+                        ? "bg-[#7D1E28] text-white shadow-md"
+                        : "text-[#D9B8B8] hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    <Package
+                      size={18}
+                      className={activeTab === "package" ? "text-[#F3D78A]" : "text-[#D4B978]"}
+                    />
+                    <span className="font-medium">Package Details</span>
+                  </button>
 
-              <button
-                type="button"
-                onClick={() => setActiveTab("process")}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-lg text-left text-sm font-medium transition-all ${
-                  activeTab === "process"
-                    ? "bg-gradient-to-r from-[#7D1E28] to-[#8C232E] text-white shadow-md border-l-4 border-[#E7BE6B]"
-                    : "text-[#E6CFCE] hover:bg-[#5E1520]"
-                }`}
-              >
-                <ListOrdered size={18} />
-                <span>Pooja Process</span>
-              </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("process")}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                      activeTab === "process"
+                        ? "bg-[#7D1E28] text-white shadow-md"
+                        : "text-[#E6CFCE]/80 hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    <ListOrdered
+                      size={18}
+                      className={activeTab === "process" ? "text-[#F3D78A]" : "text-[#D4B978]"}
+                    />
+                    <span className="font-medium">Pooja Process</span>
+                  </button>
 
-              <button
-                type="button"
-                onClick={() => setActiveTab("benefits")}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-lg text-left text-sm font-medium transition-all ${
-                  activeTab === "benefits"
-                    ? "bg-gradient-to-r from-[#7D1E28] to-[#8C232E] text-white shadow-md border-l-4 border-[#E7BE6B]"
-                    : "text-[#E6CFCE] hover:bg-[#5E1520]"
-                }`}
-              >
-                <Star size={18} />
-                <span>Benefits</span>
-              </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("benefits")}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                      activeTab === "benefits"
+                        ? "bg-[#7D1E28] text-white shadow-md"
+                        : "text-[#E6CFCE]/80 hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    <Star
+                      size={18}
+                      className={activeTab === "benefits" ? "text-[#F3D78A]" : "text-[#D4B978]"}
+                    />
+                    <span className="font-medium">Benefits</span>
+                  </button>
 
-              <button
-                type="button"
-                onClick={() => setActiveTab("notes")}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-lg text-left text-sm font-medium transition-all ${
-                  activeTab === "notes"
-                    ? "bg-gradient-to-r from-[#7D1E28] to-[#8C232E] text-white shadow-md border-l-4 border-[#E7BE6B]"
-                    : "text-[#E6CFCE] hover:bg-[#5E1520]"
-                }`}
-              >
-                <Info size={18} />
-                <span>Important Notes</span>
-              </button>
-
-              <div className="pt-4 mt-2 border-t border-white/15">
-                <span className="text-[10px] uppercase tracking-wider text-[#D4B978]">
-                  Selected Package
-                </span>
-
-                <div className="font-serif text-xl font-bold text-[#F3D78A] mt-1">
-                  Thirumanjam
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("notes")}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                      activeTab === "notes"
+                        ? "bg-[#7D1E28] text-white shadow-md"
+                        : "text-[#E6CFCE]/80 hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    <Info
+                      size={18}
+                      className={activeTab === "notes" ? "text-[#F3D78A]" : "text-[#D4B978]"}
+                    />
+                    <span className="font-medium">Important Notes</span>
+                  </button>
                 </div>
 
-                              <div className="text-white text-lg font-semibold mt-1">
-                  ₹{dynamicPrice ?? "1,999"}
+                <div className="mt-4 border-t border-white/15 pt-5">
+                  <div className="mb-4">
+                    <span className="block text-[10px] uppercase tracking-[0.16em] text-[#D4B978]">
+                      Selected Package
+                    </span>
+
+                    <h3 className="mt-2 font-serif text-2xl font-bold leading-tight text-[#F3D78A]">
+                      Thirumanjam
+                    </h3>
+
+                    <div className="mt-2 text-xl font-bold text-white">
+                      {priceLoading ? "..." : dynamicPrice ? `₹${dynamicPrice}` : "Price on request"}
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsOrderOpen(true)}
+                    className="w-full rounded-xl bg-[#E5C77A] px-4 py-3 text-sm font-bold text-[#3D1418] shadow-sm transition-all hover:bg-[#F3D78A] hover:shadow-md active:scale-[0.98]"
+                  >
+                    Order Now
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsBookingOpen(true)}
+                    className="mt-3 w-full rounded-xl border border-[#F3D78A]/50 bg-[#F3D78A] px-3 py-3 text-center text-xs font-bold leading-relaxed text-[#3D1418] shadow-sm animate-priest-blink transition-transform hover:scale-[1.01]"
+                  >
+                    Looking for an experienced Iyer for an upcoming pooja?
+                  </button>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={() => setIsOrderOpen(true)}
-                  className="mt-4 w-full rounded-lg bg-[#E5C77A] py-2.5 text-sm font-bold text-[#3D1418] hover:bg-[#F3D78A] transition-colors"
-                >
-                  Order Now
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setIsBookingOpen(true)}
-                  className="mt-3 w-full rounded-lg bg-[#F3D78A] px-3 py-2.5 text-center text-[11px] font-semibold text-[#3D1418] animate-priest-blink"
-                >
-                  Looking for an experienced Iyer for an upcoming pooja?
-                </button>
               </div>
             </div>
 

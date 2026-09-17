@@ -66,10 +66,10 @@ export default function Home() {
         {/* Content - Mobile mirrors desktop on the right, desktop classes completely preserved */}
         <div className="absolute inset-0 z-10 flex items-center justify-end">
 
-          <div className="w-[56%] max-w-2xl pr-2 min-[480px]:pr-4 sm:pr-0 sm:px-10 lg:mr-[6%] lg:px-0 text-right sm:translate-y-6 md:translate-y-8 lg:translate-y-10">
+          <div className="w-[56%] max-w-2xl translate-y-3 pr-2 min-[480px]:pr-4 sm:translate-y-6 sm:pr-0 sm:px-10 lg:mr-[6%] lg:px-0 text-right md:translate-y-8 lg:translate-y-10">
 
             {/* Brand */}
-            <div className="mb-0.5 min-[400px]:mb-1 sm:mb-4 flex items-center justify-end gap-1 sm:gap-3">
+            <div className="mb-0.5 mr-3 min-[400px]:mb-1 sm:mb-4 sm:mr-0 flex items-center justify-end gap-1 sm:gap-3">
               <span className="h-px w-3 min-[400px]:w-5 bg-[#9A7228] sm:w-10" />
 
               <span className="text-[6px] min-[360px]:text-[7px] min-[400px]:text-[8px] min-[480px]:text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] sm:tracking-[0.25em] text-[#8C5D17]">

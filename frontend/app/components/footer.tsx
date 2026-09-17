@@ -8,6 +8,13 @@ import {
   MapPin,
   Phone,
 }  from "lucide-react";
+import { Cinzel } from "next/font/google";
+
+const cinzel = Cinzel({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-cinzel",
+});
 
 const quickLinks = [
   { label: "Home", href: "/" },
@@ -109,60 +116,70 @@ export default function Footer() {
   </a>
 
 </div>
+
+            {/* Headline & Tagline (Desktop Only) */}
+            <div className="mt-7 pt-4 border-t border-[#B08A45]/20 inline-flex flex-col items-center hidden md:inline-flex">
+              <span
+                className={`${cinzel.className} block whitespace-nowrap font-semibold leading-tight tracking-[0.02em] text-[#FFD93D] text-[13px] sm:text-[14px] text-center`}
+              >
+                IYER&apos;S POOJA PRODUCTS
+              </span>
+              <span
+                className="mt-1 block whitespace-nowrap font-medium text-[#FFD93D]/80 text-[10px] sm:text-[11px] tracking-wide text-center"
+              >
+                Unit of Pon Ma Lalli Brands
+              </span>
+            </div>
           </div>
 
 
           {/* =================================================
-              QUICK LINKS
+              LINKS (SIDE BY SIDE ON MOBILE)
           ================================================== */}
-          <div>
+          <div className="grid grid-cols-2 gap-6 sm:gap-8 md:contents">
+            {/* Quick Links */}
+            <div>
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#D4B978]">
+                Quick Links
+              </h3>
 
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#D4B978]">
-              Quick Links
-            </h3>
+              <ul className="mt-4 sm:mt-6 space-y-2.5 sm:space-y-3.5">
+                {quickLinks.map((item) => (
+                  <li key={item.label}>
+                    <Link
+                      href={item.href}
+                      className="group inline-flex items-center text-xs sm:text-sm text-[#D8C9B8] transition-colors duration-300 hover:text-white"
+                    >
+                      <span className="mr-0 h-px w-0 bg-[#D4B978] transition-all duration-300 group-hover:mr-2 group-hover:w-3" />
 
-            <ul className="mt-6 space-y-3.5">
-              {quickLinks.map((item) => (
-                <li key={item.label}>
-                  <Link
-                    href={item.href}
-                    className="group inline-flex items-center text-sm text-[#D8C9B8] transition-colors duration-300 hover:text-white"
-                  >
-                    <span className="mr-0 h-px w-0 bg-[#D4B978] transition-all duration-300 group-hover:mr-2 group-hover:w-3" />
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {/* Our Packages */}
+            <div>
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#D4B978]">
+                Our Packages
+              </h3>
 
-          </div>
+              <ul className="mt-4 sm:mt-6 space-y-2.5 sm:space-y-3.5">
+                {packageLinks.map((item) => (
+                  <li key={item.label}>
+                    <Link
+                      href={item.href}
+                      className="group inline-flex items-center text-xs sm:text-sm text-[#D8C9B8] transition-colors duration-300 hover:text-white"
+                    >
+                      <span className="mr-0 h-px w-0 bg-[#D4B978] transition-all duration-300 group-hover:mr-2 group-hover:w-3" />
 
-
-          {/* =================================================
-              PACKAGES
-          ================================================== */}
-          <div>
-
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#D4B978]">
-              Our Packages
-            </h3>
-
-            <ul className="mt-6 space-y-3.5">
-              {packageLinks.map((item) => (
-                <li key={item.label}>
-                  <Link
-                    href={item.href}
-                    className="group inline-flex items-center text-sm text-[#D8C9B8] transition-colors duration-300 hover:text-white"
-                  >
-                    <span className="mr-0 h-px w-0 bg-[#D4B978] transition-all duration-300 group-hover:mr-2 group-hover:w-3" />
-
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
 

@@ -645,8 +645,10 @@ export default function CorporatePackagePage() {
   const [itemsLoading, setItemsLoading] =
     useState(false);
 
-      const [dynamicPrice, setDynamicPrice] =
+            const [dynamicPrice, setDynamicPrice] =
     useState<string | null>(null);
+
+  const [priceLoading, setPriceLoading] = useState(true);
 
   const [availabilityWeekly, setAvailabilityWeekly] = useState(false);
   const [availabilityMonthly, setAvailabilityMonthly] = useState(false);
@@ -872,7 +874,8 @@ export default function CorporatePackagePage() {
   useEffect(() => {
     let cancelled = false;
 
-    async function loadPrice() {
+        async function loadPrice() {
+      setPriceLoading(true);
       try {
         const res = await fetch(
           `${API_BASE}/package-prices/${selectedPackage.id}`
@@ -888,6 +891,10 @@ export default function CorporatePackagePage() {
           setDynamicPrice(null);
           setAvailabilityWeekly(false);
           setAvailabilityMonthly(false);
+        }
+      } finally {
+        if (!cancelled) {
+          setPriceLoading(false);
         }
       }
     }
@@ -1157,7 +1164,7 @@ export default function CorporatePackagePage() {
       `}</style>
 
      {/* HERO BANNER */}
-<section className="relative mt-[90px] w-full min-h-[620px] flex items-center overflow-hidden border-b border-[#3D1418]">
+<section className="relative mt-[90px] w-full aspect-[1888/833] flex items-center overflow-hidden border-b border-[#3D1418] md:aspect-auto md:min-h-[620px]">
   {/* Background Image */}
   <div className="absolute inset-0">
     <Image
@@ -1174,58 +1181,32 @@ export default function CorporatePackagePage() {
   </div>
 
   {/* Content */}
-  <div className="relative z-10 w-full max-w-[1800px] mx-auto px-6 lg:px-10">
-    <div className="max-w-[650px] lg:ml-[52%]">
-
-      {/* Badge 
-      <div className="mb-8 inline-flex items-center gap-4 rounded-full bg-[#6B1720]/95 px-8 py-3 shadow-xl">
-        <span className="h-px w-10 bg-[#D4B978]" />
-        <span className="text-[#F3D78A]">✦</span>
-
-        <span className="text-xs font-bold uppercase tracking-[0.28em] text-[#F3D78A]">
-          Corporate Package
-        </span>
-
-        <span className="text-[#F3D78A]">✦</span>
-        <span className="h-px w-10 bg-[#D4B978]" />
-      </div>*/}
+  <div className="relative z-10 w-full max-w-[1800px] mx-auto px-3 sm:px-6 lg:px-10">
+    <div className="ml-[48%] max-w-[50%] sm:ml-[50%] sm:max-w-[48%] md:ml-0 md:max-w-[650px] lg:ml-[52%]">
 
       {/* Heading */}
-      <h1 className="font-[family-name:var(--font-cormorant)] text-4xl md:text-5xl lg:text-[78px] leading-none font-semibold">
-        <span className="text-[#5A1820]">
-          Corporate
-        </span>{" "}
-        <span className="bg-gradient-to-r from-[#B8872F] via-[#E6C977] to-[#A8741F] bg-clip-text text-transparent">
-          Package
-        </span>
-      </h1>
+      <h1 className="font-[family-name:var(--font-cormorant)] text-[15px] min-[360px]:text-[18px] min-[420px]:text-[22px] sm:text-3xl md:text-5xl lg:text-[78px] leading-none font-semibold">
+  <span className="text-[#5A1820]">
+    Corporate
+  </span>{" "}
+  <span className="text-[#5A1820]">
+    Package
+  </span>
+</h1>
 
       {/* Divider */}
-      <div className="my-6 flex items-center gap-4">
-        <span className="h-px w-24 bg-[#D4B978]" />
-        <span className="text-[#C39A43] text-xl">❖</span>
-        <span className="h-px w-24 bg-[#D4B978]" />
+      <div className="my-1 min-[360px]:my-1.5 sm:my-3 md:my-6 flex items-center gap-1.5 min-[360px]:gap-2 md:gap-4">
+        <span className="h-px w-6 min-[360px]:w-10 sm:w-16 md:w-24 bg-[#D4B978]" />
+        <span className="text-[10px] min-[360px]:text-xs md:text-xl text-[#C39A43]"></span>
+        <span className="h-px w-6 min-[360px]:w-10 sm:w-16 md:w-24 bg-[#D4B978]" />
       </div>
 
       {/* Description */}
-      <p className="max-w-xl text-lg leading-relaxed font-medium text-[#4A1015]">
+      <p className="max-w-xl text-[7px] min-[360px]:text-[8px] min-[420px]:text-[10px] sm:text-sm md:text-lg leading-tight sm:leading-relaxed font-medium text-[#4A1015]">
         Traditional poojas and homams for offices,
         new establishments, business spaces and
         important corporate occasions.
       </p>
-
-
-     
-      {/* Button 
-      <div className="mt-10">
-        <a
-          href="#choose-ceremony"
-          className="inline-flex items-center gap-3 rounded-full bg-[#D4B978] px-10 py-4 text-base font-bold text-[#5A1820] shadow-lg transition-all duration-300 hover:scale-105 hover:bg-[#E5C77A]"
-        >
-          Explore Corporate Poojas
-          <ChevronRight size={18} />
-        </a>
-      </div>*/}
 
     </div>
   </div>
@@ -1549,10 +1530,12 @@ export default function CorporatePackagePage() {
                       {selectedPackage.name}
                     </h3>
 
-                                       <div className="mt-2 text-xl font-bold text-white">
-                      {dynamicPrice
+                                        <div className="mt-2 text-xl font-bold text-white">
+                      {priceLoading
+                        ? "..."
+                        : dynamicPrice
                         ? `₹${dynamicPrice}`
-                        : selectedPackage.price}
+                        : "Price on request"}
                     </div>
                   </div>
 

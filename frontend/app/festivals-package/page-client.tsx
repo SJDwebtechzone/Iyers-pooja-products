@@ -542,7 +542,8 @@ export default function FestivalPackagePage() {
   // festivalPackages are sample content, never a fallback.
   const [liveItems, setLiveItems] = useState<PackageItem[]>([]);
   const [itemsLoading, setItemsLoading] = useState(false);
-  const [dynamicPrice, setDynamicPrice] = useState<string | null>(null);
+    const [dynamicPrice, setDynamicPrice] = useState<string | null>(null);
+  const [priceLoading, setPriceLoading] = useState(true);
 
   // BOOKING STATE
   // ORDER NOW (2-step order + payment) modal state.
@@ -641,11 +642,12 @@ useEffect(() => {
     };
     }, [selectedFestival.id]);
 
-  // Fetch dynamic price for the selected festival
+      // Fetch dynamic price for the selected festival
   useEffect(() => {
     let cancelled = false;
 
     async function loadPrice() {
+      setPriceLoading(true);
       try {
         const res = await fetch(
           `${API_BASE}/package-prices/${selectedFestival.id}`
@@ -663,6 +665,10 @@ useEffect(() => {
       } catch {
         if (!cancelled) {
           setDynamicPrice(null);
+        }
+      } finally {
+        if (!cancelled) {
+          setPriceLoading(false);
         }
       }
     }
@@ -703,7 +709,7 @@ useEffect(() => {
         .animate-priest-blink { animation: priest-blink 1.6s ease-in-out infinite; }
       `}</style>
       {/* ================= HERO BANNER ================= */}
-      <section className="relative min-h-[520px] w-full overflow-hidden bg-[#24120E] sm:min-h-[580px] lg:min-h-[640px]">
+      <section className="relative w-full aspect-[2048/768] overflow-hidden bg-[#24120E] flex items-center justify-center sm:aspect-auto sm:min-h-[580px] lg:min-h-[640px]">
         {/* Background Image */}
         <div className="absolute inset-0">
   <Image
@@ -719,7 +725,7 @@ useEffect(() => {
 </div>
 
         {/* Content */}
-        <div className="relative z-10 mx-auto flex min-h-[520px] max-w-5xl flex-col items-center justify-center px-6 py-20 text-center sm:min-h-[580px] sm:px-10 lg:min-h-[640px]">
+        <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center justify-center px-3 text-center sm:px-10 py-2 sm:py-20">
           {/* Small Label
 <div className="mb-5 inline-flex items-center justify-center gap-3 rounded-full bg-[#42151B]/90 px-5 py-2 shadow-sm">
   <span className="h-px w-8 bg-[#D4B978]/80" />
@@ -732,7 +738,7 @@ useEffect(() => {
 </div> */}
 
 {/* Heading */}
-<h1 className="font-[family-name:var(--font-cormorant)] text-4xl font-semibold tracking-wide text-[#FFFDF8] sm:text-5xl md:text-6xl lg:text-7xl">
+<h1 className="font-[family-name:var(--font-cormorant)] text-[14px] min-[360px]:text-[17px] min-[420px]:text-[21px] font-semibold tracking-wide text-[#FFFDF8] sm:text-5xl md:text-6xl lg:text-7xl leading-tight">
   Celebrate Every Festival
   <br />
   <span
@@ -744,49 +750,38 @@ useEffect(() => {
 </h1>
 
           {/* Divider */}
-<div className="my-5 flex items-center justify-center gap-3 opacity-90">
-  <span className="h-px w-14 bg-gradient-to-r from-transparent via-[#E5C77A] to-transparent" />
-  <span className="text-sm text-[#E5C77A]">❖</span>
-  <span className="h-px w-14 bg-gradient-to-r from-transparent via-[#E5C77A] to-transparent" />
+<div className="my-1 min-[360px]:my-1.5 sm:my-5 flex items-center justify-center gap-1.5 sm:gap-3 opacity-90">
+  <span className="h-px w-6 min-[360px]:w-8 sm:w-14 bg-gradient-to-r from-transparent via-[#E5C77A] to-transparent" />
+  <span className="text-[8px] min-[360px]:text-[10px] sm:text-sm text-[#E5C77A]">❖</span>
+  <span className="h-px w-6 min-[360px]:w-8 sm:w-14 bg-gradient-to-r from-transparent via-[#E5C77A] to-transparent" />
 </div>
 
 {/* Subtitle */}
-<p className="max-w-2xl text-sm leading-relaxed text-white sm:text-base md:text-lg [text-shadow:_0_2px_10px_rgba(0,0,0,0.95)]">
+<p className="max-w-2xl text-[6.5px] min-[360px]:text-[7.5px] min-[420px]:text-[9.5px] leading-tight sm:leading-relaxed text-white sm:text-base md:text-lg [text-shadow:_0_2px_10px_rgba(0,0,0,0.95)]">
   Festivals are the soul of our culture. Worship, celebrate and receive divine blessings with our specially curated pooja packages.
 </p>
-          {/* CTA Button
-          <div className="mt-8">
-            <a
-              href="#upcoming-festivals"
-              className="inline-flex items-center gap-2 rounded-full bg-[#E5C77A] px-8 py-3.5 text-xs font-bold tracking-wider text-[#3D1418] shadow-lg transition-all duration-300 hover:bg-[#F3D78A] hover:shadow-xl hover:scale-105 active:scale-95 sm:text-sm"
-            >
-              <span>Explore Festival Poojas</span>
-              <ArrowRight size={16} />
-            </a>
-          </div>
-          */}
         </div>
       </section>
 
       {/* ================= 4 FEATURE HIGHLIGHTS STRIP ================= */}
-      <section className="relative z-20 mx-auto -mt-10 max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-[#E9DDC9] bg-[#FFFDF9] p-6 shadow-[0_10px_35px_rgba(60,30,20,0.06)] backdrop-blur-sm sm:p-8">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+      <section className="relative z-20 mx-auto mt-4 sm:-mt-10 max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="rounded-2xl border border-[#E9DDC9] bg-[#FFFDF9] p-4 sm:p-8 shadow-[0_10px_35px_rgba(60,30,20,0.06)] backdrop-blur-sm">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
             {featureBadges.map((badge, idx) => {
               const IconComponent = badge.icon;
               return (
                 <div
                   key={idx}
-                  className="flex items-center gap-4 transition-transform duration-300 hover:translate-y-[-2px]"
+                  className="flex items-center gap-3.5 sm:gap-4 transition-transform duration-300 hover:translate-y-[-2px]"
                 >
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#D4B978]/60 bg-[#FAF4E8] text-[#91202B] shadow-sm">
-                    <IconComponent size={20} strokeWidth={1.8} />
+                  <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-full border border-[#D4B978]/60 bg-[#FAF4E8] text-[#91202B] shadow-sm">
+                    <IconComponent size={18} strokeWidth={1.8} className="sm:w-5 sm:h-5" />
                   </div>
                   <div>
-                    <h3 className="font-[family-name:var(--font-cormorant)] text-lg font-semibold text-[#4A171E] sm:text-xl">
+                    <h3 className="font-[family-name:var(--font-cormorant)] text-base font-semibold text-[#4A171E] sm:text-xl">
                       {badge.title}
                     </h3>
-                    <p className="text-xs leading-snug text-[#7A6E65]">
+                    <p className="text-[11px] sm:text-xs leading-snug text-[#7A6E65]">
                       {badge.subtitle}
                     </p>
                   </div>
@@ -1088,107 +1083,118 @@ useEffect(() => {
             </div>
           </div>
 
-          {/* Details Card with Tabs & Full Table */}
-          <div className="overflow-hidden rounded-2xl border border-[#E8D5B5] bg-[#FFFCF7] shadow-lg">
-            <div className="grid lg:grid-cols-[260px_1fr]">
-              {/* SIDEBAR TABS */}
-              <div className="bg-[#5A1C22] p-4 lg:p-6">
-                <div className="space-y-2.5">
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab("details")}
-                    className={`flex w-full items-center gap-3 rounded-xl px-4 py-3.5 text-left text-sm font-medium transition-all duration-300 ${
-                      activeTab === "details"
-                        ? "bg-[#7A202B] text-white shadow-md"
-                        : "text-white/80 hover:bg-white/10 hover:text-white"
-                    }`}
-                  >
-                    <Gift size={18} className={activeTab === "details" ? "text-[#D4B978]" : "text-white/70"} />
-                    <span>Package Details (Items)</span>
-                    {activeTab === "details" && <span className="ml-auto hidden text-[#D4B978] lg:block">›</span>}
-                  </button>
+                    {/* Details Card with Tabs & Full Table */}
+          <div className="rounded-2xl bg-[#FCFAF5] border border-[#DFCBB0] p-4 sm:p-6 lg:p-7 shadow-lg">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              {/* SIDEBAR */}
+              <div className="min-w-0 lg:col-span-3">
+                <div className="lg:sticky lg:top-28 bg-[#5A1C22] rounded-xl p-3 shadow-lg">
+                  <div className="space-y-2">
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("details")}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                        activeTab === "details"
+                          ? "bg-[#7A202B] text-white shadow-md"
+                          : "text-white/80 hover:bg-white/10 hover:text-white"
+                      }`}
+                    >
+                      <Gift
+                        size={18}
+                        className={activeTab === "details" ? "text-[#D4B978]" : "text-white/70"}
+                      />
+                      <span className="font-medium">Package Details (Items)</span>
+                    </button>
 
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab("process")}
-                    className={`flex min-w-max items-center gap-3 rounded-xl px-4 py-3.5 text-left text-sm font-medium transition-all duration-300 lg:w-full ${
-                      activeTab === "process"
-                        ? "bg-[#7A202B] text-white shadow-md"
-                        : "text-white/80 hover:bg-white/10 hover:text-white"
-                    }`}
-                  >
-                    <List size={18} className={activeTab === "process" ? "text-[#D4B978]" : "text-white/70"} />
-                    <span>Pooja Process</span>
-                    {activeTab === "process" && <span className="ml-auto hidden text-[#D4B978] lg:block">›</span>}
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("process")}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                        activeTab === "process"
+                          ? "bg-[#7A202B] text-white shadow-md"
+                          : "text-white/80 hover:bg-white/10 hover:text-white"
+                      }`}
+                    >
+                      <List
+                        size={18}
+                        className={activeTab === "process" ? "text-[#D4B978]" : "text-white/70"}
+                      />
+                      <span className="font-medium">Pooja Process</span>
+                    </button>
 
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab("benefits")}
-                    className={`flex min-w-max items-center gap-3 rounded-xl px-4 py-3.5 text-left text-sm font-medium transition-all duration-300 lg:w-full ${
-                      activeTab === "benefits"
-                        ? "bg-[#7A202B] text-white shadow-md"
-                        : "text-white/80 hover:bg-white/10 hover:text-white"
-                    }`}
-                  >
-                    <Star size={18} className={activeTab === "benefits" ? "text-[#D4B978]" : "text-white/70"} />
-                    <span>Benefits</span>
-                    {activeTab === "benefits" && <span className="ml-auto hidden text-[#D4B978] lg:block">›</span>}
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("benefits")}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                        activeTab === "benefits"
+                          ? "bg-[#7A202B] text-white shadow-md"
+                          : "text-white/80 hover:bg-white/10 hover:text-white"
+                      }`}
+                    >
+                      <Star
+                        size={18}
+                        className={activeTab === "benefits" ? "text-[#D4B978]" : "text-white/70"}
+                      />
+                      <span className="font-medium">Benefits</span>
+                    </button>
 
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab("notes")}
-                    className={`flex min-w-max items-center gap-3 rounded-xl px-4 py-3.5 text-left text-sm font-medium transition-all duration-300 lg:w-full ${
-                      activeTab === "notes"
-                        ? "bg-[#7A202B] text-white shadow-md"
-                        : "text-white/80 hover:bg-white/10 hover:text-white"
-                    }`}
-                  >
-                    <Info size={18} className={activeTab === "notes" ? "text-[#D4B978]" : "text-white/70"} />
-                    <span>Important Notes</span>
-                    {activeTab === "notes" && <span className="ml-auto hidden text-[#D4B978] lg:block">›</span>}
-                  </button>
-                </div>
-
-            
-                                            {/* Package Quick Booking Box inside sidebar */}
-                <div className="mt-8 hidden pt-4 border-t border-white/15 text-white lg:block">
-                  <span className="text-[11px] uppercase tracking-wider text-[#D4B978]">
-                    Selected Package
-                  </span>
-
-                  <div className="mt-1 font-[family-name:var(--font-cormorant)] text-xl font-bold text-[#F3D78A]">
-                    {selectedFestival.name}
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("notes")}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                        activeTab === "notes"
+                          ? "bg-[#7A202B] text-white shadow-md"
+                          : "text-white/80 hover:bg-white/10 hover:text-white"
+                      }`}
+                    >
+                      <Info
+                        size={18}
+                        className={activeTab === "notes" ? "text-[#D4B978]" : "text-white/70"}
+                      />
+                      <span className="font-medium">Important Notes</span>
+                    </button>
                   </div>
 
-                  <div className="mt-1 text-lg font-semibold text-white">
-                    {dynamicPrice
-                      ? `₹${dynamicPrice}`
-                      : selectedFestival.price}
+                  <div className="mt-4 border-t border-white/15 pt-5">
+                    <div className="mb-4">
+                      <span className="block text-[10px] uppercase tracking-[0.16em] text-[#D4B978]">
+                        Selected Package
+                      </span>
+
+                      <h3 className="mt-2 font-[family-name:var(--font-cormorant)] text-2xl font-bold leading-tight text-[#F3D78A]">
+                        {selectedFestival.name}
+                      </h3>
+
+                      <div className="mt-2 text-xl font-bold text-white">
+                        {priceLoading
+                          ? "..."
+                          : dynamicPrice
+                          ? `₹${dynamicPrice}`
+                          : "Price on request"}
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setIsOrderOpen(true)}
+                      className="w-full rounded-xl bg-[#E5C77A] px-4 py-3 text-sm font-bold text-[#3D1418] shadow-sm transition-all hover:bg-[#F3D78A] hover:shadow-md active:scale-[0.98]"
+                    >
+                      Order Now
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setIsBookingOpen(true)}
+                      className="mt-3 w-full rounded-xl border border-[#F3D78A]/50 bg-[#F3D78A] px-3 py-3 text-center text-xs font-bold leading-relaxed text-[#3D1418] shadow-sm animate-priest-blink transition-transform hover:scale-[1.01]"
+                    >
+                      Looking for an experienced Iyer for an upcoming pooja?
+                    </button>
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={() => setIsOrderOpen(true)}
-                    className="mt-4 flex w-full items-center justify-center rounded-lg bg-[#E5C77A] py-2.5 text-xs font-bold tracking-wider text-[#3D1418] transition hover:bg-[#F3D78A]"
-                  >
-                    ORDER NOW
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setIsBookingOpen(true)}
-                    className="mt-3 w-full rounded-lg bg-[#F3D78A] px-3 py-2.5 text-center text-[11px] font-semibold text-[#3D1418] animate-priest-blink"
-                  >
-                    Looking for an experienced Iyer for an
-                    upcoming pooja?
-                  </button>
                 </div>
               </div>
 
               {/* CONTENT AREA */}
-              <div className="min-w-0 p-2 sm:p-7 lg:p-9">
+              <div className="lg:col-span-9 min-w-0">
                 {/* TAB 1: ITEMS TABLE */}
                 {activeTab === "details" && (
                   <div>
