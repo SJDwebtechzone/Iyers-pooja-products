@@ -7,7 +7,7 @@ import {
   Mail,
   MapPin,
   Phone,
-}  from "lucide-react";
+} from "lucide-react";
 import { Cinzel } from "next/font/google";
 
 const cinzel = Cinzel({
@@ -71,12 +71,12 @@ export default function Footer() {
               />
 
               <div>
-                <div className="font-[family-name:var(--font-cormorant)] text-3xl font-semibold tracking-[0.08em] text-[#F8F4EC]">
-                  IYER&apos;S
+                <div className="font-[family-name:var(--font-cormorant)] italic text-2xl sm:text-3xl font-semibold tracking-[0.03em] text-[#F8F4EC] leading-tight">
+                  IYER&apos;S POOJA PRODUCTS
                 </div>
 
-                <div className="mt-1 text-[9px] font-medium tracking-[0.28em] text-[#D4B978]">
-                  POOJA PRODUCTS
+                <div className="mt-1 font-[family-name:var(--font-cormorant)] italic text-sm sm:text-base font-medium tracking-[0.05em] text-[#D4B978]">
+                  Unit of Pon Ma Lalli Brands
                 </div>
               </div>
             </Link>
@@ -90,46 +90,39 @@ export default function Footer() {
 
             {/* Social Media */}
             <div className="mt-7 flex items-center gap-3">
-
-  <a
-    href="#"
-    aria-label="Facebook"
-    className="flex h-10 w-10 items-center justify-center rounded-full border border-[#B08A45]/30 text-sm font-semibold text-[#D8C9B8] transition-all duration-300 hover:border-[#D4B978] hover:bg-[#D4B978] hover:text-[#42161B]"
-  >
-    f
-  </a>
-
-  <a
-    href="#"
-    aria-label="Instagram"
-    className="flex h-10 w-10 items-center justify-center rounded-full border border-[#B08A45]/30 text-sm font-semibold text-[#D8C9B8] transition-all duration-300 hover:border-[#D4B978] hover:bg-[#D4B978] hover:text-[#42161B]"
-  >
-    ◎
-  </a>
-
-  <a
-    href="#"
-    aria-label="YouTube"
-    className="flex h-10 w-10 items-center justify-center rounded-full border border-[#B08A45]/30 text-sm font-semibold text-[#D8C9B8] transition-all duration-300 hover:border-[#D4B978] hover:bg-[#D4B978] hover:text-[#42161B]"
-  >
-    ▶
-  </a>
-
-</div>
-
-            {/* Headline & Tagline (Desktop Only) */}
-            <div className="mt-7 pt-4 border-t border-[#B08A45]/20 inline-flex flex-col items-center hidden md:inline-flex">
-              <span
-                className={`${cinzel.className} block whitespace-nowrap font-semibold leading-tight tracking-[0.02em] text-[#FFD93D] text-[13px] sm:text-[14px] text-center`}
+              <a
+                href="#"
+                aria-label="Facebook"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#D4B978]/40 bg-white/5 text-[#E8D7C3] backdrop-blur-sm shadow-md transition-all duration-300 hover:border-[#FFD93D] hover:bg-gradient-to-br hover:from-[#D4B978] hover:to-[#B08A45] hover:text-[#2B0C14] hover:scale-110 hover:shadow-[0_0_15px_rgba(212,185,120,0.35)]"
               >
-                IYER&apos;S POOJA PRODUCTS
-              </span>
-              <span
-                className="mt-1 block whitespace-nowrap font-medium text-[#FFD93D]/80 text-[10px] sm:text-[11px] tracking-wide text-center"
+                <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </a>
+
+              <a
+                href="#"
+                aria-label="Instagram"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#D4B978]/40 bg-white/5 text-[#E8D7C3] backdrop-blur-sm shadow-md transition-all duration-300 hover:border-[#FFD93D] hover:bg-gradient-to-br hover:from-[#D4B978] hover:to-[#B08A45] hover:text-[#2B0C14] hover:scale-110 hover:shadow-[0_0_15px_rgba(212,185,120,0.35)]"
               >
-                Unit of Pon Ma Lalli Brands
-              </span>
+                <svg viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-current stroke-2 stroke-linecap-round stroke-linejoin-round">
+                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                </svg>
+              </a>
+
+              <a
+                href="#"
+                aria-label="YouTube"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#D4B978]/40 bg-white/5 text-[#E8D7C3] backdrop-blur-sm shadow-md transition-all duration-300 hover:border-[#FFD93D] hover:bg-gradient-to-br hover:from-[#D4B978] hover:to-[#B08A45] hover:text-[#2B0C14] hover:scale-110 hover:shadow-[0_0_15px_rgba(212,185,120,0.35)]"
+              >
+                <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+              </a>
             </div>
+
           </div>
 
 

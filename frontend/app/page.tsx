@@ -149,7 +149,7 @@ export default function Home() {
           </h2>
 
           {/* Description */}
-          <p className="mx-auto mt-7 max-w-3xl text-base leading-8 text-[#756B62] sm:text-lg">
+          <p className="mx-auto mt-7 max-w-3xl text-justify text-base leading-8 text-[#756B62] sm:text-lg">
             At Iyer&apos;s Pooja Products, we believe preparing for a pooja
             should be meaningful, not time-consuming. We bring together
             carefully selected pooja essentials and thoughtfully curated

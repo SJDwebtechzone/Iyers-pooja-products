@@ -1201,12 +1201,12 @@ export default function CorporatePackagePage() {
         <span className="h-px w-6 min-[360px]:w-10 sm:w-16 md:w-24 bg-[#D4B978]" />
       </div>
 
-      {/* Description */}
-      <p className="max-w-xl text-[7px] min-[360px]:text-[8px] min-[420px]:text-[10px] sm:text-sm md:text-lg leading-tight sm:leading-relaxed font-medium text-[#4A1015]">
-        Traditional poojas and homams for offices,
-        new establishments, business spaces and
-        important corporate occasions.
-      </p>
+      {/* Description in Glass Card */}
+      <div className="inline-block max-w-xl rounded-lg sm:rounded-2xl bg-gradient-to-br from-white/90 via-white/80 to-[#FAF5EE]/85 p-2 min-[360px]:p-2.5 sm:p-4 md:p-5 backdrop-blur-md border border-[#D4B978]/50 shadow-[0_4px_24px_rgba(74,16,21,0.08)]">
+        <p className="text-[8.5px] min-[360px]:text-[10px] min-[420px]:text-[11.5px] sm:text-sm md:text-base lg:text-lg leading-snug sm:leading-relaxed font-medium text-[#38090E]">
+          Traditional poojas and homams for offices, new business spaces and important corporate occasions.
+        </p>
+      </div>
 
     </div>
   </div>

@@ -455,13 +455,12 @@ export default function TemplePackagePage() {
               </span>
             </h1>
 
-            {/* Description */}
-            <p className="text-[6.5px] min-[360px]:text-[7.5px] min-[420px]:text-[9.5px] sm:text-base lg:text-[17px] text-white leading-tight sm:leading-relaxed max-w-xl font-medium [text-shadow:_0_2px_8px_rgba(0,0,0,0.95)]">
-              Experience divine blessings with our specially curated Temple
-              Packages performed in sacred temples by experienced priests
-              with traditional rituals for peace, prosperity and spiritual
-              growth.
-            </p>
+            {/* Description in Glass Card */}
+            <div className="inline-block max-w-xl rounded-lg sm:rounded-2xl bg-gradient-to-br from-white/90 via-white/80 to-[#FAF5EE]/85 p-2 min-[360px]:p-2.5 sm:p-4 md:p-5 backdrop-blur-md border border-[#D4B978]/50 shadow-[0_4px_24px_rgba(74,16,21,0.08)]">
+              <p className="text-[8.5px] min-[360px]:text-[10px] min-[420px]:text-[11.5px] sm:text-sm md:text-base lg:text-lg leading-snug sm:leading-relaxed font-medium text-[#38090E]">
+                Experience divine blessings through sacred temple rituals performed by experienced priests.
+              </p>
+            </div>
 
           </div>
         </div>

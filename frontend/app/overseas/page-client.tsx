@@ -1225,7 +1225,7 @@ return (
           1. HERO SECTION
       ========================================== */}
 
-      <section className="relative mt-[90px] overflow-hidden aspect-[1877/838] border-b border-[#E8DDC8] flex items-start sm:items-center md:aspect-auto md:min-h-[620px] md:mt-0 md:pt-[90px]">
+      <section className="relative mt-[90px] overflow-hidden aspect-[1877/838] border-b border-[#E8DDC8] flex items-end sm:items-center md:aspect-auto md:min-h-[620px] md:mt-0 md:pt-[90px]">
 
   {/* ORIGINAL FULL WIDTH IMAGE - NO EFFECT */}
   <div className="absolute inset-0 md:top-[90px]">
@@ -1239,9 +1239,9 @@ return (
     />
   </div>
 
-<div className="relative z-10 mx-auto w-full max-w-[1600px] flex items-start sm:items-center md:min-h-[560px] lg:min-h-[620px]">
+<div className="relative z-10 mx-auto w-full max-w-[1600px] h-full flex items-end sm:items-center md:min-h-[560px] lg:min-h-[620px]">
           {/* LEFT */}
-    <div className="w-[58%] max-w-[760px] flex flex-col justify-start pt-12 md:min-h-[560px] lg:min-h-[620px] px-3 sm:px-10 lg:pl-16 lg:pr-8 sm:pt-24 lg:pt-32 sm:pb-10">
+    <div className="w-[58%] max-w-[760px] flex flex-col justify-end sm:justify-start pb-2.5 min-[360px]:pb-3.5 sm:pb-10 pt-2 sm:pt-24 lg:pt-32 md:min-h-[560px] lg:min-h-[620px] px-3 sm:px-10 lg:pl-16 lg:pr-8">
   <div>
     <h1
       className="font-[family-name:var(--font-cormorant)] text-[14px] min-[360px]:text-[17px] min-[420px]:text-[21px] sm:text-5xl lg:text-6xl xl:text-[64px] font-bold tracking-tight text-[#42151B] leading-[1.12]"
@@ -1250,11 +1250,9 @@ return (
       Overseas Temple <span className="text-[#B37D2A]">Package</span>
     </h1>
 
-    <div className="mt-1 sm:mt-4">
-      <p
-        className="font-[family-name:var(--font-cormorant)] text-[6.5px] min-[360px]:text-[7.5px] min-[420px]:text-[9.5px] sm:text-2xl font-semibold text-[#42151B] leading-tight sm:leading-snug"
-        style={{ textShadow: "0 1px 8px rgba(255,255,255,0.4)" }}
-      >
+    {/* Description in Glass Card */}
+    <div className="mt-1 min-[360px]:mt-1.5 sm:mt-4 inline-block max-w-xl rounded-lg sm:rounded-2xl bg-gradient-to-br from-white/90 via-white/80 to-[#FAF5EE]/85 p-1.5 min-[360px]:p-2 sm:p-4 md:p-5 backdrop-blur-md border border-[#D4B978]/50 shadow-[0_4px_24px_rgba(74,16,21,0.08)]">
+      <p className="text-[8px] min-[360px]:text-[9.5px] min-[420px]:text-[11px] sm:text-sm md:text-base lg:text-lg leading-tight sm:leading-relaxed font-medium text-[#38090E]">
         Experience sacred temple rituals performed with devotion and authenticity, helping you stay spiritually connected to timeless traditions and divine blessings.
       </p>
     </div>

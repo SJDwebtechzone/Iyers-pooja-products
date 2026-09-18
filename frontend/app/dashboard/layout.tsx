@@ -23,6 +23,8 @@ import {
   ShoppingBag,
   CreditCard,
   MessageCircle,
+  LogOut,
+  Loader2,
 } from "lucide-react";
 import NextImage from "next/image";
 import { DASHBOARD_BADGES_EVENT } from "./dashboard-events";
@@ -131,6 +133,22 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
+  const [adminOpen, setAdminOpen] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setLoggingOut(true);
+    try {
+      await fetch(`${API_BASE}/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch {
+      // ignore network errors and still redirect
+    } finally {
+      window.location.href = "/login";
+    }
+  };
 
   /**
    * Every badge below is a live database count fetched from the backend.
@@ -431,13 +449,71 @@ export default function DashboardLayout({
               )}
             </div>
 
-            <button className="flex items-center gap-2 text-base text-[#2B0C14]">
-              <div className="w-7 h-7 rounded-full bg-[#8A1C2B] text-[#F3E7D3] text-xs flex items-center justify-center font-medium">
-                A
-              </div>
-              <span className="hidden sm:block">Admin</span>
-              <ChevronDown className="w-3.5 h-3.5 text-[#B5A290]" />
-            </button>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setAdminOpen((prev) => !prev)}
+                className="flex items-center gap-2 text-base text-[#2B0C14] hover:opacity-85 transition py-1 px-1.5 rounded-lg"
+                aria-expanded={adminOpen}
+                aria-haspopup="true"
+              >
+                <div className="w-7 h-7 rounded-full bg-[#8A1C2B] text-[#F3E7D3] text-xs flex items-center justify-center font-medium">
+                  A
+                </div>
+                <span className="hidden sm:block text-sm font-medium">Admin</span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 text-[#B5A290] transition-transform duration-200 ${
+                    adminOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {adminOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setAdminOpen(false)}
+                  />
+                  <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-[#E4D7C3] rounded-xl shadow-lg z-50 overflow-hidden py-1.5">
+                    <div className="px-4 py-2.5 border-b border-[#F3E7D3]">
+                      <p className="text-xs font-semibold text-[#2B0C14]">
+                        Administrator
+                      </p>
+                      <p className="text-[11px] text-[#6B5A4E] mt-0.5 truncate">
+                        Admin Account
+                      </p>
+                    </div>
+
+                    <div className="py-1">
+                      <Link
+                        href="/dashboard/settings"
+                        onClick={() => setAdminOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-2 text-xs text-[#2B0C14] hover:bg-[#FBF6EE] transition"
+                      >
+                        <Settings className="w-4 h-4 text-[#8A1C2B]" />
+                        <span>Account Settings</span>
+                      </Link>
+                    </div>
+
+                    <div className="border-t border-[#F3E7D3] py-1">
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        disabled={loggingOut}
+                        className="w-full flex items-center gap-2.5 px-4 py-2 text-xs text-[#96201C] hover:bg-[#FBEEEE] transition disabled:opacity-50 text-left font-medium"
+                      >
+                        {loggingOut ? (
+                          <Loader2 className="w-4 h-4 text-[#96201C] animate-spin" />
+                        ) : (
+                          <LogOut className="w-4 h-4 text-[#96201C]" />
+                        )}
+                        <span>{loggingOut ? "Signing out..." : "Log out"}</span>
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </header>
 

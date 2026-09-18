@@ -756,10 +756,12 @@ useEffect(() => {
   <span className="h-px w-6 min-[360px]:w-8 sm:w-14 bg-gradient-to-r from-transparent via-[#E5C77A] to-transparent" />
 </div>
 
-{/* Subtitle */}
-<p className="max-w-2xl text-[6.5px] min-[360px]:text-[7.5px] min-[420px]:text-[9.5px] leading-tight sm:leading-relaxed text-white sm:text-base md:text-lg [text-shadow:_0_2px_10px_rgba(0,0,0,0.95)]">
-  Festivals are the soul of our culture. Worship, celebrate and receive divine blessings with our specially curated pooja packages.
-</p>
+{/* Subtitle in Glass Card */}
+<div className="inline-block max-w-2xl rounded-lg sm:rounded-2xl bg-gradient-to-br from-white/90 via-white/80 to-[#FAF5EE]/85 p-2 min-[360px]:p-2.5 sm:p-4 md:p-5 backdrop-blur-md border border-[#D4B978]/50 shadow-[0_4px_24px_rgba(74,16,21,0.08)]">
+  <p className="text-[8.5px] min-[360px]:text-[10px] min-[420px]:text-[11.5px] sm:text-sm md:text-base lg:text-lg leading-snug sm:leading-relaxed font-medium text-[#38090E]">
+    Festivals are the soul of our culture. Worship, celebrate and receive divine blessings with our specially curated pooja packages.
+  </p>
+</div>
         </div>
       </section>
 
@@ -1365,19 +1367,19 @@ useEffect(() => {
               </div>
 
               {/* Center Content */}
-              <div className="max-w-3xl flex-1 text-center">
-                <h2 className="font-[family-name:var(--font-cormorant)] text-2xl font-bold tracking-tight text-[#FFFDF8] sm:text-3xl md:text-4xl lg:text-[44px] xl:text-5xl whitespace-nowrap">
+              <div className="max-w-3xl flex-1 text-center px-1 sm:px-0">
+                <h2 className="font-[family-name:var(--font-cormorant)] text-xl min-[380px]:text-2xl sm:text-3xl md:text-4xl lg:text-[44px] xl:text-5xl font-bold tracking-tight text-[#FFFDF8] leading-snug sm:leading-tight whitespace-normal md:whitespace-nowrap">
                   Make Every Festival More Meaningful
                 </h2>
 
-                <p className="mx-auto mt-3 max-w-xl text-xs leading-relaxed text-[#F3EAD8]/90 sm:text-sm md:text-base">
+                <p className="mx-auto mt-2.5 sm:mt-3 max-w-xl text-xs leading-relaxed text-[#F3EAD8]/90 sm:text-sm md:text-base px-2 sm:px-0">
                   Choose the perfect pooja and invite divine blessings into your life.
                 </p>
 
-                <div className="mt-6 sm:mt-8">
+                <div className="mt-5 sm:mt-8">
                   <a
                     href="#upcoming-festivals"
-                    className="inline-flex items-center gap-2 rounded-full bg-[#E5C77A] px-8 py-3.5 text-xs font-bold tracking-wider text-[#3D1418] shadow-lg transition-all duration-300 hover:bg-[#F3D78A] hover:scale-105 active:scale-95 sm:text-sm"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#E5C77A] px-6 py-3 sm:px-8 sm:py-3.5 text-xs font-bold tracking-wider text-[#3D1418] shadow-lg transition-all duration-300 hover:bg-[#F3D78A] hover:scale-105 active:scale-95 sm:text-sm"
                   >
                     <span>Explore All Festival Poojas</span>
                     <ArrowRight size={16} />

@@ -26,7 +26,7 @@ export const packagesData: PackageItem[] = [
       "Hand-crafted Herbal Incense & Diya Oils",
     ],
     badge: "Most Popular for Homes",
-    href: "/consumer-package",
+    href: "/package",
     image: "/images/banner.jpeg",
     accentColor: "#B08A45",
   },

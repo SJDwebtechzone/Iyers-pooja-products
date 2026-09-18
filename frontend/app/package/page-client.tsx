@@ -902,7 +902,7 @@ function PackagePage({ data }: PackagePageProps) {
           <div className="ml-[48%] max-w-[50%] sm:ml-[50%] sm:max-w-[48%] md:ml-0 md:max-w-[650px] lg:ml-[52%]">
             <div className="mb-1 min-[360px]:mb-1.5 sm:mb-3 md:mb-4 flex items-center gap-1.5 min-[360px]:gap-2 md:gap-4">
   <span className="h-px w-6 min-[360px]:w-10 sm:w-16 md:w-24 bg-[#D4B978]" />
-  <span className="text-[10px] min-[360px]:text-xs md:text-xl text-[#5A1820]">❖</span>
+  <span className="text-[10px] min-[360px]:text-xs md:text-xl text-[#5A1820]"></span>
   <span className="h-px w-6 min-[360px]:w-10 sm:w-16 md:w-24 bg-[#D4B978]" />
 </div>
 
@@ -912,13 +912,16 @@ function PackagePage({ data }: PackagePageProps) {
 
 <div className="my-1 min-[360px]:my-1.5 sm:my-3 md:my-6 flex items-center gap-1.5 min-[360px]:gap-2 md:gap-4">
   <span className="h-px w-6 min-[360px]:w-10 sm:w-16 md:w-24 bg-[#D4B978]" />
-  <span className="text-[10px] min-[360px]:text-xs md:text-xl text-[#5A1820]">❖</span>
+  <span className="text-[10px] min-[360px]:text-xs md:text-xl text-[#5A1820]"></span>
   <span className="h-px w-6 min-[360px]:w-10 sm:w-16 md:w-24 bg-[#D4B978]" />
 </div>
 
-            <p className="max-w-xl text-[7px] min-[360px]:text-[8px] min-[420px]:text-[10px] sm:text-sm md:text-lg font-medium leading-tight sm:leading-relaxed text-[#4A1015]">
-              {data.subtitle}
-            </p>
+            {/* Description in Glass Card */}
+            <div className="inline-block max-w-xl rounded-lg sm:rounded-2xl bg-gradient-to-br from-white/90 via-white/80 to-[#FAF5EE]/85 p-2 min-[360px]:p-2.5 sm:p-4 md:p-5 backdrop-blur-md border border-[#D4B978]/50 shadow-[0_4px_24px_rgba(74,16,21,0.08)]">
+              <p className="text-[8.5px] min-[360px]:text-[10px] min-[420px]:text-[11.5px] sm:text-sm md:text-base lg:text-lg leading-snug sm:leading-relaxed font-medium text-[#38090E]">
+                {data.subtitle}
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -1051,9 +1054,10 @@ function PackagePage({ data }: PackagePageProps) {
                     );
                   })}
               </div>
-            </div>
-                              <div className="min-w-0 lg:col-span-3">
-  <div className="lg:sticky lg:top-28 bg-[#5A2026] rounded-xl p-3 shadow-lg">
+                        </div>
+
+            <div className="rounded-2xl bg-[#FCFAF5] border border-[#DFCBB0] p-4 sm:p-6 lg:p-7">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
                 {/* SIDEBAR */}
 

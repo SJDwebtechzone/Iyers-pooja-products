@@ -198,7 +198,7 @@ export default function AboutPage() {
               <span className="text-[#D4B978]">Serving Devotion.</span>
             </h1>
 
-            <p className="text-[6.5px] min-[360px]:text-[7.5px] min-[420px]:text-[9.5px] sm:text-base lg:text-[17px] leading-tight sm:leading-relaxed text-[#F3EAD8] max-w-xl ml-auto font-medium [text-shadow:_0_1px_8px_rgba(0,0,0,0.9)]">
+            <p className="text-[6.5px] min-[360px]:text-[7.5px] min-[420px]:text-[9.5px] sm:text-base lg:text-[17px] leading-tight sm:leading-relaxed text-[#F3EAD8] max-w-xl ml-auto font-medium [text-shadow:_0_1px_8px_rgba(0,0,0,0.9)] text-justify">
               Simplifying sacred pooja preparation for every family, making
               authentic traditions easier to observe with care and devotion.
             </p>
@@ -236,7 +236,7 @@ export default function AboutPage() {
                 <span className="h-[1.5px] w-6 bg-[#B08A45]/40" />
               </div>
 
-              <div className="space-y-4 text-base sm:text-lg leading-8 text-[#63574F]">
+              <div className="space-y-4 text-base sm:text-lg leading-8 text-[#63574F] text-justify">
                 <p>
                   Iyyars Pooja List was founded with a simple purpose – to help
                   families perform poojas with ease, authenticity, and complete
@@ -347,7 +347,7 @@ export default function AboutPage() {
                   {item.title}
                 </h3>
 
-                <p className="text-sm sm:text-[15px] leading-relaxed text-[#73665D]">
+                <p className="text-sm sm:text-[15px] leading-relaxed text-[#73665D] text-justify">
                   {item.text}
                 </p>
               </div>
@@ -376,7 +376,7 @@ export default function AboutPage() {
               Around the Globe
             </h2>
 
-            <p className="mt-5 text-base sm:text-lg lg:text-[22px] leading-relaxed text-[#73665D]">
+            <p className="mt-5 text-base sm:text-lg lg:text-[22px] leading-relaxed text-[#73665D] text-justify">
               Carrying the essence of sacred traditions beyond boundaries and
               making authentic pooja experiences accessible to devotees
               everywhere.
@@ -444,7 +444,7 @@ export default function AboutPage() {
                   </div>
                 </div>
 
-                <div className="space-y-5 text-base sm:text-lg lg:text-[19px] leading-8 text-[#63574F]">
+                <div className="space-y-5 text-base sm:text-lg lg:text-[19px] leading-8 text-[#63574F] text-justify">
                   <p>
                     <span className="font-semibold italic text-[#000000]">Our vision</span> is to become a trusted bridge between timeless
                     traditions and modern-day devotees, ensuring that the sacred
@@ -504,7 +504,7 @@ export default function AboutPage() {
         </span>
       </h2>
 
-      <p className="mt-5 text-base sm:text-lg lg:text-[22px] leading-relaxed text-[#73665D]">
+      <p className="mt-5 text-base sm:text-lg lg:text-[22px] leading-relaxed text-[#73665D] text-justify">
         Making sacred traditions easier to experience while protecting
         the authenticity and meaning behind every ritual.
       </p>
@@ -781,7 +781,7 @@ export default function AboutPage() {
 
           {/* Description */}
 
-          <div className="space-y-5 text-base sm:text-lg lg:text-[19px] leading-8 text-[#63574F]">
+          <div className="space-y-5 text-base sm:text-lg lg:text-[19px] leading-8 text-[#63574F] text-justify">
 
             <p>
               <span className="font-semibold italic text-[#000000]">Our mission</span> is to preserve the authenticity of sacred
@@ -825,7 +825,7 @@ export default function AboutPage() {
                   </h4>
 
 
-                  <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-[#73665D]">
+                  <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-[#73665D] text-justify">
                     Protecting the purity, authenticity, and cultural
                     meaning behind every sacred practice.
                   </p>
@@ -857,7 +857,7 @@ export default function AboutPage() {
                   </h4>
 
 
-                  <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-[#73665D]">
+                  <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-[#73665D] text-justify">
                     Making pooja preparation easier through thoughtfully
                     arranged essentials and reliable guidance.
                   </p>
@@ -889,7 +889,7 @@ export default function AboutPage() {
                   </h4>
 
 
-                  <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-[#73665D]">
+                  <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-[#73665D] text-justify">
                     Supporting every devotee with sincerity, care, and
                     respect throughout their spiritual journey.
                   </p>
@@ -1005,7 +1005,7 @@ export default function AboutPage() {
 
               <div className="hidden xl:block h-16 w-px bg-white/20" />
 
-              <div className="max-w-md text-center lg:text-left text-xs sm:text-sm text-[#E6D5C3] leading-relaxed">
+              <div className="max-w-md text-justify text-xs sm:text-sm text-[#E6D5C3] leading-relaxed">
                 Whether it&apos;s a simple pooja at home or a grand celebration,
                 we are here to make it truly memorable and blessed.
               </div>

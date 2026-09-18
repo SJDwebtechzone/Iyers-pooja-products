@@ -101,20 +101,20 @@ export default function PackagesSection() {
     const x = xOffsets[index];
     const y = yOffsets[index];
 
-    if (isActive) {
+       if (isActive) {
       return {
         desktopTransform: `translate3d(${x}px, ${y - 16}px, 0px) rotate(0deg) scale(1.04)`,
         mobileTransform: `translate3d(${x * 0.45}px, ${y * 0.4 - 10}px, 0px) rotate(0deg) scale(1.03)`,
-        zIndex: 50,
+        zIndex: 10,
         opacity: 1,
       };
     }
 
-    const distFromActive = Math.abs(index - activeIndex);
+        const distFromActive = Math.abs(index - activeIndex);
     return {
       desktopTransform: `translate3d(${x}px, ${y}px, 0px) rotate(${rot}deg) scale(0.96)`,
       mobileTransform: `translate3d(${x * 0.45}px, ${y * 0.4}px, 0px) rotate(${rot * 0.75}deg) scale(0.92)`,
-      zIndex: 30 - distFromActive,
+      zIndex: 5 - distFromActive,
       opacity: 0.92,
     };
   };
@@ -149,8 +149,8 @@ export default function PackagesSection() {
           {/* Split Layout: Left 45% Card Fan, Right 48% Editorial Panel */}
           <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
 
-            {/* LEFT 45%: Compact Fan of 5 Rummy Cards */}
-            <div className="relative flex h-[320px] w-full items-center justify-center sm:h-[360px] lg:h-[400px] lg:w-[45%]">
+                        {/* LEFT 45%: Compact Fan of 5 Rummy Cards */}
+                        <div className="relative z-0 isolate flex h-[280px] w-full items-center justify-center overflow-hidden sm:h-[360px] sm:overflow-visible lg:h-[400px] lg:w-[45%]">
               <div className="relative flex h-full w-full max-w-[420px] items-center justify-center">
                 {packagesData.map((pkg, index) => {
                   const isActive = index === activeIndex;
